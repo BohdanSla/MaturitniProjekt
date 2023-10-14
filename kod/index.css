@@ -52,15 +52,15 @@ header form input {
     outline: none;
     font-size: large;
     padding-left: 1rem;
-    border-bottom-left-radius: 0.1rem;
-    border-top-left-radius: 0.1rem;
+    border-bottom-left-radius: 0.15rem;
+    border-top-left-radius: 0.15rem;
 }
 header button {
     background-color: #F6F6F6;
     border: none;
     cursor: pointer;
-    border-top-right-radius: 0.1rem;
-    border-bottom-right-radius: 0.1rem;
+    border-top-right-radius: 0.15rem;
+    border-bottom-right-radius: 0.15rem;
 }
 header section {
     width: 5.5rem;
@@ -91,12 +91,133 @@ header section {
     justify-content: center;
     font-size: 1.25rem;
 }
-main section {
+main .doporucene-produkty {
     background-color: #DCDCDC;
     width: 100%;
     height: 25rem;
 
 }
+.sipky-doporuceny-produkt {
+    height: 21rem;
+    display: flex;
+}
+.slider-polozky {
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.slider-polozky .polozka {
+    height: 1rem;
+    width: 3rem;
+    background-color: #FFFFFF;
+    margin: 0.5rem;
+    border-radius: 0.15rem;
+}
+.slider-polozky .polozka:first-child {
+    background-color: #1c1c1c;
+}
+.sipka {
+    width: 10%;
+    margin: 0 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+}
+.sipka img {
+    height: 5rem;
+
+}
+.sipka:last-child img:last-child {
+    transform: scaleX(-1);
+}
 .doporuceny-produkt {
-height: 21rem;
+    width: 70%;
+    height: 19rem;
+    margin-top: 2rem;
+    background: #FFFFFF;
+    border-radius: 0.15rem;
+    display: flex;
+}
+.doporuceny-produkt .obrazek {
+    height: inherit;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.doporuceny-produkt .obrazek img {
+    height: 16rem;
+    width: 16rem;
+}
+.doporuceny-produkt .parametry {
+    padding: 1rem;
+    width: 70%;
+}
+.doporuceny-produkt .parametry h3 {
+    font-size: 2rem;
+    margin: 0.25rem 0 0.75rem 0;
+}
+.cena-recenze {
+    display: flex;
+}
+.cena-recenze b {
+    color:#C70000;
+    font-size: 2rem;
+
+}
+.cena-recenze .recenze  {
+    background-color: #DCDCDCDC;
+    margin-left: 1rem;
+    height: inherit;
+    width: 5rem;
+    border-radius: 0.15rem;
+    display: flex;
+    align-items: center;
+    padding-left:0.5rem ;
+}
+.cena-recenze .recenze img {
+    height: 2rem;
+}
+.cena-recenze .recenze .hodnota-recenze {
+    display:flex;
+    justify-content: center;
+    height: inherit;
+    width: 100%;
+    font-size: larger;
+    font-weight: bold;
+}
+.parametry p {
+    width: 75%;
+    height: 6.75rem;
+    margin-bottom: 0;
+    color: #919191;
+}
+.parametry .tlacitko {
+    display: flex;
+    justify-content: end;
+    align-items: flex-end;
+}
+.parametry .tlacitko a {
+    width: 3rem;
+    background-color: #C70000;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: #F6F6F6;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-right: 1rem;
+}
+.produkty-ve-sleve {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+}
+.produkt-ve-sleve {
+    width: 15rem;
+    height: 30rem;
+    border: #70707070 solid 1px;
+    margin: 0 2rem;
 }
