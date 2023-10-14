@@ -1,0 +1,13 @@
+udelat jednoduchou sablonu jenom v htmlku, ze ktere pak udelam ostatni stranky
+zacit backendem nez frontendem
+posetrit si, kdyby se mi nekdo v tom hrabal, tak si tam dat backdoor(zadní vrátka), zip s databazi a pak phpeckem nahrat.
+nemit v nazvu projektu eshop
+nedelat intranet!!!!
+
+DŮ
+mít základní body k maturitnímu projektu(název, co bude umět, věty o tom)
+
+
+jmena pro eshop:
+Pro sportovce
+
