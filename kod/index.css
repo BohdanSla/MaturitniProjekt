@@ -213,13 +213,14 @@ main .doporucene-produkty {
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 
 }
 .produkt-ve-sleve {
     width: 15rem;
     height: 30rem;
     border: #70707070 solid 1px;
-    margin: 0 2rem;
+    margin: 2rem 2rem 2rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -246,11 +247,9 @@ main .doporucene-produkty {
 .ceny {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    margin-left: 2rem;
+    align-items: flex-start;
+    width: 12rem;
+    margin-top: 2rem;
 }
 .produkt-ve-sleve s {
     color: #70707090;
