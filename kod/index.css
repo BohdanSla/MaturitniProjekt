@@ -258,3 +258,32 @@ main .doporucene-produkty {
     color:#C70000;
     font-size: xx-large;
 }
+.sporty {
+    width: 100%;
+    margin: 2rem 0;
+    display: flex;
+    justify-content: space-evenly;
+}
+.sporty a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: x-large;
+    text-decoration: none;
+    color: #000000;
+}
+.sporty a img {
+    height: 10rem;
+    width: 10rem;
+    margin-bottom: 1.5rem;
+}
+.znacky {
+    width: 100%;
+    height: 10rem;
+    display: flex;
+}
+.znacky .dekorace-cara {
+    width: 1px;
+    height: 20%;
+    margin: 0 2rem;
+}
