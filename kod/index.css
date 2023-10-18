@@ -220,4 +220,42 @@ main .doporucene-produkty {
     height: 30rem;
     border: #70707070 solid 1px;
     margin: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.obrazek-nazev {
+    display: flex;
+    flex-direction: column;
+}
+.obrazek-nazev img {
+    height: 12rem;
+    width: 12rem;
+}
+.obrazek-nazev h3 {
+    margin: 0.45rem 0 0.25rem 0.25rem;
+}
+.obrazek-nazev h4 {
+    margin: 0.25rem 0 5rem 0.25rem;
+    color:#70707090 ;
+}
+.produkt-ve-sleve .dekorace-cara {
+    position: static;
+    width: 80%;
+}
+.ceny {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-left: 2rem;
+}
+.produkt-ve-sleve s {
+    color: #70707090;
+}
+.produkt-ve-sleve b {
+    color:#C70000;
+    font-size: xx-large;
 }
