@@ -10,20 +10,74 @@ for (let index = 0; index < plochy.length; index++) {
 let ikonaMenu = document.querySelector("header nav img:first-child");
 ikonaMenu.addEventListener("click",otevriPostraniMenu);
 
-let postrannniMenu = document.querySelector(".kategorie");
-let a = document.querySelector("aside");
+let postranniMenu = document.querySelector(".kategorie");
+let tmavaPlocha = document.querySelector("aside");
 
 function otevriPostraniMenu() {
-    if (getComputedStyle(postrannniMenu).getPropertyValue("left") == "-240px") {
-        postrannniMenu.style.left = "0";
-        a.style.visibility = "visible";
+    if (getComputedStyle(postranniMenu).getPropertyValue("left") == "-240px") {
+        postranniMenu.style.left = "0";
+        tmavaPlocha.style.visibility = "visible";
     } else  {
-        postrannniMenu.style.left = "-240px";
-        a.style.visibility = "hidden";
+        postranniMenu.style.left = "-240px";
+        tmavaPlocha.style.visibility = "hidden";
     }
+}
+let polozkaSlideru = 0
+
+let doporucenyProdukty = document.querySelectorAll(".doporuceny-produkt");
+for (let index = 1; index < doporucenyProdukty.length; index++) {
+    doporucenyProdukty[index].style.width = "0";
+    doporucenyProdukty[index].style.visibility = "hidden";
+    doporucenyProdukty[index].style.left = "-100%";
+    
+}
+
+let levaSipka = document.querySelector(".sipky-doporuceny-produkt img");
+let pravaSipka = document.querySelector(".sipky-doporuceny-produkt .sipka:last-child img");
+
+pravaSipka.addEventListener("click",dalsiDoporucenyProdukt);
+levaSipka.addEventListener("click",predchoziDoporucenyProdukt);
+
+let polozkySlideru = document.querySelectorAll(".polozka");
+
+function predchoziDoporucenyProdukt() {
+    polozkySlideru[polozkaSlideru].style.background = "#FFFFFF"
+
+    doporucenyProdukty[polozkaSlideru].style.width ="0"
+    doporucenyProdukty[polozkaSlideru].style.visibility ="hidden"
+    doporucenyProdukty[polozkaSlideru].style.left = "100%"
+    if (polozkaSlideru == 0) {
+        polozkaSlideru = polozkySlideru.length - 1
+        doporucenyProduktUmisteni = -((polozkySlideru.length - 1) * 100)
+
+        polozkySlideru[polozkaSlideru].style.background = "#1c1c1c"
+    } else {
+        doporucenyProduktUmisteni += 100;
+
+        polozkySlideru[--polozkaSlideru].style.background = "#1c1c1c"
+
+    }
+    doporucenyProdukty[polozkaSlideru].style.width ="70%"
+    doporucenyProdukty[polozkaSlideru].style.visibility ="visible"
+    doporucenyProdukty[polozkaSlideru].style.left = "0"
 }
 
 
+function dalsiDoporucenyProdukt() {
+    polozkySlideru[polozkaSlideru].style.background = "#FFFFFF"
 
-let levaSipka = document.querySelector(".sipky-dopruceny-produkt img");
-let pravaSipka = document.querySelector(".sipky-dopruceny-produkt img:last-child");
+    doporucenyProdukty[polozkaSlideru].style.width ="0"
+    doporucenyProdukty[polozkaSlideru].style.visibility ="hidden"
+    doporucenyProdukty[polozkaSlideru].style.left = "-100%"
+    if (polozkaSlideru == 3) {
+        polozkaSlideru = 0
+
+        polozkySlideru[polozkaSlideru].style.background = "#1c1c1c"
+    } else {
+
+        polozkySlideru[++polozkaSlideru].style.background = "#1c1c1c"
+    }
+    doporucenyProdukty[polozkaSlideru].style.width ="70%"
+    doporucenyProdukty[polozkaSlideru].style.visibility ="visible"
+    doporucenyProdukty[polozkaSlideru].style.left = "0"
+}
