@@ -26,9 +26,7 @@ let polozkaSlideru = 0
 
 let doporucenyProdukty = document.querySelectorAll(".doporuceny-produkt");
 for (let index = 1; index < doporucenyProdukty.length; index++) {
-    doporucenyProdukty[index].style.width = "0";
-    doporucenyProdukty[index].style.visibility = "hidden";
-    doporucenyProdukty[index].style.left = "-100%";
+    doporucenyProdukty[index].style.display = "none";
     
 }
 
@@ -43,41 +41,32 @@ let polozkySlideru = document.querySelectorAll(".polozka");
 function predchoziDoporucenyProdukt() {
     polozkySlideru[polozkaSlideru].style.background = "#FFFFFF"
 
-    doporucenyProdukty[polozkaSlideru].style.width ="0"
-    doporucenyProdukty[polozkaSlideru].style.visibility ="hidden"
-    doporucenyProdukty[polozkaSlideru].style.left = "100%"
+    doporucenyProdukty[polozkaSlideru].style.display ="none"
     if (polozkaSlideru == 0) {
         polozkaSlideru = polozkySlideru.length - 1
-        doporucenyProduktUmisteni = -((polozkySlideru.length - 1) * 100)
 
         polozkySlideru[polozkaSlideru].style.background = "#1c1c1c"
     } else {
-        doporucenyProduktUmisteni += 100;
 
         polozkySlideru[--polozkaSlideru].style.background = "#1c1c1c"
 
     }
-    doporucenyProdukty[polozkaSlideru].style.width ="70%"
-    doporucenyProdukty[polozkaSlideru].style.visibility ="visible"
-    doporucenyProdukty[polozkaSlideru].style.left = "0"
+    doporucenyProdukty[polozkaSlideru].style.display ="flex"
+    console.log(polozkaSlideru);
 }
 
 
 function dalsiDoporucenyProdukt() {
     polozkySlideru[polozkaSlideru].style.background = "#FFFFFF"
-
-    doporucenyProdukty[polozkaSlideru].style.width ="0"
-    doporucenyProdukty[polozkaSlideru].style.visibility ="hidden"
-    doporucenyProdukty[polozkaSlideru].style.left = "-100%"
+    
+    doporucenyProdukty[polozkaSlideru].style.display ="none"
     if (polozkaSlideru == 3) {
         polozkaSlideru = 0
-
+        
         polozkySlideru[polozkaSlideru].style.background = "#1c1c1c"
     } else {
-
+        
         polozkySlideru[++polozkaSlideru].style.background = "#1c1c1c"
     }
-    doporucenyProdukty[polozkaSlideru].style.width ="70%"
-    doporucenyProdukty[polozkaSlideru].style.visibility ="visible"
-    doporucenyProdukty[polozkaSlideru].style.left = "0"
+    doporucenyProdukty[polozkaSlideru].style.display ="flex"
 }
