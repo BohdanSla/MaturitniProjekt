@@ -366,3 +366,13 @@ aside {
 .kategorie li:hover {
     background-color: #6d839a;
 }
+
+@media only screen and (max-width: 1100px) {
+    header {
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    header {
+    }
+}
