@@ -1,6 +1,6 @@
 let nadpisy = document.querySelector("main").querySelectorAll("h2");
 nadpisy = Array.from(nadpisy).map(e => e.offsetWidth);
-let plochy = document.querySelector("main").querySelectorAll(".bili-prostor");
+let plochy = document.querySelector("main").querySelectorAll(".bily-prostor");
 
 for (let index = 0; index < plochy.length; index++) {
     let sirka = nadpisy[index] + 80;
