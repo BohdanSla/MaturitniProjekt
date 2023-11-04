@@ -32,7 +32,6 @@ header img {
 header nav:first-child img:first-child {
     height: 2.75rem;
     margin-left: 3rem;
-    transition: 0.1s ease-in;
 }
 header nav:first-child img:first-child:hover {
     cursor: pointer;
@@ -45,11 +44,11 @@ header nav:first-child img:last-child {
     margin-left: 0.5rem;
 }
 header nav:last-child {
-    margin-right: 3rem;
+    margin:0 3rem 0 1rem;
 }
 header form {
     display: flex;
-    margin-right: 4rem;
+    margin-right: 1rem;
     height: 3rem;
 }
 header form input {
@@ -70,7 +69,6 @@ header button {
     border-bottom-right-radius: 0.15rem;
 }
 header section {
-    width: 5.5rem;
     display: flex;
     justify-content: space-between;
     flex-direction: row-reverse;
@@ -147,7 +145,6 @@ main .doporucene-produkty {
 }
 .doporuceny-produkt {
     width: 70%;
-    height: 19rem;
     margin-top: 2rem;
     background: #FFFFFF;
     border-radius: 0.15rem;
@@ -156,7 +153,6 @@ main .doporucene-produkty {
 }
 .doporuceny-produkt .obrazek {
     height: inherit;
-    width: 30%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -203,15 +199,20 @@ main .doporucene-produkty {
     font-weight: bold;
 }
 .parametry p {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
     width: 75%;
-    height: 6.75rem;
     margin-bottom: 0;
     color: #919191;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .parametry .tlacitko {
     display: flex;
     justify-content: end;
     align-items: flex-end;
+    text-align: center;
 }
 .parametry .tlacitko a {
     width: 3rem;
@@ -367,8 +368,31 @@ aside {
     background-color: #6d839a;
 }
 
-@media only screen and (max-width: 1100px) {
-    header {
+@media only screen and (max-width: 1000px) {
+    .doporuceny-produkt {
+        flex-direction: column;
+        height:40rem;
+    }
+    main .doporucene-produkty {
+        height: 50rem;
+    }
+    .sipky-doporuceny-produkt {
+        height: 44rem;
+    }
+    .parametry .tlacitko a {
+        width: 100%;
+        margin: 0;
+    }
+    .doporuceny-produkt .parametry {
+        width: 92%;
+        padding: 4%;
+    }
+    .parametry .tlacitko {
+        justify-content: center;
+        align-items: normal;
+    }
+    .parametry p {
+        margin-bottom: 1rem;
     }
 }
 
