@@ -70,3 +70,27 @@ function dalsiDoporucenyProdukt() {
     }
     doporucenyProdukty[polozkaSlideru].style.display ="flex"
 }
+
+let vyhledavani = document.querySelector("header form");
+
+let lupa = document.querySelector("#lupa");
+lupa.addEventListener("click",zobrazVyhledavani);
+
+let krizek = document.querySelector(".krizek")
+krizek.addEventListener("click",function(){
+    vyhledavani.style.display= "none"
+    krizek.style.display = "none"
+}); 
+
+function zobrazVyhledavani() {
+    vyhledavani.style.position = "absolute"
+    vyhledavani.style.left = "0"
+    vyhledavani.style.right = "0"
+    vyhledavani.style.margin = "0 0 0 2.5vw";
+    vyhledavani.style.display = "flex";
+
+    krizek.style.display= "flex"
+    vyhledavani.querySelector("input").style.width = "88%"        
+    vyhledavani.querySelector("button").style.borderRadius = "0";
+        
+}

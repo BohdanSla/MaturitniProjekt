@@ -1,6 +1,10 @@
+html {
+    overflow-x: hidden;
+}
 body {
-    margin:0;
     font-family: Segoe UI Light, Segoe UI, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    margin:0;
 }
 
 header {
@@ -21,13 +25,13 @@ header nav {
 header nav:first-child a {
     display: flex;
     align-items: center;
-    margin-left: 2rem;
+    margin-left: 1rem;
     text-decoration: none;
     color: #F6F6F6;
 }
 
 header img {
-    height: 2.5rem;
+    width: 2.5rem;
 }
 header nav:first-child img:first-child {
     height: 2.75rem;
@@ -44,22 +48,32 @@ header nav:first-child img:last-child {
     margin-left: 0.5rem;
 }
 header nav:last-child {
-    margin:0 3rem 0 1rem;
+    margin-right: 1vw;
 }
 header form {
     display: flex;
-    margin-right: 1rem;
     height: 3rem;
 }
 header form input {
     background-color: #F6F6F6;
-    width: 20rem;
     border: none;
     outline: none;
     font-size: large;
     padding-left: 1rem;
     border-bottom-left-radius: 0.15rem;
     border-top-left-radius: 0.15rem;
+    text-overflow: ellipsis;
+}
+header .krizek {
+    display: none;
+    background-color: #C70000;
+    display: flex;
+    align-items: center;
+    border-bottom-right-radius: 0.15rem;
+    border-top-right-radius: 0.15rem;
+}
+header .krizek:hover {
+    cursor: pointer;
 }
 header button {
     background-color: #F6F6F6;
@@ -67,11 +81,6 @@ header button {
     cursor: pointer;
     border-top-right-radius: 0.15rem;
     border-bottom-right-radius: 0.15rem;
-}
-header section {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row-reverse;
 }
 .vypln {
     height: 8rem;
@@ -82,7 +91,7 @@ header section {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 1rem 0 1rem 0;
+    margin: 1rem 0;
 }
 
 .dekorace-cara {
@@ -100,13 +109,11 @@ header section {
 }
 main .doporucene-produkty {
     background-color: #DCDCDC;
-    width: 100%;
-    height: 25rem;
     
 }
 .sipky-doporuceny-produkt {
-    height: 21rem;
     display: flex;
+    justify-content: center;
 }
 .slider-polozky {
     height: 4rem;
@@ -120,7 +127,7 @@ main .doporucene-produkty {
     background-color: #FFFFFF;
     margin: 0.5rem;
     border-radius: 0.15rem;
-    transition: 0.15s ease-in;
+    transition: background-color 0.15s ease-in ;
 }
 .slider-polozky .polozka:first-child {
     background-color: #1c1c1c;
@@ -156,10 +163,10 @@ main .doporucene-produkty {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 2vw;
 }
 .doporuceny-produkt .obrazek img {
-    height: 16rem;
-    width: 16rem;
+    width: 15rem;
 }
 .doporuceny-produkt .parametry {
     padding: 1rem;
@@ -168,9 +175,11 @@ main .doporucene-produkty {
 .doporuceny-produkt .parametry h3 {
     font-size: 2rem;
     margin: 0.25rem 0 0.75rem 0;
+    text-wrap: wrap;
 }
 .cena-recenze {
     display: flex;
+    align-items: center;
 }
 .cena-recenze b {
     color:#C70000;
@@ -180,7 +189,7 @@ main .doporucene-produkty {
 .cena-recenze .recenze  {
     background-color: #DCDCDCDC;
     margin-left: 1rem;
-    height: inherit;
+    height: 2.5rem;
     width: 5rem;
     border-radius: 0.15rem;
     display: flex;
@@ -193,7 +202,6 @@ main .doporucene-produkty {
 .cena-recenze .recenze .hodnota-recenze {
     display:flex;
     justify-content: center;
-    height: inherit;
     width: 100%;
     font-size: larger;
     font-weight: bold;
@@ -222,65 +230,67 @@ main .doporucene-produkty {
     color: #F6F6F6;
     font-weight: bold;
     letter-spacing: 1px;
-    margin-right: 1rem;
 }
 .produkty-ve-sleve {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:1vw;
+    margin: 0 4vw;
 }
 .produkty-ve-sleve a {
-    width: 15rem;
-    height: 30rem;
     border: #70707070 solid 1px;
-    margin: 2rem 2rem 2rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-decoration: none;
+    padding:1vw;
+}
+.produkt-ve-sleve {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5vw;
 }
 .obrazek-nazev {
     display: flex;
     flex-direction: column;
+    width: 90%;
 }
 .obrazek-nazev img {
-    height: 12rem;
-    width: 12rem;
+    width: 18vw;
+    align-self: center;
 }
 .obrazek-nazev h3 {
     margin: 0.45rem 0 0.25rem 0.25rem;
     color: #000000;
 }
 .obrazek-nazev h4 {
-    margin: 0.25rem 0 5rem 0.25rem;
+    margin: 0.25rem 0 2rem 0.25rem;
     color:#70707090 ;
 }
 .produkty-ve-sleve a .dekorace-cara {
     position: static;
-    width: 80%;
+    width: 90%;
 }
 .ceny {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 12rem;
-    margin-top: 2rem;
+    width: 90%;
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
 }
-.produkty-ve-sleve a s {
+.produkty-ve-sleve s {
     color: #70707090;
 }
-.produkty-ve-sleve a b {
+.produkty-ve-sleve b {
     color:#C70000;
     font-size: xx-large;
 }
 .sporty {
     width: 100%;
     margin: 2rem 0;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
 }
 .sporty a {
     display: flex;
@@ -292,24 +302,29 @@ main .doporucene-produkty {
     margin: 1rem;
 }
 .sporty a img {
-    height: 10rem;
     width: 10rem;
     margin-bottom: 1.5rem;
 }
 .znacky {
     width: 100%;
-    height: 10rem;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    justify-content: center;
     margin-bottom: 5rem;
 }
 .znacky .dekorace-cara {
     width: 1px;
-    height: 80%;
+    height: 9rem;
     margin: 0 2rem;
     position: static;
+}
+.znacky a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.znacky img {
+    width: 15vw;
 }
 footer {
     display: flex;
@@ -319,24 +334,24 @@ footer {
     color: #FAFAFA;
     height: 15rem;
     width: 100%;
-    font-size: x-large;
+    font-size: 5vw;
 }
 aside {
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: 1;
-    margin:8rem 0 0 0;
+    margin:6rem 0 0 0;
     background-color: #00000040;
     visibility: hidden;
-    transition: 0.05s ease-in;
+    transition:visibility 0.05s ease-in;
 }
 .kategorie {
     height: inherit;
     width: 15rem;
     background-color: #105295;
     position: fixed;
-    transition: 0.07s ease-in;
+    transition:left 0.07s ease-in;
     left: -15rem;
     display: flex;
     align-items: center;
@@ -344,6 +359,10 @@ aside {
     padding-top: 8rem;
     top: 0;
     bottom: 0;
+    letter-spacing: 1px;
+}
+.kategorie img {
+    width: 2.5rem;
 }
 .kategorie ul {
     text-decoration: none;
@@ -365,23 +384,33 @@ aside {
     text-decoration: none;
 }
 .kategorie li:hover {
-    background-color: #6d839a;
+    background-color: #aed2f8;
+    color: #1c1c1c;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1200px) {
+    .sporty {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .sporty a img {
+        width: 20vw;
+    }
+    .produkty-ve-sleve {
+        grid-template-columns: repeat(2,1fr);
+    }
+    .produkty-ve-sleve a {
+        width: 35vw;
+    }
+    .obrazek-nazev img {
+        width: 30vw;
+    }
+}
+@media only screen and (max-width: 1020px) {
     .doporuceny-produkt {
         flex-direction: column;
-        height:40rem;
-    }
-    main .doporucene-produkty {
-        height: 50rem;
-    }
-    .sipky-doporuceny-produkt {
-        height: 44rem;
     }
     .parametry .tlacitko a {
         width: 100%;
-        margin: 0;
     }
     .doporuceny-produkt .parametry {
         width: 92%;
@@ -394,9 +423,139 @@ aside {
     .parametry p {
         margin-bottom: 1rem;
     }
+    header nav:first-child img:first-child {
+        margin-left: 2vw;
+    }
 }
 
-@media only screen and (max-width: 600px) {
-    header {
+@media only screen and (max-width: 850px) {
+    .znacky .dekorace-cara {
+        display: none;
     }
+    .znacky {
+        flex-direction: column;
+    }
+    .znacky img {
+        width: 60vw;
+    }
+    .produkty-ve-sleve {
+        grid-template-columns: repeat(1,1fr);
+    }
+    .produkty-ve-sleve a {
+        width: 60vw;
+    }
+    .obrazek-nazev img {
+        width:40vw;
+    }
+    .sporty {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .sporty a img {
+        width: 40vw;
+    }
+}
+@media only screen and (max-width: 650px) {
+    header {
+        align-items: center;
+        font-size: 2.5vw;
+        height: 7vh;
+    }
+    header img {
+        width: 6vw;
+    }
+    header nav:first-child a {
+        margin-left: 3vw;
+    }
+    .vypln {
+        height: 7vh;
+    }
+    .nadpis {
+        margin: 2vw 0;
+    }
+    .kategorie {
+        padding-top: 7vh;
+        width: 100%;
+        height: auto;
+        bottom:unset;
+    }
+    .kategorie li {
+        font-size: 3vw;
+    }
+    .kategorie img {
+        width: 6vw;
+    }
+    aside {
+        margin-top: 7vw;
+    }
+    header form {
+        height: 7vw;
+    }
+    header form input {
+        width: 30vw;
+        font-size: 3vw;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .doporuceny-produkt .parametry h3 {
+        font-size: 6.5vw;
+    }
+    .cena-recenze b {
+        font-size: 6.5vw;
+    }
+    .cena-recenze .recenze .hodnota-recenze {
+        font-size: 4vw
+    }
+    .cena-recenze .recenze img {
+        height: 5.5vw;
+    }
+    .cena-recenze .recenze {
+        width: 22%;
+        height: 8vw;
+        padding:0 1vw;
+    }
+    .parametry p {
+        display: none;
+    }
+    .sipka img {
+        height: 11vw;
+    }
+    .sipka {
+        margin: 0 2vw;
+    }
+    .tlacitko {
+        margin-top: 2.5vw;
+    }
+    .slider-polozky .polozka {
+        width: 9vw;
+        height: 3vw;
+        margin: 1vw;
+    }
+    .doporuceny-produkt .obrazek img {
+        width: 50vw;
+    }
+    .nadpis h2 {
+        font-size: 6vw;
+    }
+    .parametry .tlacitko a {
+        font-size: 3vw;
+    }
+    .obrazek-nazev h3 {
+        font-size: 4vw;
+    }
+    .obrazek-nazev h4 {
+        font-size: 3vw;
+    }
+    .produkty-ve-sleve s {
+        font-size: 2.5vw;
+    }
+    .produkty-ve-sleve b {
+        font-size: 5vw;
+    }
+    .sporty b {
+        font-size: 4.5vw;
+    }
+    .produkty-ve-sleve a {
+        width: 80vw;
+    }
+    
 }
