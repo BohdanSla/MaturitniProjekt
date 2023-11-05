@@ -211,7 +211,7 @@ main .doporucene-produkty {
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     width: 75%;
-    margin-bottom: 0;
+    margin-bottom: 3vw;
     color: #919191;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -557,5 +557,7 @@ aside {
     .produkty-ve-sleve a {
         width: 80vw;
     }
-    
+    header nav:first-child img:last-child {
+        margin-left: 1vw;
+    }
 }
