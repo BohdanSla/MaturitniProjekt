@@ -9,7 +9,7 @@ body {
 
 header {
     width: 100%;
-    height: 8rem;
+    height: 6rem;
     background-color: #187AD9;
     display: flex;
     justify-content: space-between;
@@ -83,7 +83,7 @@ header button {
     border-bottom-right-radius: 0.15rem;
 }
 .vypln {
-    height: 8rem;
+    height: 6rem;
 }
 .nadpis {
     width: 100%;
@@ -351,12 +351,11 @@ aside {
     width: 15rem;
     background-color: #105295;
     position: fixed;
-    transition:left 0.07s ease-in;
-    left: -15rem;
+    transition:left 0.07s ease-in,top 0.07s ease-in;
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 8rem;
+    padding-top: 6rem;
     top: 0;
     bottom: 0;
     letter-spacing: 1px;
@@ -458,7 +457,7 @@ aside {
     header {
         align-items: center;
         font-size: 2.5vw;
-        height: 7vh;
+        height: 12vw;
     }
     header img {
         width: 6vw;
@@ -467,19 +466,21 @@ aside {
         margin-left: 3vw;
     }
     .vypln {
-        height: 7vh;
+        height: 12vw;
     }
     .nadpis {
         margin: 2vw 0;
     }
     .kategorie {
-        padding-top: 7vh;
+        padding-top: 12vw;
         width: 100%;
         height: auto;
         bottom:unset;
+        left: 0;
     }
     .kategorie li {
         font-size: 3vw;
+        padding: 3.5vw 0;
     }
     .kategorie img {
         width: 6vw;
