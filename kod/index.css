@@ -290,7 +290,7 @@ main .doporucene-produkty {
     width: 100%;
     margin: 2rem 0;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 .sporty a {
     display: flex;
