@@ -435,7 +435,7 @@ aside {
         flex-direction: column;
     }
     .znacky img {
-        width: 60vw;
+        width: 50vw;
     }
     .produkty-ve-sleve {
         grid-template-columns: repeat(1,1fr);
@@ -450,7 +450,8 @@ aside {
         grid-template-columns: repeat(1, 1fr);
     }
     .sporty a img {
-        width: 40vw;
+        width: 35vw;
+        margin-bottom: 1.5vw;
     }
 }
 @media only screen and (max-width: 650px) {
