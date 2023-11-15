@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$html = file_get_contents("kod/stranky/index.html");
+$html = file_get_contents("index.html");
 
 $db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
 
@@ -18,7 +18,7 @@ $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($arr as $key => $value) {
     # code...
 
-    $src = "kod/obrazky/" . $value["obrazek_src"];
+    $src = "obrazky/" . $value["obrazek_src"];
 
     $html = preg_replace("/\[@doporuceny-produkt-obrazek]/",$src, $html,1);
     $html = preg_replace("/\[@nazev\]/",$value["nazev"], $html,1);
@@ -41,7 +41,7 @@ $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($arr as $key => $value) {
     # code...
 
-    $src = "kod/obrazky/" . $value["obrazek_src"];
+    $src = "obrazky/" . $value["obrazek_src"];
 
     $html = preg_replace("/\[@produkt-ve-sleve-obrazek]/",$src, $html,1);
     $html = preg_replace("/\[@produkt-ve-sleve-nazev\]/",$value["nazev"], $html,1);

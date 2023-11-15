@@ -260,11 +260,11 @@ main .doporucene-produkty {
     align-self: center;
 }
 .obrazek-nazev h3 {
-    margin: 0.45rem 0 0.25rem 0.25rem;
+    margin: 0.45rem 0 0.25rem 0;
     color: #000000;
 }
 .obrazek-nazev h4 {
-    margin: 0.25rem 0 2rem 0.25rem;
+    margin: 0.25rem 0 2rem 0;
     color:#70707090 ;
 }
 .produkty-ve-sleve a .dekorace-cara {
@@ -330,11 +330,12 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     background-color: #187AD9;
     color: #FAFAFA;
     height: 15rem;
     width: 100%;
-    font-size: 5vw;
+    font-size: 1rem;
 }
 aside {
     position: fixed;
@@ -428,15 +429,6 @@ aside {
 }
 
 @media only screen and (max-width: 850px) {
-    .znacky .dekorace-cara {
-        display: none;
-    }
-    .znacky {
-        flex-direction: column;
-    }
-    .znacky img {
-        width: 50vw;
-    }
     .produkty-ve-sleve {
         grid-template-columns: repeat(1,1fr);
     }
@@ -444,10 +436,12 @@ aside {
         width: 60vw;
     }
     .obrazek-nazev img {
-        width:40vw;
+        width:50vw;
+        padding:1vw 0;
     }
     .sporty {
         grid-template-columns: repeat(1, 1fr);
+        margin: 2vw 0;
     }
     .sporty a img {
         width: 35vw;
@@ -498,6 +492,19 @@ aside {
     }
 }
 @media only screen and (max-width: 600px) {
+    .znacky .dekorace-cara {
+        display: none;
+    }
+    .znacky {
+        flex-direction: column;
+    }
+    .znacky img {
+        width: 40vw;
+        margin-bottom: 10vw;
+    }
+    .znacky a:last-child img {
+        margin: 0;
+    }
     .doporuceny-produkt .parametry h3 {
         font-size: 6.5vw;
     }
@@ -542,16 +549,17 @@ aside {
         font-size: 3vw;
     }
     .obrazek-nazev h3 {
-        font-size: 4vw;
+        font-size: 5vw;
     }
     .obrazek-nazev h4 {
-        font-size: 3vw;
+        font-size: 4vw;
+        margin-bottom: 2vw;
     }
     .produkty-ve-sleve s {
-        font-size: 2.5vw;
+        font-size: 3.5vw;
     }
     .produkty-ve-sleve b {
-        font-size: 5vw;
+        font-size: 6vw;
     }
     .sporty b {
         font-size: 4.5vw;
@@ -561,5 +569,14 @@ aside {
     }
     header nav:first-child img:last-child {
         margin-left: 1vw;
+    }
+    .ceny {
+        margin-top: 2vw;
+    }
+    .nadpis .dekorace-cara {
+        display:none;
+    }
+    footer {
+        font-size: 3vw;
     }
 }
