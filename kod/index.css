@@ -334,8 +334,9 @@ footer {
     background-color: #187AD9;
     color: #FAFAFA;
     height: 15rem;
-    width: 100%;
+    width: 90%;
     font-size: 1rem;
+    padding: 5%;
 }
 aside {
     position: fixed;
@@ -577,6 +578,7 @@ aside {
         display:none;
     }
     footer {
-        font-size: 3vw;
+        font-size: 4vw;
     }
 }
+/*poupravit index.css na sablonu.css + soubor k index.html*/

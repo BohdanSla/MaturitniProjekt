@@ -41,7 +41,6 @@ function zmenPolohuPostrannihoMenu() {
     }
 }
 
-let prvni = true
 
 function otevriPostraniMenu() {
     if (window.innerWidth > "650") {
@@ -62,6 +61,7 @@ function otevriPostraniMenu() {
         }
     }
 }
+
 let polozkaSlideru = 0
 
 let doporucenyProdukty = document.querySelectorAll(".doporuceny-produkt");

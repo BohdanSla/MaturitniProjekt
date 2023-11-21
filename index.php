@@ -6,7 +6,7 @@ $html = file_get_contents("index.html");
 
 $db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
 
-$stmt = $db->prepare("SELECT produkt.nazev, produkt.popis, produkt.cena, produkt.hodnoceni_produktu, obrazek.obrazek_src
+$stmt = $db->prepare("SELECT produkt.nazev, produkt.popis, produkt.cena, produkt.hodnoceni_produktu, obrazek.src
 FROM produkt 
 JOIN obrazky_k_produktu ON produkt.id = obrazky_k_produktu.id_produktu
 JOIN obrazek ON obrazky_k_produktu.id_obrazku = obrazek.id
@@ -18,7 +18,7 @@ $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($arr as $key => $value) {
     # code...
 
-    $src = "obrazky/" . $value["obrazek_src"];
+    $src = "obrazky/" . $value["src"];
 
     $html = preg_replace("/\[@doporuceny-produkt-obrazek]/",$src, $html,1);
     $html = preg_replace("/\[@nazev\]/",$value["nazev"], $html,1);
@@ -27,8 +27,8 @@ foreach ($arr as $key => $value) {
     $html = preg_replace("/\[@popis\]/",strval($value["popis"]), $html,1);
 }
 
-
-$stmt = $db->prepare("SELECT produkt.nazev, znacka.znacka, produkt.cena, produkt.cena_ve_sleve, obrazek.obrazek_src 
+// musim dat AS protoze php ma problem se stejnymi nazvy sloupce!!!
+$stmt = $db->prepare("SELECT produkt.nazev, znacka.nazev as znacka, produkt.cena, produkt.cena_ve_sleve, obrazek.src 
 FROM produkt, znacka, obrazek 
 JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id 
 WHERE znacka.id = produkt.id_znacky 
@@ -41,7 +41,7 @@ $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($arr as $key => $value) {
     # code...
 
-    $src = "obrazky/" . $value["obrazek_src"];
+    $src = "obrazky/" . $value["src"];
 
     $html = preg_replace("/\[@produkt-ve-sleve-obrazek]/",$src, $html,1);
     $html = preg_replace("/\[@produkt-ve-sleve-nazev\]/",$value["nazev"], $html,1);

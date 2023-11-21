@@ -4,13 +4,13 @@ INSERT into produkt(nazev,popis,cena,cena_ve_sleve,hodnoceni_produktu,id_znacky,
 
 INSERT INTO recenze(recenze, pocet_hvezd, id_produktu, id_uzivatele) VALUES ("Vyzerajú dobre, ale vrátené, lebo nesedela veľkosť, napriek tomu, že mám tejto veľkosti už dvojo adidasov. Objednané väčšie...",3,1,2)
 /*vyber produktu*/
-SELECT produkt.nazev, produkt.popis, produkt.cena, produkt.hodnoceni_produktu, obrazek.obrazek_src
+SELECT produkt.nazev, produkt.popis, produkt.cena, produkt.hodnoceni_produktu, obrazek.src
 FROM produkt 
 JOIN obrazky_k_produktu ON produkt.id = obrazky_k_produktu.id_produktu
 JOIN obrazek ON obrazky_k_produktu.id_obrazku = obrazek.id
 LIMIT 4
 
-SELECT produkt.nazev, znacka.znacka, produkt.cena, produkt.cena_ve_sleve, obrazek.obrazek_src 
+SELECT produkt.nazev, znacka.nazev, produkt.cena, produkt.cena_ve_sleve, obrazek.src 
 FROM produkt, znacka, obrazek 
 JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id 
 WHERE znacka.id = produkt.id_znacky 
