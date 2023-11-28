@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$html = file_get_contents("index.html");
+$html = file_get_contents("kod/html/index.html");
 
 $db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
 
@@ -20,7 +20,7 @@ foreach ($arr as $key => $value) {
 
     $src = "obrazky/" . $value["src"];
 
-    $html = preg_replace("/\[@doporuceny-produkt-obrazek]/",$src, $html,1);
+    $html = preg_replace("/\[@doporuceny-produkt-obrazek\]/",$src, $html,1);
     $html = preg_replace("/\[@nazev\]/",$value["nazev"], $html,1);
     $html = preg_replace("/\[@cena\]/",zformulujCenu(strval($value["cena"])), $html,1);
     $html = preg_replace("/\[@recenze\]/",strval($value["hodnoceni_produktu"]), $html,1);

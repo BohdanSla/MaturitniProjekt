@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="cz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="kod/css/index.css" rel="stylesheet" type="text/css">
+    <link href="kod/css/login.css" rel="stylesheet" type="text/css">
+    <script defer src="kod/js/sablona.js"></script>
+    <title>Pro sportovce</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="obrazky/menu_ikona.svg" alt="menu_ikona">
+            <a href="index.php">
+                <h1>PRO SPORTOVCE</h1>
+                <img src="obrazky/logo_ikona.svg" alt="logo_ikona">
+            </a>
+        </nav>
+        <nav>
+            <form method="get" enctype="text/plain">
+                <input type="search" name="hledat" placeholder="Vyhledat vybavení">
+                <button type="submit" name="odeslat">
+                    <img src="obrazky/lupa_ikona_cerna.svg" alt="lupa_ikona">
+                </button>
+            </form>
+        </nav>
+    </header>
+    <aside>
+        <nav>
+            <ul>
+                <a href="kosik.php">
+                    <li>
+                        <img src="obrazky/kosik_ikona.svg" alt="kosik_ikona">
+                        Košík
+                    </li>
+                </a>
+                <a href="ucet.php">
+                    <li>
+                        <img src="obrazky/ucet_ikona.svg" alt="ucet_ikona">                        
+                        Účet
+                    </li>
+                </a>
+                <a href="oblibene.php">
+                    <li>
+                        <img src="obrazky/srdce_ikona.svg" alt="srdce_ikona">
+                        Oblíbené produkty
+                    </li>
+                </a>
+                <a href="vypis.php">
+                    <li>Všechny produkty</li>
+                </a>
+                <a href="vypis.php?typ=obleceni">
+                    <li>Oblečení</li>
+                </a>
+                <a href="vypis.php?typ=doplnky">
+                    <li>Doplňky</li>
+                </a>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <div class="vypln">
+        </div>
+        <div class="login">
+            <form method="post">
+                <h2>Login</h2>
+                <div class="udaj">
+                    Email<input type="email" name="email" required>
+                </div>
+                <div class="udaj">
+                    Heslo<input type="password" name="heslo" required>
+                </div>
+                <input type="submit" name="odeslat" value="Přihlásit se">
+                <a href="registrace.php">Registrovat se</a>
+            </form>
+        </div>
+    </main>
+    <footer>
+        Tento eshop je Maturitní projekt<br>
+        práva na obrázky produktů patří sportisimu a značek about you.
+    </footer>
+</body>
+</html>

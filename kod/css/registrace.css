@@ -1,0 +1,66 @@
+.registrace {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.registrace form {
+    background-color: #DCDCDCDC;
+    width: 40%;
+    border-radius: 0.15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: larger;
+    padding-bottom: 2%;
+}
+.registrace form input[type="submit"] {
+    background-color: #C70000;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: #F6F6F6;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 0.15rem;
+    border: none;
+    margin-top: 5%;
+}
+.registrace form input[type="submit"]:hover {
+    cursor: pointer;
+}
+.registrace form h2 {
+    margin-bottom: 5%;
+}
+.registrace form h4 {
+    margin:0 0 5% 0;
+}
+.registrace form input[type="button"]:hover {
+    cursor: pointer;
+}
+.jmeno-prijmeni {
+    display: flex;
+}
+.jmeno-prijmeni .udaj {
+    justify-content: space-around   ;
+}
+.udaj input  {
+    padding:1% 2%;
+    border: none;
+    outline: none;
+    width: 60%;
+    text-align: center;
+}
+.registrace form a {
+    margin-top: 2%;
+    font-size:medium;
+    color: blue;
+}
+.udaj {
+    margin-bottom: 5%;
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+}
+

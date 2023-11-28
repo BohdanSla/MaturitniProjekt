@@ -336,7 +336,7 @@ footer {
     height: 15rem;
     width: 90%;
     font-size: 1rem;
-    padding: 5%;
+    padding:0 5%;
 }
 aside {
     position: fixed;
@@ -348,7 +348,7 @@ aside {
     visibility: hidden;
     transition:visibility 0.05s ease-in;
 }
-.kategorie {
+aside nav {
     height: inherit;
     width: 15rem;
     background-color: #105295;
@@ -362,17 +362,17 @@ aside {
     bottom: 0;
     letter-spacing: 1px;
 }
-.kategorie img {
+aside nav img {
     width: 2.5rem;
 }
-.kategorie ul {
+aside nav ul {
     text-decoration: none;
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 100%;
 }
-.kategorie li {
+aside nav li {
     color: #F6F6F6;
     font-size: larger;
     display: flex;
@@ -381,10 +381,10 @@ aside {
     padding: 1.5rem 0;
     border-bottom: #000000 solid 1px;
 }
-.kategorie a  {
+aside nav a  {
     text-decoration: none;
 }
-.kategorie li:hover {
+aside nav li:hover {
     background-color: #aed2f8;
     color: #1c1c1c;
 }
@@ -467,18 +467,18 @@ aside {
     .nadpis {
         margin: 2vw 0;
     }
-    .kategorie {
+    aside nav {
         padding-top: 12vw;
         width: 100%;
         height: auto;
         bottom:unset;
         left: 0;
     }
-    .kategorie li {
+    aside nav li {
         font-size: 3vw;
         padding: 3.5vw 0;
     }
-    .kategorie img {
+    aside nav img {
         width: 6vw;
     }
     aside {

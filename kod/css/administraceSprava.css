@@ -1,0 +1,322 @@
+main {
+    background-color: rgb(224, 224, 224);
+    min-height: 100vh;
+}
+p {
+    margin: 0;
+}
+.produkty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+input[type=search] {
+    width: 40%;
+    border-radius:0.25rem ;
+    border: 1px solid rgb(215, 215, 215);
+    padding: 1%;
+    font-size: large;
+    margin-left: 2%;
+}
+.produkt, .novy-produkt {
+    width: 86%;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding:1% 2%;
+    margin: 1rem 0;
+}
+.nazev {
+    display: flex;
+    align-items: center;
+}
+.nazev img:first-child {
+    height: 5rem;
+    margin-right: 2rem;
+}
+.nazev img:last-child {
+    height: 2.5rem;
+    z-index: 1;
+}
+.nazev img:last-child:hover {
+    cursor: pointer;
+}
+.produkty form {
+    display: flex;
+}
+.produkty form input {
+    text-align: center;
+}
+textarea {
+    max-width: 14rem;
+}
+.parametry {
+    text-align: center;
+    display: flex;
+}
+.galerie img {
+    width: 5rem;
+}
+.parametry-hlavni-obrazek {
+    display: flex;
+    flex-direction: column;
+}
+.hlavni-obrazek img {
+    width: 10rem;
+}
+.hlavni-obrazek {
+    display: flex;
+    flex-direction: column;
+}
+.hlavni-obrazek input{
+    margin-top: 2%;
+}
+table,td {
+    padding: 2%;
+    border: 1px solid rgb(195, 195, 195);
+}
+.produkt .obrazky-mnozstvi table {
+    padding: 0;
+}
+.produkty tr td:last-child {
+    text-align: center;
+    width: 60%;
+}
+td div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hlavni-obrazek h2 {
+    margin: 0;
+}
+.obrazky-mnozstvi {
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+}
+.obrazky-mnozstvi table {
+    width: 100%;
+}
+.produkt form img {
+    border: 1px solid rgb(185, 185, 185);
+}
+.produkt .obrazky-mnozstvi table tr td:first-child {
+    width: 22%;
+}
+.produkt .obrazky-mnozstvi table tr td:nth-child(2) {
+    width: 50%;
+}
+.produkt .obrazky-mnozstvi table tr td:last-child {
+    width: 20%
+}
+.produkt .obrazky-mnozstvi table input {
+    width: 5rem;
+}
+.barva {
+    padding: 2%;
+    width: 96%;
+}
+.galerie {
+    margin: 2% 0;
+    display: flex;
+    align-items: center;
+}
+.galerie > * {
+    margin-right: 1rem;
+}
+input[type=submit] {
+    padding: 1%;
+    border-radius: 0.15rem;
+}
+.tlacitka {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+nav ul {
+    display: flex;
+    text-decoration: none;
+    width: 100%;
+    justify-content: space-evenly   ;
+    list-style-type: none;
+    margin: 0;
+}
+nav ul li {
+    border-radius: 0.25rem;
+    padding: 2%;
+}
+nav ul li:first-child {
+    background-color: #DDDDDD;
+}
+nav ul li:hover {
+    cursor: pointer;
+}
+.modal-pozadi {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+.modal {
+    display: inherit;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 25%;
+    height: 20%;
+    z-index: 3;
+    flex-direction: column;
+    border: 0,15rem;
+}
+.modal-tlacitka {
+    display: inherit;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+}
+.menu {
+    display: flex;
+    padding: 1%;
+    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    width: 98%;
+    background-color: #f8f8f8;
+    flex-direction: column;
+}
+.menu > * {
+    display: flex;
+    justify-content: space-evenly;
+    border-radius: 0.25rem;
+    padding: 1% 0;
+}
+.hledani {
+    margin-top: 2%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.menu nav {
+    width: 50%;
+}
+.tlacitka > *:hover {
+    cursor: pointer;
+}
+.slevove-kody {
+    padding: 1%;
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.obrazky-mnozstvi h1 {
+    align-self:flex-start;
+    margin: 0;
+}
+.kody {
+    padding: 1%;
+    width: 90%;
+    background-color: white;
+    display: flex;
+}
+.kody table {
+    width: 40%;
+    height: 5rem;
+    margin-top: 2%;
+}
+.slevove-kody table {
+    width: 100%;
+    text-align: center;
+}
+.slevove-kody form {
+    padding: 2%;
+}
+.slevove-kody form:first-child {
+    width: 55%;
+}
+.sporty, .znacky {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+}
+.slevove-kody input[type=submit] {
+    margin-top: 1rem;
+}
+.slevove-kody .hledani {
+    margin-bottom: 1rem;
+}
+.uzivatele {
+    padding: 1%;
+    width: 98%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+.uzivatel {
+    width: 30%;
+    padding: 1%;
+    display: flex;
+    background-color: #f8f8f8;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.15rem;
+    margin-bottom: 1rem;
+    flex-direction: column;
+}
+.uzivatel input[type=button] {
+    height: 1.5rem;
+}
+.uzivatel div p  {
+    word-break: break-all;
+    margin:0 0 1rem 0 ;
+}
+.uzivatele .hledani {
+    margin-bottom: 2rem;
+}
+.vyber-stranky {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    width: 5%;
+    justify-content: space-evenly;
+}
+.vyber-stranky input[type=button] {
+    padding: 5%;
+}
+.stranka {
+    width: inherit;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.atributy-produktu {
+    display: none;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 100%;
+
+}
+.atribut {
+    background-color: #fff;
+    margin: 1rem 0;
+    padding: 1%;
+    border-radius: 0.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 45%;
+}
+

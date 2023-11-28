@@ -1,0 +1,72 @@
+.vypis {
+    display: flex;
+    flex-direction: row;
+}
+.filtry {
+    width: 15%;
+    min-height: 30rem;
+    background-color: #f6f6f6;
+    padding:1vw;
+}
+.produkty {
+    width: 75%;
+    min-height: 30rem;
+    padding: 1% 7% 0 3%;
+}
+.filtr {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 0.15rem;
+    border: 1px solid rgba(0, 0, 0, 0.049);
+    padding: 1vw;
+    margin-top: 0.5rem;
+}
+.nazev-filtru {
+    display: flex;
+    align-items: center;
+}
+.nazev-filtru img {
+    width: 1.5rem;
+    transition: transform 0.05s ease-in;
+}
+.nazev-filtru img:hover {
+    cursor: pointer;
+}
+.filtry .cena b {
+    margin-bottom: 1vw;
+}
+/*abych neměl na pravé straně inputu spinner*/
+input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type="number"] {
+    border: 1px solid rgb(161, 161, 161);
+    border-radius: 0.15rem;
+    outline: none;
+    padding:2%;
+    width: 50%;
+    text-align: center;
+}
+.produkty a {
+    border: solid 1px rgb(220, 220, 220);
+    width: calc(90% / 3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1%;
+    text-decoration: none;
+    color: black;
+}
+.produkty a:hover {
+    border: 1px solid rgb(129, 129, 255);
+    cursor: pointer;
+}
+.produkty a img {
+    width: 90%;
+}
+.parametry {
+    display: flex;
+    flex-direction: column;
+    width:90%;
+}

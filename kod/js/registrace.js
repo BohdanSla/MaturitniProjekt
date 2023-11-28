@@ -1,17 +1,8 @@
-// let nadpisy = document.querySelector("main").querySelectorAll("h2");
-// nadpisy = Array.from(nadpisy).map(e => e.offsetWidth);
-// let plochy = document.querySelector("main").querySelectorAll(".bily-prostor");
-
-// for (let index = 0; index < plochy.length; index++) {
-//     let sirka = nadpisy[index] + 80;
-//     plochy[index].style.width = sirka + "px";
-// }
-
 let ikonaMenu = document.querySelector("header nav img:first-child");
 ikonaMenu.addEventListener("click",otevriPostraniMenu);
 
-let postranniMenu = document.querySelector(".kategorie");
 let tmavaPlocha = document.querySelector("aside");
+let postranniMenu = tmavaPlocha.querySelector("nav");
 
 if (window.innerWidth > 650) {
     postranniMenu.style.left = "-240px";
@@ -61,3 +52,28 @@ function otevriPostraniMenu() {
         }
     }
 }
+
+let hesla = document.querySelectorAll("input[type=\"password\"]")
+let telefonniCislo = document.querySelector("input[type=\"tel\"]")
+
+let telefonniCisloRegex = /(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/
+let hesloRegex = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!#$%&? "])[a-zA-Z0-9!#$%&? ]{8,20}$/    
+
+
+telefonniCislo.addEventListener("input",function() {
+    if (!telefonniCisloRegex.test(telefonniCislo.value)) {
+        console.log("špatně zadané telefonní číslo");
+    }
+})
+
+hesla[0].addEventListener("input",function(){
+    if(!hesloRegex.test(hesla[0].value)) {
+        console.log("heslo neopovídá daným požadavkům");
+    }
+})
+
+hesla[1].addEventListener("input",function(){
+    if (hesla[0].value !== hesla[1].value) {
+        console.log("Heslo není stejné");
+    }
+})

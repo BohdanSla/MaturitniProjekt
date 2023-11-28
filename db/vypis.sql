@@ -25,3 +25,63 @@ UPDATE produkt JOIN (
     HAVING recenze.id_produktu = 1
 ) subquery ON 1=1
 SET produkt.hodnoceni_produktu = subquery.prumer
+
+SELECT produkt.nazev, produkt.cena, produkt.cena_ve_sleve, GROUP_CONCAT(barva.nazev) AS barvy
+FROM produkt,barva
+JOIN mnozstvi_produktu_urcite_barvy_a_velikosti ON mnozstvi_produktu_urcite_barvy_a_velikosti.id_produktu = produkt.id
+WHERE barva.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_barvy
+
+SELECT
+    obrazek.src
+    produkt.nazev,
+    produkt.cena,
+    produkt.cena_ve_sleve,
+    GROUP_CONCAT(barva.nazev) AS barvy
+FROM produkt
+JOIN mnozstvi_produktu_urcite_barvy_a_velikosti ON mnozstvi_produktu_urcite_barvy_a_velikosti.id_produktu = produkt.id
+JOIN barva ON barva.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_barvy
+JOIN 
+GROUP BY produkt.id
+
+SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,produkt.hodnoceni_produktu,znacka.nazev AS znacka,sport.nazev AS sport 
+FROM produkt
+JOIN znacka ON znacka.id = produkt.id_znacky
+JOIN sport ON sport.id = produkt.id_sportu
+WHERE produkt.nazev = :nazev
+
+/*administrace*/
+/**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**/
+SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve, kategorie_produktu.kategorie,kategorie_produktu.podkategorie,
+znacka.nazev AS znacka,
+sport.nazev AS sport
+FROM produkt
+JOIN kategorie_produktu ON produkt.id_kategorie_produktu = kategorie_produktu.id
+JOIN znacka ON znacka.id = produkt.id_znacky
+JOIN sport ON sport.id = produkt.id_sportu
+ORDER BY produkt.nazev ASC
+
+
+SELECT produkt.nazev,material.nazev AS material, materialy_produktu.procento_materialu 
+FROM produkt 
+JOIN materialy_produktu ON materialy_produktu.id_produktu = produkt.id 
+JOIN material ON material.id = materialy_produktu.id_materialu
+ORDER BY produkt.nazev ASC
+
+SELECT produkt.nazev,
+velikost.nazev AS velikosti,
+barva.nazev AS barvy,
+mnozstvi_produktu_urcite_barvy_a_velikosti.pocet AS pocet
+FROM produkt
+JOIN mnozstvi_produktu_urcite_barvy_a_velikosti ON mnozstvi_produktu_urcite_barvy_a_velikosti.id_produktu = produkt.id
+JOIN velikost ON velikost.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_velikosti
+JOIN barva ON barva.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_barvy
+ORDER BY produkt.nazev ASC
+SELECT produkt.nazev,
+barva.nazev AS barvy,
+obrazek.src AS obrazky
+FROM produkt
+JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
+JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
+JOIN barva ON barva.id = obrazky_k_produktu.id_barvy
+ORDER BY produkt.nazev ASC
+/**//**//**//**//**//**//**//**//**/

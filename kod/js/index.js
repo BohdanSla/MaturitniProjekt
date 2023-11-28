@@ -10,8 +10,8 @@ for (let index = 0; index < plochy.length; index++) {
 let ikonaMenu = document.querySelector("header nav img:first-child");
 ikonaMenu.addEventListener("click",otevriPostraniMenu);
 
-let postranniMenu = document.querySelector(".kategorie");
 let tmavaPlocha = document.querySelector("aside");
+let postranniMenu = tmavaPlocha.querySelector("nav");
 
 if (window.innerWidth > 650) {
     postranniMenu.style.left = "-240px";
@@ -23,7 +23,6 @@ if (window.innerWidth > 650) {
 window.addEventListener("resize",zmenPolohuPostrannihoMenu)
 
 function zmenPolohuPostrannihoMenu() {
-    console.log(this.innerWidth);
     if (this.innerWidth > 650) {
         if (tmavaPlocha.style.visibility == "visible") {
             postranniMenu.style.left = "0";

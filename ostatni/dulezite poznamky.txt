@@ -4,9 +4,5 @@ posetrit si, kdyby se mi nekdo v tom hrabal, tak si tam dat backdoor(zadní vrá
 nemit v nazvu projektu eshop
 nedelat intranet!!!!
 
-DŮ
-mít základní body k maturitnímu projektu(název, co bude umět, věty o tom)
-
-
-jmena pro eshop:
-Pro sportovce
+jmeno pro administratora: administrator
+heslo pro administratora: AdmnstrtrProSprotvce23$
