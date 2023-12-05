@@ -11,19 +11,27 @@ p {
     align-items: center;
 }
 input[type=search] {
-    width: 40%;
+    width: 50%;
     border-radius:0.25rem ;
     border: 1px solid rgb(215, 215, 215);
     padding: 1%;
     font-size: large;
     margin-left: 2%;
 }
-.produkt, .novy-produkt {
+.novy-produkt {
+    width: 100%;
+    display: flex;
+    justify-content: center ;
+}
+.produkt  {
     width: 86%;
     background-color: white;
     border-radius: 0.5rem;
     padding:1% 2%;
-    margin: 1rem 0;
+    margin-top: 1rem;
+}
+#striska {
+    transform:rotate(-90deg);
 }
 .nazev {
     display: flex;
@@ -53,7 +61,7 @@ textarea {
     text-align: center;
     display: flex;
 }
-.galerie img {
+.barva table img {
     width: 5rem;
 }
 .parametry-hlavni-obrazek {
@@ -71,7 +79,7 @@ textarea {
     margin-top: 2%;
 }
 table,td {
-    padding: 2%;
+    padding: 0.5rem;
     border: 1px solid rgb(195, 195, 195);
 }
 .produkt .obrazky-mnozstvi table {
@@ -111,9 +119,6 @@ td div {
 .produkt .obrazky-mnozstvi table tr td:last-child {
     width: 20%
 }
-.produkt .obrazky-mnozstvi table input {
-    width: 5rem;
-}
 .barva {
     padding: 2%;
     width: 96%;
@@ -146,6 +151,7 @@ nav ul {
 nav ul li {
     border-radius: 0.25rem;
     padding: 2%;
+    font-weight: bold;
 }
 nav ul li:first-child {
     background-color: #DDDDDD;
@@ -200,7 +206,7 @@ nav ul li:hover {
     border-radius: 0.25rem;
     padding: 1% 0;
 }
-.hledani {
+.produkty .hledani-navrhy {
     margin-top: 2%;
     width: 100%;
     display: flex;
@@ -275,6 +281,13 @@ nav ul li:hover {
     margin-bottom: 1rem;
     flex-direction: column;
 }
+.uzivatele table {
+    background-color: #fff;
+    width: 88%;
+}
+.uzivatele table td:last-child {
+    width: 7.5rem;
+}
 .uzivatel input[type=button] {
     height: 1.5rem;
 }
@@ -284,16 +297,6 @@ nav ul li:hover {
 }
 .uzivatele .hledani {
     margin-bottom: 2rem;
-}
-.vyber-stranky {
-    display: flex;
-    align-self: center;
-    align-items: center;
-    width: 5%;
-    justify-content: space-evenly;
-}
-.vyber-stranky input[type=button] {
-    padding: 5%;
 }
 .stranka {
     width: inherit;
@@ -319,4 +322,13 @@ nav ul li:hover {
     gap: 0.5rem;
     width: 45%;
 }
-
+.hledani {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20rem;
+}
+.hledani input[type=search] {
+    width: 100%;
+    margin: unset;
+}

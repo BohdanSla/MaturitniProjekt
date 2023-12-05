@@ -29,7 +29,7 @@ if (isset($_POST["odeslat"])) {
             # code...
             if (password_verify($_POST["heslo"],$arr[0]["heslo"])) {
                 # code...
-                $_SESSION["user"] = $login;
+                $_SESSION["username"] = $login;
                 echo "User: $login";
 
                 header("Location: administraceSprava.php");

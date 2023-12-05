@@ -49,17 +49,27 @@ JOIN znacka ON znacka.id = produkt.id_znacky
 JOIN sport ON sport.id = produkt.id_sportu
 WHERE produkt.nazev = :nazev
 
-/*administrace*/
-/**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**/
-SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve, kategorie_produktu.kategorie,kategorie_produktu.podkategorie,
+SELECT obrazek.src,produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve, kategorie_produktu.kategorie,kategorie_produktu.podkategorie,
 znacka.nazev AS znacka,
 sport.nazev AS sport
 FROM produkt
 JOIN kategorie_produktu ON produkt.id_kategorie_produktu = kategorie_produktu.id
 JOIN znacka ON znacka.id = produkt.id_znacky
 JOIN sport ON sport.id = produkt.id_sportu
-ORDER BY produkt.nazev ASC
+JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
+JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_produktu
+GROUP BY obrazek.id
+ORDER BY produkt.nazev ASC;
 
+/*administrace*/
+/**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**//**/
+
+SELECT produkt.nazev, obrazek.src,produkt.popis,produkt.cena,produkt.cena_ve_sleve,kategorie_produktu.kategorie, kategorie_produktu.podkategorie, 
+znacka.nazev AS znacka, 
+sport.nazev AS sport FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu JOIN znacka ON znacka.id = produkt.id_znacky JOIN sport ON sport.id = produkt.id_sportu WHERE obrazek.src LIKE "%main%" ORDER BY produkt.nazev ASC;
+
+/*udava pocet barev ke kazdemu produktu*/
+SELECT produkt.nazev, COUNT(DISTINCT obrazky_k_produktu.id_barvy) FROM produkt,obrazky_k_produktu,barva WHERE barva.id = obrazky_k_produktu.id_barvy and produkt.id = obrazky_k_produktu.id_produktu GROUP BY produkt.id
 
 SELECT produkt.nazev,material.nazev AS material, materialy_produktu.procento_materialu 
 FROM produkt 
@@ -68,14 +78,15 @@ JOIN material ON material.id = materialy_produktu.id_materialu
 ORDER BY produkt.nazev ASC
 
 SELECT produkt.nazev,
-velikost.nazev AS velikosti,
-barva.nazev AS barvy,
+velikost.nazev AS velikost,
+barva.nazev AS barva,
 mnozstvi_produktu_urcite_barvy_a_velikosti.pocet AS pocet
 FROM produkt
 JOIN mnozstvi_produktu_urcite_barvy_a_velikosti ON mnozstvi_produktu_urcite_barvy_a_velikosti.id_produktu = produkt.id
 JOIN velikost ON velikost.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_velikosti
 JOIN barva ON barva.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_barvy
 ORDER BY produkt.nazev ASC
+
 SELECT produkt.nazev,
 barva.nazev AS barvy,
 obrazek.src AS obrazky
@@ -85,3 +96,68 @@ JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
 JOIN barva ON barva.id = obrazky_k_produktu.id_barvy
 ORDER BY produkt.nazev ASC
 /**//**//**//**//**//**//**//**//**/
+
+
+/*lepsi verze selectu produktu-----------------*/
+SELECT 
+  produkt.nazev,
+  obrazek.src,
+  produkt.popis,
+  produkt.cena,
+  produkt.cena_ve_sleve,
+  kategorie_produktu.kategorie,
+  kategorie_produktu.podkategorie,
+  znacka.nazev AS znacka,
+  sport.nazev AS sport,
+  (
+    SELECT COUNT(DISTINCT obrazky_k_produktu.id_barvy) 
+    FROM obrazky_k_produktu 
+    JOIN barva ON barva.id = obrazky_k_produktu.id_barvy 
+    WHERE obrazky_k_produktu.id_produktu = produkt.id
+  ) AS barvy_count
+FROM 
+  produkt 
+  JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+  JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+  JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
+  JOIN znacka ON znacka.id = produkt.id_znacky 
+  JOIN sport ON sport.id = produkt.id_sportu 
+WHERE 
+  obrazek.src LIKE "%main%" 
+ORDER BY 
+  produkt.nazev ASC;
+
+
+/*druha verze*/
+  SELECT 
+  produkt.nazev,
+  obrazek.src,
+  produkt.popis,
+  produkt.cena,
+  produkt.cena_ve_sleve,
+  kategorie_produktu.kategorie,
+  kategorie_produktu.podkategorie,
+  znacka.nazev AS znacka,
+  sport.nazev AS sport,
+  (
+    SELECT COUNT(DISTINCT obrazky_k_produktu.id_barvy) 
+    FROM obrazky_k_produktu, barva 
+    WHERE barva.id = obrazky_k_produktu.id_barvy 
+    AND produkt.id = obrazky_k_produktu.id_produktu 
+  ) AS pocet_barev
+FROM 
+  produkt 
+JOIN 
+  obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+JOIN 
+  obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+JOIN 
+  kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
+JOIN 
+  znacka ON znacka.id = produkt.id_znacky 
+JOIN 
+  sport ON sport.id = produkt.id_sportu 
+WHERE 
+  obrazek.src LIKE "%main%" 
+ORDER BY 
+  produkt.nazev ASC;
