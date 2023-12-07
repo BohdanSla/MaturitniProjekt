@@ -48,11 +48,9 @@ input[type=search] {
 .nazev img:last-child:hover {
     cursor: pointer;
 }
-.produkty form {
-    display: flex;
-}
-.produkty form input {
+.produkty form input[type=submit] {
     text-align: center;
+    margin-right: 1rem;
 }
 textarea {
     max-width: 14rem;
@@ -137,7 +135,8 @@ input[type=submit] {
 }
 .tlacitka {
     display: flex;
-    justify-content: space-evenly;
+    margin-top: 1rem;
+    justify-content: center;
     width: 100%;
 }
 nav ul {
@@ -331,4 +330,13 @@ nav ul li:hover {
 .hledani input[type=search] {
     width: 100%;
     margin: unset;
+}
+#hledat-produkt {
+    margin-left: 1rem;
+}
+.hlavni-info {
+    display: flex;
+}
+#popisProduktu {
+    height: 15rem;
 }

@@ -21,8 +21,7 @@
         <div class="modal">
             Přidat novou velikost:
             <select name="kategorie" id="velikost">
-                <option value="volvo">Oblečení</option>
-                <option value="saab">Doplňky</option>
+                [@velikosti]
             </select>
             Počet kusů:
             <input type="number" id="pocet">
@@ -67,186 +66,27 @@
                 <div class="nazev">
                     <h1>Vyhledaný produkt:</h1>
                 </div>
-                <form method="post" enctype="multipart/form-data">
-                    <div class="parametry-hlavni-obrazek">
-                        <h1>Základní informace</h1>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>Název</td>
-                                    <td><input type="text" name="nazevProduktu"id="nazevProduktu" value="" required></td>
-                                </tr>
-                                <tr>
-                                    <td>Popis</td>
-                                    <td>
-                                        <textarea id="popisProduktu" name="popis" required maxlength="450"></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Cena</td>
-                                    <td>
-                                        <div>
-                                            <input type="number" name="cena" value="" id="cenaProduktu" required>Kč
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Cena ve slevě</td>
-                                    <td>
-                                        <div>
-                                            <input type="number" name="cenaVeSleve" id="cenaProduktuVeSleve" value="">Kč
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Kategorie</td>
-                                    <td>
-                                        <select name="kategorie" id="kategorieProduktu" required>
-                                            [@kategorie-produkty]
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Podkategorie</td>
-                                    <td>
-                                        <select name="podkategorie" id="podkategorieProduktu" required>
-                                            [@podkategorie-produkty]
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Znacka</td>
-                                    <td>
-                                        <select name="znacka" id="znackaProduktu" required>
-                                            [@znacka-produkty]
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Sport</td>
-                                    <td>
-                                        <select name="sport" id="sportProduktu" required >
-                                            [@sport-produkty]
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Materiály<br> 
-                                        (+procento materiálu v produktu)
-                                    </td>
-                                    <td>
-                                        [@materialy-produkty]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Barvy</td>
-                                    <td>
-                                        [@barvy-produkty]
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="hlavni-obrazek">
-                            <h2>Hlavní obrázek</h2>
-                            <img src="" hidden id="hlavniObrazekProduktu">
-                            <input type="file" name="hlavniOrazek">
-                        </div>
-                    </div>
-                    <div class="obrazky-mnozstvi">
-                        <h1>Barvy</h1>
-                        <div class="barva">
-                            <h3>Černá</h3>
-                            <div class="velikosti">
-
-                                <b>Velikosti a množství:</b>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                Velikost 41 1/3
-                                            </td>
-                                            <td>
-                                                    Skladem 5ks + přidat: <input type="number" min="0" name="skladem" value="">ks
-                                            </td>
-                                            <td>
-                                                <input type="button" name="odstranitVelikost" value="odstranit">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Velikost 45 1/3
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    Skladem 12ks + přidat: <input type="number" min="0" name="skladem" value="">ks
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <input type="button" name="odstranitVelikost" value="odstranit">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <input type="button" value="Přidat novou velikost" id="pridat" data-barva="1"><br>
-                            </div>
-                            <div class="obrazky">
-                                <b>Obrázky:</b>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <img src="obrazky/adidas-eastrail-2-r-rdy-yel_1.jpg">
-                                            </td>
-                                            <td>
-                                                <input type="button" value="odebrat obrázek">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="obrazky/adidas-eastrail-2-r-rdy-yel_1.jpg">
-                                            </td>
-                                            <td>
-                                                <input type="button" value="odebrat obrázek">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <input type="file" name="obrazek" value="Vybrat obrázky" multiple>
-                            </div>
-                        </div>
-                        <div class="tlacitka">
-                            <input type="submit" name="reset" value="Resetovat hodnoty produktu">
-                            <input type="submit" name="odstranit" value="Odstranit produkt">
-                            <input type="submit" name="odeslat" value="Aktualizovat produkt">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="novy-produkt">
-                <div class="produkt">
-                    <div class="nazev">
-                        <h1>Vytvořit nový produkt</h1>
-                    </div>
-                    <form method="post" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data" class="vytvorit">
+                    <div class="hlavni-info">
                         <div class="parametry-hlavni-obrazek">
                             <h1>Základní informace</h1>
                             <table>
                                 <tbody>
                                     <tr>
                                         <td>Název</td>
-                                        <td><input type="text" name="nazev" required></td>
+                                        <td><input type="text" name="nazevProduktu"id="nazevProduktu" value="" required></td>
                                     </tr>
                                     <tr>
                                         <td>Popis</td>
                                         <td>
-                                            <textarea name="popis" required maxlength="450"></textarea>
+                                            <textarea id="popisProduktu" name="popis" required maxlength="450"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Cena</td>
                                         <td>
                                             <div>
-                                                <input type="number" name="cena" required>Kč
+                                                <input type="number" name="cena" value="" id="cenaProduktu" required>Kč
                                             </div>
                                         </td>
                                     </tr>
@@ -254,49 +94,39 @@
                                         <td>Cena ve slevě</td>
                                         <td>
                                             <div>
-                                                <input type="number" name="cena">Kč
+                                                <input type="number" name="cenaVeSleve" id="cenaProduktuVeSleve" value="">Kč
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Kategorie</td>
                                         <td>
-                                            <select name="kategorie" required>
-                                                <option value="volvo">Oblečení</option>
-                                                <option value="saab">Doplňky</option>
+                                            <select name="kategorie" id="kategorieProduktu" required>
+                                                [@kategorie-produkty]
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Podkategorie</td>
                                         <td>
-                                            <select name="Podkategorie" required>
-                                                <option value="volvo">obuv</option>
-                                                <option value="saab">bunda</option>
-                                                <option value="fiat">svetr</option>
-                                                <option value="audi">tričko</option>
+                                            <select name="podkategorie" id="podkategorieProduktu" required>
+                                                [@podkategorie-produkty]
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Znacka</td>
                                         <td>
-                                            <select name="znacka" required>
-                                                <option value="volvo">Adidas</option>
-                                                <option value="saab">under armor</option>
-                                                <option value="fiat">nike</option>
-                                                <option value="audi">umbro</option>
+                                            <select name="znacka" id="znackaProduktu" required>
+                                                [@znacka-produkty]
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Sport</td>
                                         <td>
-                                            <select name="sport"required >
-                                                <option value="volvo">beh</option>
-                                                <option value="saab">hokej</option>
-                                                <option value="fiat">fotbal</option>
-                                                <option value="audi">basketbal</option>
+                                            <select name="sport" id="sportProduktu" required >
+                                                [@sport-produkty]
                                             </select>
                                         </td>
                                     </tr>
@@ -305,38 +135,131 @@
                                             (+procento materiálu v produktu)
                                         </td>
                                         <td>
-                                            <input type="checkbox" name="EVA">EVA
-                                            <input type="number" min="1" max="100">%<br>
-                                            <input type="checkbox" name="bavlna">polyester
-                                            <input type="number" min="1" max="100">%<br>
-                                            <input type="checkbox" name="bavlna">Bavlna
-                                            <input type="number" min="1" max="100">%<br>
-                                            <input type="checkbox" name="bavlna">Polyakryl
-                                            <input type="number" min="1" max="100">%<br>
-                                            <input type="checkbox" name="bavlna">Nylon
-                                            <input type="number" min="1" max="100">%<br>
+                                            [@materialy-produkty]
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Barvy</td>
                                         <td>
-                                            <input type="checkbox" name="barva">Zelená<br>
-                                            <input type="checkbox" name="barva">Černá<br>
-                                            <input type="checkbox" name="barva">Modrá<br>
+                                            [@barvy-produkty]
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div class="hlavni-obrazek">
                                 <h2>Hlavní obrázek</h2>
-                                <input type="file" name="hlavni-obrazek">
+                                <img src="" hidden id="hlavniObrazekProduktu">
+                                <input type="file" name="hlavniOrazek">
                             </div>
                         </div>
                         <div class="obrazky-mnozstvi">
-                            <h1>Barvy </h1>
-                            <div class="tlacitka">
-                                <input type="submit" name="vytvoritProdukt" value="Vytvořit produkt">
+                            <h1>Barvy</h1>
+                        </div>
+                    </div>
+                    <div class="tlacitka">
+                        <input type="submit" name="reset" value="Resetovat hodnoty produktu">
+                        <input type="submit" name="odstranit" value="Odstranit produkt">
+                        <input type="submit" name="odeslat" value="Aktualizovat produkt">
+                    </div>
+                </form>
+            </div>
+            <div class="novy-produkt">
+                <div class="produkt">
+                    <div class="nazev">
+                        <h1>Vytvořit nový produkt:</h1>
+                    </div>
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="hlavni-info">
+                            <div class="parametry-hlavni-obrazek">
+                                <h1>Základní informace</h1>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>Název</td>
+                                            <td><input type="text" name="nazevProduktu"id="nazevProduktu" value="" required></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Popis</td>
+                                            <td>
+                                                <textarea id="popisProduktu" name="popis" required maxlength="450"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cena</td>
+                                            <td>
+                                                <div>
+                                                    <input type="number" name="cena" value="" id="cenaProduktu" required>Kč
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cena ve slevě</td>
+                                            <td>
+                                                <div>
+                                                    <input type="number" name="cenaVeSleve" id="cenaProduktuVeSleve" value="">Kč
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kategorie</td>
+                                            <td>
+                                                <select name="kategorie" id="kategorieProduktu" required>
+                                                    [@kategorie-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Podkategorie</td>
+                                            <td>
+                                                <select name="podkategorie" id="podkategorieProduktu" required>
+                                                    [@podkategorie-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Znacka</td>
+                                            <td>
+                                                <select name="znacka" id="znackaProduktu" required>
+                                                    [@znacka-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sport</td>
+                                            <td>
+                                                <select name="sport" id="sportProduktu" required >
+                                                    [@sport-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Materiály<br> 
+                                                (+procento materiálu v produktu)
+                                            </td>
+                                            <td>
+                                                [@materialy-produkty]
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Barvy</td>
+                                            <td>
+                                                [@barvy-produkty]
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="hlavni-obrazek">
+                                    <h2>Hlavní obrázek</h2>
+                                    <img src="" hidden id="hlavniObrazekProduktu">
+                                    <input type="file" name="hlavniOrazek">
+                                </div>
                             </div>
+                            <div class="obrazky-mnozstvi">
+                                <h1>Barvy</h1>
+                            </div>
+                        </div>
+                        <div class="tlacitka">
+                            <input type="submit" name="vytvorit" value="Vytvořit produkt">
                         </div>
                     </form>
                 </div>

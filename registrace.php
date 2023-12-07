@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.php");
+
+use Databaze as Db;
+
 $html = file_get_contents("kod/html/registrace.html");
 
 
 if (isset($_POST["odeslat"])) {
-    $db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
+    $db = new Db();
     # code...
     
     $stmt = $db->prepare("insert into uzivatel(heslo,jmeno,prijmeni,email,telefonni_cislo,psc,ulice,mesto) values(:heslo,:jmeno,:prijmeni,:email,:telefonni_cislo,:psc,:ulice,:mesto)");

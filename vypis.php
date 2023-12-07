@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 $html = file_get_contents("kod/html/vypis.html");
 
-//neni konecne reseni pro sbirani hodnot z db
-$db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
+
+spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.php");
+
+use Databaze as Db;
+
+$db = new Db();
+
 $stmt = $db->prepare("SELECT 
 MAX(GREATEST(produkt.cena,produkt.cena_ve_sleve)) AS nejvetsi_cena 
 FROM produkt");

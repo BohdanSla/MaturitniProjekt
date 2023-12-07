@@ -2,12 +2,17 @@
 
 declare(strict_types=1);
 
-$html = file_get_contents("kod/html/administraceSprava.html");
-$js = file_get_contents("kod/js/administraceSprava.js");
 
 //každý form bude muset mít vlastní name!! (takže přes fory dát navíc čísla), jednotlivé inputy pak ne!!!!!!
 
-    $db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
+spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.php");
+
+use Databaze as Db;
+
+    $db = new Db();
+
+    $html = file_get_contents("kod/html/administraceSprava.html");
+    $js = file_get_contents("kod/js/administraceSprava.js");
 
     //! SELECT pro dany produkt
     //!SELECT pro vybrani vsech kategorie
@@ -15,17 +20,38 @@ $js = file_get_contents("kod/js/administraceSprava.js");
     //!SELECTY pro vybrani vsech znacek,sportu,materialu a barev pro vyber
      //!SELECT barvy,velikosti a mnozstvi pro dany produkt
      //!SELECt materialu pro dany produkt
-    $sql = "SELECT produkt.nazev, obrazek.src,produkt.popis,produkt.cena,produkt.cena_ve_sleve,kategorie_produktu.kategorie, kategorie_produktu.podkategorie, 
-    znacka.nazev AS znacka, 
-    sport.nazev AS sport 
-    FROM produkt 
-    JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
-    JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
-    JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
-    JOIN znacka ON znacka.id = produkt.id_znacky 
-    JOIN sport ON sport.id = produkt.id_sportu 
-    WHERE obrazek.src LIKE '%main%' 
-    ORDER BY produkt.nazev ASC;
+    $sql = 'SELECT 
+    produkt.nazev,
+    obrazek.src,
+    produkt.popis,
+    produkt.cena,
+    produkt.cena_ve_sleve,
+    kategorie_produktu.kategorie,
+    kategorie_produktu.podkategorie,
+    znacka.nazev AS znacka,
+    sport.nazev AS sport,
+    (
+      SELECT COUNT(DISTINCT obrazky_k_produktu.id_barvy) 
+      FROM obrazky_k_produktu, barva 
+      WHERE barva.id = obrazky_k_produktu.id_barvy 
+      AND produkt.id = obrazky_k_produktu.id_produktu 
+    ) AS pocet_barev
+  FROM 
+    produkt 
+  JOIN 
+    obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+  JOIN 
+    obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+  JOIN 
+    kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
+  JOIN 
+    znacka ON znacka.id = produkt.id_znacky 
+  JOIN 
+    sport ON sport.id = produkt.id_sportu 
+  WHERE 
+    obrazek.src LIKE "%main%" 
+  ORDER BY 
+    produkt.nazev ASC;
     SELECT DISTINCT kategorie FROM kategorie_produktu; 
     SELECT kategorie,podkategorie FROM kategorie_produktu;
     SELECT nazev FROM znacka; 
@@ -37,7 +63,7 @@ $js = file_get_contents("kod/js/administraceSprava.js");
     JOIN mnozstvi_produktu_urcite_barvy_a_velikosti ON mnozstvi_produktu_urcite_barvy_a_velikosti.id_produktu = produkt.id
     JOIN velikost ON velikost.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_velikosti
     JOIN barva ON barva.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_barvy
-    ORDER BY produkt.nazev ASC;
+    ORDER BY barva.nazev ASC,velikost.nazev ASC;
     SELECT produkt.nazev,material.nazev AS material, materialy_produktu.procento_materialu AS procento
     FROM produkt 
     JOIN materialy_produktu ON materialy_produktu.id_produktu = produkt.id 
@@ -50,7 +76,8 @@ $js = file_get_contents("kod/js/administraceSprava.js");
     JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
     JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
     JOIN barva ON barva.id = obrazky_k_produktu.id_barvy
-    ORDER BY produkt.nazev ASC";
+    ORDER BY barva.nazev ASC;
+    SELECT velikost.nazev FROM velikost ORDER BY velikost.nazev';
 
     $moznosti = "";
     $stmt = $db->prepare($sql);
@@ -59,7 +86,7 @@ $js = file_get_contents("kod/js/administraceSprava.js");
     foreach ($arr as $key => $value) {
         # code...
 
-        $moznosti .= "<option value=\"" . $value["nazev"] . "\" data-popis=\"" . $value["popis"] . "\" data-cena=\"" . $value["cena"] . "\" data-cenaVeSleve=\"" . $value["cena_ve_sleve"] . "\" data-kategorie=\"" . $value["kategorie"] . "\" data-podkategorie=\"" . $value["podkategorie"] . "\" data-znacka=\"" . $value["znacka"] . "\" data-sport=\"" . $value["sport"] . "\" data-hlavniObrazek=\"obrazky/" . $value["src"] . "\">";
+        $moznosti .= "<option value=\"" . $value["nazev"] . "\" data-popis=\"" . $value["popis"] . "\" data-cena=\"" . $value["cena"] . "\" data-cenaVeSleve=\"" . $value["cena_ve_sleve"] . "\" data-kategorie=\"" . $value["kategorie"] . "\" data-podkategorie=\"" . $value["podkategorie"] . "\" data-znacka=\"" . $value["znacka"] . "\" data-sport=\"" . $value["sport"] . "\" data-hlavniObrazek=\"obrazky/" . $value["src"] . "\" data-pocetBarev=\"" . $value["pocet_barev"] . "\">";
     }
     
     $html = preg_replace("/\[@navrhy-produkty\]/",$moznosti,$html);
@@ -145,6 +172,15 @@ $js = file_get_contents("kod/js/administraceSprava.js");
         $moznosti .= "<option value=\"" . $value["nazev"] . "\" data-barva=\"" . $value["barva"] . "\" data-obrazek=\"obrazky/" . $value["obrazek"] . "\">";
     }
     $html = preg_replace("/\[@dane-obrazky-produktu\]/",$moznosti,$html);
+
+    $moznosti = "";
+    $stmt->nextRowset();
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($arr as $key => $value) {
+        # code...
+        $moznosti .= "<option value=\"" . $value["nazev"] . "\">" . $value["nazev"] . "</option>";
+    }
+    $html = preg_replace("/\[@velikosti\]/",$moznosti,$html);
     
     
     echo $html;

@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
+spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.php");
+
+use Databaze as Db;
+
+
 $html = file_get_contents("kod/html/produkt.html");
 
 if(isset($_GET["nazev"])) {
-    $db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
+    $db = new Db();
 
     $stmt = $db->prepare("SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,produkt.hodnoceni_produktu,
     znacka.nazev AS znacka,sport.nazev AS sport,
