@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+session_start();
+
 
 //každý form bude muset mít vlastní name!! (takže přes fory dát navíc čísla), jednotlivé inputy pak ne!!!!!!
 
@@ -9,11 +11,11 @@ spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.
 
 use Databaze as Db;
 
-    $db = new Db();
+$db = new Db();
+$html = file_get_contents("kod/html/administraceSprava.html");
 
-    $html = file_get_contents("kod/html/administraceSprava.html");
-    $js = file_get_contents("kod/js/administraceSprava.js");
-
+$db->beginTransaction();
+try {
     //! SELECT pro dany produkt
     //!SELECT pro vybrani vsech kategorie
     //!SELECT pro vybrani podkategorie a kategorie pro určení podkategorie
@@ -133,7 +135,7 @@ use Databaze as Db;
     foreach ($arr as $key => $value) {
         # code...
         $moznosti .= "<input id='materialProduktu' type='checkbox' value=\"" . $value["nazev"] . "\" name='materialy[]' >" . $value["nazev"] . " ";
-        $moznosti .= "<input id='procentoMaterialu' type='number' min='0' max='100'>%<br>";
+        $moznosti .= "<input id='procentoMaterialu' name=" . $value["nazev"] . "Procento' type='number' min='0' max='100'>%<br>";
     }
     $html = preg_replace("/\[@materialy-produkty\]/",$moznosti,$html);
     
@@ -183,4 +185,89 @@ use Databaze as Db;
     $html = preg_replace("/\[@velikosti\]/",$moznosti,$html);
     
     
-    echo $html;
+  if(isset($_POST["aktualizovat"])) {
+        $sql = 'UPDATE `produkt` SET `nazev`= :nazev,`popis`= :popis ,`cena`= :cena,`cena_ve_sleve`= :cenaVeSleve,`id_znacky`= (SELECT id FROM znacka WHERE nazev  = :znacka LIMIT 1),`id_sportu`= (SELECT id FROM sport where nazev = :sport LIMIT 1),`id_kategorie_produktu`= (SELECT id FROM kategorie_produktu where kategorie = :kategorie LIMIT 1) WHERE nazev = :puvodniNazev;
+        ';
+
+        $stmt = $db->prepare($sql);
+
+        $cenaVeSleve = 0;
+
+        if(isset($_POST["cenaVeSleve"])) {
+          $cenaVeSleve = $_POST["cenaVeSleve"];
+        } else {
+          $cenaVeSleve = NULL;
+        }
+
+        $stmt->execute([":sport" => htmlspecialchars($_POST["sport"]),
+        ":kategorie" => htmlspecialchars($_POST["kategorie"]),
+        ":znacka" => htmlspecialchars($_POST["znacka"]),
+        ":nazev" => htmlspecialchars($_POST["nazev"]),
+        ":popis" => htmlspecialchars($_POST["popis"]),
+        ":cena" => htmlspecialchars($_POST["cena"]),
+        ":cenaVeSleve" => htmlspecialchars($cenaVeSleve),
+        ":puvodniNazev" => $_POST["puvodniNazev"]]);
+
+        // $sql = "INSERT INTO `materialy_produktu`(`id_produktu`, `id_materialu`, `procento_materialu`) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM material WHERE nazev = :material),:procento)";
+
+        // $stmt = $db->prepare($sql);
+
+        // foreach ($_POST["materialy"] as $key => $value) {
+        //   $procento = $value . "Procento";
+        //   # code...
+        //   $stmt->execute([":nazev" => htmlspecialchars($_POST["nazev"]),
+        //   ":material" => htmlspecialchars($value),
+        //   ":procento" => $_POST[$procento]]);
+        // }
+        if(getimagesize($_FILES["hlavniObrazek"]["tmp_name"])) {
+          $hlavniObrazek = htmlspecialchars($_FILES["hlavniObrazek"]["name"]);
+          $src =  "obrazky/main-" . $hlavniObrazek;
+  
+          if(!file_exists($src)) {
+              move_uploaded_file($_FILES["hlavniObrazek"]["tmp_name"],$src);
+              unlink(htmlspecialchars($_POST["puvodniHlavniObrazek"]));
+  
+              $sql = "DELETE FROM obrazek WHERE src = :puvodniHlavniObrazek;
+              INSERT INTO obrazek (src) VALUES (:src)";
+  
+              $stmt = $db->prepare($sql);
+              
+              $stmt->execute([":puvodniHlavniObrazek" => htmlspecialchars($_POST["puvodniHlavniObrazek"]),
+              ":src" => $src]);
+          }
+      }
+
+
+        // $sql = "INSERT INTO ";
+
+        // $sql = "INSERT INTO obrazek (src) VALUES (:novyObrazek)
+        // INSERT INTO obrazky_k_produktu (id_produktu,id_barvy,id_obrazku) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM produkt WHERE nazev = :barva),(SELECT id FROM obrazek WHERE src = :obrazek))";
+
+        // $stmt = $db->prepare($sql);
+        
+        // foreach ($_POST["barvy"] as $key => $value) {
+        //   # code...
+
+        // }
+
+  }
+  if(isset($_POST["odstranit"])) {
+    $sql = "DELETE FROM obrazky_k_produktu WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM mnozstvi_produktu_urcite_barvy_a_velikosti WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM zakoupene_produkty WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM materialy_produktu WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM produkty_v_objednavce WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM oblibene_produkty WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM recenze WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM produkt WHERE nazev = :puvodniNazev";
+
+    $stmt = $db->prepare($sql);
+
+    $stmt->execute([":puvodniNazev" => $_POST["puvodniNazev"]]);
+  }
+  $db->commit();
+  } catch(Exception $e) {
+    $db->rollBack();
+  }
+    
+echo $html;

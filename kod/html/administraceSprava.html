@@ -66,7 +66,8 @@
                 <div class="nazev">
                     <h1>Vyhledaný produkt:</h1>
                 </div>
-                <form method="post" enctype="multipart/form-data" class="vytvorit">
+                <form method="post" enctype="multipart/form-data" class="vytvorit" action="test.php">
+                    <input type="text" name="puvodniNazev" id="puvodniNazev" readonly>
                     <div class="hlavni-info">
                         <div class="parametry-hlavni-obrazek">
                             <h1>Základní informace</h1>
@@ -74,7 +75,7 @@
                                 <tbody>
                                     <tr>
                                         <td>Název</td>
-                                        <td><input type="text" name="nazevProduktu"id="nazevProduktu" value="" required></td>
+                                        <td><input type="text" name="nazev"id="nazevProduktu" value="" required></td>
                                     </tr>
                                     <tr>
                                         <td>Popis</td>
@@ -149,7 +150,9 @@
                             <div class="hlavni-obrazek">
                                 <h2>Hlavní obrázek</h2>
                                 <img src="" hidden id="hlavniObrazekProduktu">
-                                <input type="file" name="hlavniOrazek">
+                                <label for="novyHlavniObrazek">Nový hlavní obrázek:</label>
+                                <input value="" id="puvodniHlavniObrazek" name="puvodniHlavniObrazek">
+                                <input type="file" name="hlavniObrazek" id="novyHlavniObrazek" accept="image/*">
                             </div>
                         </div>
                         <div class="obrazky-mnozstvi">
@@ -157,9 +160,9 @@
                         </div>
                     </div>
                     <div class="tlacitka">
-                        <input type="submit" name="reset" value="Resetovat hodnoty produktu">
+                        <input type="button" name="reset" value="Resetovat hodnoty produktu">
                         <input type="submit" name="odstranit" value="Odstranit produkt">
-                        <input type="submit" name="odeslat" value="Aktualizovat produkt">
+                        <input type="submit" name="aktualizovat" value="Aktualizovat produkt">
                     </div>
                 </form>
             </div>
@@ -172,7 +175,7 @@
                         <div class="hlavni-info">
                             <div class="parametry-hlavni-obrazek">
                                 <h1>Základní informace</h1>
-                                <table>
+                                <table id="atributyNovehoProduktu">
                                     <tbody>
                                         <tr>
                                             <td>Název</td>

@@ -24,11 +24,11 @@ function pridatNovouVelikost() {
     let radek = document.createElement("tr")
     
     let velikostSloupec = document.createElement("td")
-    velikostSloupec.innerHTML = "Velikost " + document.querySelector(".modal #velikost").value
+    velikostSloupec.innerHTML = "Velikost: " + document.querySelector(".modal #velikost").value
     radek.appendChild(velikostSloupec)
 
     let skladSloupec = document.createElement("td");
-    skladSloupec.innerHTML = "<div>Skladem " + document.querySelector(".modal #pocet").value +  "ks + přidat <input type=\"number\" min=\"0\" name=\"skladem\" value=\"\">ks</div>"
+    skladSloupec.innerHTML = "<div>Skladem <input type=\"number\" min=\"0\" name=\"pocet\" value=\"" + document.querySelector(".modal #pocet").value  + "\">ks</div>"
     radek.appendChild(skladSloupec)
 
     let odstranitSloupec = document.createElement("td")
@@ -78,6 +78,7 @@ let indexBarvy = 0;
 
 let hledatProduktSearch = document.querySelector("#hledatProduktSearch")
 let hledatProdukt = document.querySelector("#hledat-produkt")
+let resetovatHodnoty = document.querySelector(".tlacitka input:first-child")
 
 let produkty = document.querySelectorAll("#produkty option")
 let mnozstviProduktu = document.querySelectorAll("#mnozstviProduktu option")
@@ -95,6 +96,7 @@ mnozstviProduktu.forEach(el =>{
 let nazevProduktu = document.querySelector("#nazevProduktu")
 let popisProduktu = document.querySelector("#popisProduktu")
 let cenaProduktu = document.querySelector("#cenaProduktu")
+let cenaProduktuVeSleve = document.querySelector("#cenaProduktuVeSleve")
 let kategorieProduktu = document.querySelector("#kategorieProduktu")
 let podkategorieProduktu = document.querySelector("#podkategorieProduktu")
 let znackaProduktu = document.querySelector("#znackaProduktu")
@@ -105,14 +107,22 @@ let vsechnyBarvyProduktu = document.querySelectorAll(".vytvorit #barvaProduktu")
 let vsechnyMaterialyProduktu = document.querySelectorAll(".vytvorit #materialProduktu")
 let vsechnyProcentaMaterialu = document.querySelectorAll(".vytvorit #procentoMaterialu")
 
+let indexHledanehoProduktu = 0;
+
 hledatProdukt.addEventListener("click",function() {
-    let indexHledanehoProduktu = 0;
     for (let index = 0; index < produkty.length; index++) {
         if(produkty[index].value == hledatProduktSearch.value) {
             indexHledanehoProduktu = index
             break;
         }
     }
+    vyhledejProdukt()
+})
+
+resetovatHodnoty.addEventListener("click",vyhledejProdukt)
+
+function vyhledejProdukt() {
+    document.querySelector("#puvodniNazev").value = produkty[indexHledanehoProduktu].value
     nazevProduktu.value = produkty[indexHledanehoProduktu].value
     popisProduktu.value = produkty[indexHledanehoProduktu].getAttribute("data-popis")
     cenaProduktu.value = produkty[indexHledanehoProduktu].getAttribute("data-cena")
@@ -125,6 +135,10 @@ hledatProdukt.addEventListener("click",function() {
 
     znackaProduktu.value = produkty[indexHledanehoProduktu].getAttribute("data-znacka")
     sportProduktu.value = produkty[indexHledanehoProduktu].getAttribute("data-sport")
+
+    let puvodniObrazek = document.querySelector("#puvodniHlavniObrazek")
+    console.log(puvodniObrazek);
+    puvodniObrazek.setAttribute("value",produkty[indexHledanehoProduktu].getAttribute("data-hlavniObrazek"))
 
     hlavniObrazekProduktu.src = produkty[indexHledanehoProduktu].getAttribute("data-hlavniObrazek")
     hlavniObrazekProduktu.removeAttribute("hidden")
@@ -160,11 +174,11 @@ hledatProdukt.addEventListener("click",function() {
             }
         }
     }
-
+    
     let obrazkyMnozstviDiv = document.querySelector(".obrazky-mnozstvi")
-
+    
     obrazkyMnozstviDiv.innerHTML = "<h1>Barvy</h1>"
-
+    
     let pouziteBarvyVelikosti = []
     
     for (let index = 0; index < produkty[indexHledanehoProduktu].getAttribute("data-pocetBarev"); index++) {
@@ -183,17 +197,17 @@ hledatProdukt.addEventListener("click",function() {
                     let velikostiDiv = document.createElement("div")
                     velikostiDiv.classList = "velikosti"
                     barvaDiv.appendChild(velikostiDiv)
-
+                    
                     let pVelikosti = document.createElement("p")
                     pVelikosti.innerHTML = "Velikosti a množství:"
                     velikostiDiv.appendChild(pVelikosti)
-
+                    
                     let tableVelikosti = document.createElement("table")
                     velikostiDiv.appendChild(tableVelikosti)
-
+                    
                     let tbodyVelikosti = document.createElement("tbody")
                     tableVelikosti.appendChild(tbodyVelikosti)
-
+                    
                     let novaVelikostButton = document.createElement("input")
                     novaVelikostButton.type = 'button'
                     novaVelikostButton.value = 'Přidat novou velikost'
@@ -201,26 +215,28 @@ hledatProdukt.addEventListener("click",function() {
                     novaVelikostButton.setAttribute("data-barva",pouziteBarvyVelikosti.length)
                     velikostiDiv.appendChild(novaVelikostButton)
                     velikostiDiv.appendChild(document.createElement("br"))
-                    
+
+                    indexVelikosti = 0
                     
                     for (let y = 0; y < mnozstviProduktu.length; y++) {
                         if (produkty[indexHledanehoProduktu].value == mnozstviProduktu[y].value) {
                             if (mnozstviProduktu[i].getAttribute("data-barva") == mnozstviProduktu[y].getAttribute("data-barva")) {
                                 let tr = document.createElement("tr")
+                                tr.setAttribute("data-velikost",indexVelikosti)
                                 tbodyVelikosti.appendChild(tr)
-
+                                
                                 let tdVelikosti = document.createElement("td")
-                                tdVelikosti.innerHTML = "Velikost: " + mnozstviProduktu[y].getAttribute("data-velikost")  
+                                tdVelikosti.innerHTML = "Velikost: " + mnozstviProduktu[y].getAttribute("data-velikost")+ "<input name=\"" +  mnozstviProduktu[y].getAttribute("data-barva") + "-velikost[]\" value=\"" + mnozstviProduktu[y].getAttribute("data-velikost") +"\" hidden>"  
                                 tr.appendChild(tdVelikosti)
-
+                                
                                 let tdMnozstvi = document.createElement("td")
-                                tdMnozstvi.innerHTML = 'Skladem: ' + mnozstviProduktu[y].getAttribute("data-pocet") + 'ks + přidat <input type="number" min="0" name="skladem" >ks'
+                                tdMnozstvi.innerHTML = 'Skladem: <input type="number" min="0" name="'+ mnozstviProduktu[y].getAttribute("data-barva") + '-pocet[]" value="'+ mnozstviProduktu[y].getAttribute("data-pocet") +'">ks'
                                 tr.appendChild(tdMnozstvi)
-
+                                
                                 let tdOdstranit = document.createElement("td")
-                                tdOdstranit.innerHTML = '<input type="button" name="odstranitVelikost" value="odstranit">'
+                                tdOdstranit.innerHTML = '<input type="button" name="odstranitVelikost" value="odstranit" id="odstranitVelikost" data-velikost="' + indexVelikosti++ +'">'
                                 tr.appendChild(tdOdstranit)
-
+                                
                             }
                         }
                     }
@@ -232,33 +248,52 @@ hledatProdukt.addEventListener("click",function() {
                     let pObrazky = document.createElement("p")
                     pObrazky.innerHTML = "Obrázky:"
                     obrazkyDiv.appendChild(pObrazky)
-
+                    
                     let tableObrazky = document.createElement("table")
                     obrazkyDiv.appendChild(tableObrazky)
-
+                    
                     let tbodyObrazky= document.createElement("tbody")
+                    tbodyObrazky.setAttribute("data-barva",mnozstviProduktu[i].getAttribute("data-barva"))
                     tableObrazky.appendChild(tbodyObrazky)
+                    
+                    let labelNovyhoObrazkuButton = document.createElement("label")
+                    labelNovyhoObrazkuButton.innerHTML = "Přidat nový obrázky:"
+                    labelNovyhoObrazkuButton.setAttribute("for","novyObrazek")
+                    obrazkyDiv.appendChild(labelNovyhoObrazkuButton)
 
                     let novyObrazekButton = document.createElement("input")
                     novyObrazekButton.type = 'file'
+                    novyObrazekButton.accept = 'image/*'
+                    novyObrazekButton.name = mnozstviProduktu[i].getAttribute("data-barva") + "[]"
+                    novyObrazekButton.multiple = "multiple"
                     obrazkyDiv.appendChild(novyObrazekButton)
+
+
+                    indexObrazku = 0;
 
                     for (let y = 0; y < obrazkyProduktu.length; y++) {
                         if (produkty[indexHledanehoProduktu].value == obrazkyProduktu[y].value) {
                             if (mnozstviProduktu[i].getAttribute("data-barva") == obrazkyProduktu[y].getAttribute("data-barva")) {
-
+                                
                                 let tr = document.createElement("tr")
+                                tr.setAttribute("data-obrazek",index)
                                 tbodyObrazky.appendChild(tr)
-
+                                
+                                let inputObrazku = document.createElement("input")
+                                inputObrazku.value = obrazkyProduktu[y].getAttribute('data-obrazek')
+                                inputObrazku.name = obrazkyProduktu[y].getAttribute("data-barva") + "[]"
+                                inputObrazku.style.display = "none"
+                                
                                 let img = document.createElement("img")
                                 img.src = obrazkyProduktu[y].getAttribute("data-obrazek")
 
                                 let tdObrazku = document.createElement("td")
                                 tdObrazku.appendChild(img)
+                                tdObrazku.appendChild(inputObrazku)
                                 tr.appendChild(tdObrazku)
                                 
                                 let tdOdstranit = document.createElement("td")
-                                tdOdstranit.innerHTML = '<input type="button" value="odebrat obrázek">'
+                                tdOdstranit.innerHTML = '<input type="button" value="odebrat obrázek" id="odstranitObrazek" data-obrazek="' + index++ +'">'
                                 tr.appendChild(tdOdstranit)
                             }
                         }
@@ -272,10 +307,38 @@ hledatProdukt.addEventListener("click",function() {
     //když zmáčknu tlačítko na přidání velikostí, tak získám index zmáčknutého tlačítka, který využiji na přidání řádku velikosti k danému produktu
     let pridatVelikostiTlacitka = document.querySelectorAll("#pridat");
 
-        for (let index = 0; index < pridatVelikostiTlacitka.length; index++) {
-            pridatVelikostiTlacitka[index].addEventListener("click",function() {
-                modalniPozadi.style.display = "flex"
-                indexBarvy = parseInt(pridatVelikostiTlacitka[index].getAttribute("data-barva"))
-            })
-        }
-})
+    for (let index = 0; index < pridatVelikostiTlacitka.length; index++) {
+        pridatVelikostiTlacitka[index].addEventListener("click",function() {
+            modalniPozadi.style.display = "flex"
+            indexBarvy = parseInt(pridatVelikostiTlacitka[index].getAttribute("data-barva"))
+        })
+    }
+
+    let odstranitVelikost = document.querySelectorAll("#odstranitVelikost")
+
+    odstranitVelikost.forEach(element => {
+        element.addEventListener("click",function() {
+            document.querySelector('tr[data-velikost="' + element.getAttribute("data-velikost") + '"]').parentElement.removeChild(document.querySelector('tr[data-velikost="' + element.getAttribute("data-velikost") + '"]'))
+        })
+    })
+
+    let odstranitObrazek = document.querySelectorAll("#odstranitObrazek")
+
+    odstranitObrazek.forEach(element => {
+        element.addEventListener("click",function() {
+            document.querySelector('tr[data-obrazek="' + element.getAttribute("data-obrazek") + '"]').parentElement.removeChild(document.querySelector('tr[data-obrazek="' + element.getAttribute("data-obrazek") + '"]'))
+        })
+    });
+
+    vstupyCen = document.querySelectorAll(".obrazky-mnozstvi input[type=\"number\"]")
+
+    vstupyCen.forEach(e => {
+        e.addEventListener("keydown",function(event){
+            //key vrací zmáčknutou klávesu
+            if(event.key == "-" || event.key == "." || event.key == "," ) {
+                event.preventDefault();
+            }
+
+        })
+    })
+}

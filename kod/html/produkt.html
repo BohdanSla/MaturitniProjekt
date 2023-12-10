@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="kod/css/index.css" rel="stylesheet" type="text/css">
     <link href="kod/css/produkt.css" rel="stylesheet" type="text/css">
-    <script defer src="kod/js/sablona.js"></script>
+    <script defer src="kod/js/produkt.js"></script>
     <title>Pro sportovce</title>
 </head>
 <body>
@@ -65,18 +65,30 @@
         <div class="produkt">
             <div class="galerie-info">
                 <div class="galerie">
-                    <img src="[@hlavni-obrazek]">
-                    <div class="ostatni-obrazky">
-                        [@ostatni-obrazky]
+                    <div class="obrazky-produktu">
+                        <div>
+                        </div>
+                        <datalist>
+                            [@ostatni-obrazky]
+                        </datalist>
                     </div>
                 </div>
-                <div class="info">
-                    <h1>[@nazev]</h1>
-                    <h2>[@znacka]</h2>
-                    <h2>[@sport]</h2>
-                    <h2>[@cena]</h2>
-                    <h2>[@cena-ve-sleve]</h2>
-                    <h2>[@hodnoceni-produktu]</h2>
+                <div class="info-pridat">
+                    <div class="info">
+                        <h1>[@nazev]</h1>
+                        <h2>[@znacka]</h2>
+                        <h2>[@sport]</h2>
+                        <h2>[@cena]</h2>
+                        <h2>[@cena-ve-sleve]</h2>
+                        <h2>[@hodnoceni-produktu]</h2>
+                    </div>
+                    <form method="post">
+                        <select name="barva">
+                            
+                        </select>
+                        <input value="[@nazev]" type="text">
+                        <input type="submit" value="Přidat do košíku">
+                    </form>
                 </div>
             </div>
             <p>[@popis]</p>

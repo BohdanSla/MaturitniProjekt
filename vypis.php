@@ -23,42 +23,33 @@ foreach ($arr as $key => $value) {
     $html = preg_replace("/\[@maximum\]/",strval($value["nejvetsi_cena"]),$html);
 }
 
-$stmt = $db->prepare("SELECT
-obrazek.src,
-produkt.nazev,
-produkt.cena,
-produkt.cena_ve_sleve,
-GROUP_CONCAT(barva.nazev) AS barvy
-FROM produkt
-JOIN mnozstvi_produktu_urcite_barvy_a_velikosti ON mnozstvi_produktu_urcite_barvy_a_velikosti.id_produktu = produkt.id
-JOIN barva ON barva.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_barvy
-JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
-JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
-GROUP BY produkt.id");
+$stmt = $db->prepare('SELECT obrazek.src, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, kategorie_produktu.podkategorie FROM produkt JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE "%main%";');
 
 $stmt->execute();
 
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$produkty = "";
 
 foreach ($arr as $key => $value) {
-    # code...
+
+
     $src = "obrazky/" . $value["src"];
-    $cenaVesleve = "";
     $odkaz = "produkt.php?nazev=" . $value["nazev"] ;
+    $cenaVesleve = "";
+    $maCenuVeSleve = "";
 
-    if (isset($value["cena-ve-sleve"])) {
-        # code...
-        $cenaVesleve = "<p>" . strval($value["cena_ve_sleve"]) . "</p>";
-    }
+    $produkty .= '<a [@ma-cenu-ve-sleve] href="' . $odkaz . '"><img src="' . $src .'"><div class="parametry"><h2>' . $value["nazev"] . '</h2><b id="podkategorie">' . $value["podkategorie"] . '</b><b id="cena">' . $value["cena"] . '</b> [@cena-ve-sleve] </div></a>';
     
-    $html = preg_replace("/\[@odkaz\]/",$odkaz,$html,1);
-    $html = preg_replace("/\[@obrazek\]/",$src,$html,1);
-    $html = preg_replace("/\[@nazev\]/",$value["nazev"],$html,1);
-    $html = preg_replace("/\[@cena\]/",strval($value["cena"]),$html,1);
-    $html = preg_replace("/\[@cena-ve-sleve\]/",$cenaVesleve,$html,1);
-    $html = preg_replace("/\[@barvy\]/",$value["barvy"],$html,1);
-
+    if ($value["cena_ve_sleve"] != null) {
+        # code...
+        $cenaVesleve = "<b id=\"cenaVeSleve\">" . $value["cena_ve_sleve"] . "</b>";
+        $maCenuVeSleve = 'class="maCenuVeSleve"';
+    }
+    $produkty = preg_replace("/\[@cena-ve-sleve\]/",$cenaVesleve,$produkty,1);
+    $produkty = preg_replace("/\[@ma-cenu-ve-sleve\]/",$maCenuVeSleve,$produkty,1);
 }
+
+$html = preg_replace("/\[@produkty\]/",$produkty,$html,1);
 
 echo $html;

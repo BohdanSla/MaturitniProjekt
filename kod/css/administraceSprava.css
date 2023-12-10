@@ -48,7 +48,7 @@ input[type=search] {
 .nazev img:last-child:hover {
     cursor: pointer;
 }
-.produkty form input[type=submit] {
+.tlacitka input {
     text-align: center;
     margin-right: 1rem;
 }
@@ -120,6 +120,9 @@ td div {
 .barva {
     padding: 2%;
     width: 96%;
+    background-color: #dddddd6b;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
 }
 .galerie {
     margin: 2% 0;
@@ -339,4 +342,7 @@ nav ul li:hover {
 }
 #popisProduktu {
     height: 15rem;
+}
+#puvodniNazev, #puvodniHlavniObrazek {
+    display: none;
 }

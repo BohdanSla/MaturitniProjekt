@@ -12,15 +12,13 @@ $html = file_get_contents("kod/html/produkt.html");
 if(isset($_GET["nazev"])) {
     $db = new Db();
 
-    $stmt = $db->prepare("SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,produkt.hodnoceni_produktu,
-    znacka.nazev AS znacka,sport.nazev AS sport,
-    obrazek.src
+    $stmt = $db->prepare('SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,produkt.hodnoceni_produktu,
+    znacka.nazev AS znacka,sport.nazev AS sport
     FROM produkt
     JOIN znacka ON znacka.id = produkt.id_znacky
     JOIN sport ON sport.id = produkt.id_sportu
-    JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
-    JOIN obrazek ON obrazek.id =  obrazky_k_produktu.id_obrazku
-    WHERE produkt.nazev = :nazev");
+    WHERE produkt.nazev = :nazev;
+    SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.nazev = :nazev ORDER BY barva.nazev;');
 
     $stmt->execute([":nazev" => $_GET["nazev"]]);
 
@@ -29,11 +27,13 @@ if(isset($_GET["nazev"])) {
     if (count($arr) > 0) {
         # code...
         $cenaVeSleve = "";
-        $src = "obrazky/" . $arr[0]["src"];
 
-        if (isset($value["cena-ve-sleve"])) {
+        if (isset($arr[0]["cena_ve_sleve"])) {
             # code...
             $cenaVeSleve = zformulujCenu(strval($cenaVeSleve));
+        }
+        if (isset($arr[0]["hodnoceni_produktu"])) {
+
         }
 
         $html = preg_replace("/\[@nazev\]/",$arr[0]["nazev"],$html);
@@ -42,10 +42,28 @@ if(isset($_GET["nazev"])) {
         $html = preg_replace("/\[@cena-ve-sleve\]/",$cenaVeSleve,$html);
         $html = preg_replace("/\[@znacka\]/",$arr[0]["znacka"],$html);
         $html = preg_replace("/\[@sport\]/",$arr[0]["sport"],$html);
-        $html = preg_replace("/\[@hlavni-obrazek\]/",$src,$html);
         $html = preg_replace("/\[@hodnoceni-produktu\]/",strval($arr[0]["hodnoceni_produktu"]),$html);
     } else {
         $html .= "hledaný produkt nebyl nalezen...";
+    }
+
+    $stmt->nextRowset();
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (count($arr) > 0) {
+
+        $obrazky = "";
+
+        foreach ($arr as $key => $value) {
+
+            # code...
+            $src  = "obrazky/" . $value["src"];
+            $obrazky .= '<option value="obrazky/' . $value["src"] . '" data-barva=' . $value["nazev"] . '></option>';
+
+
+        }
+
+        $html = preg_replace("/\[@ostatni-obrazky\]/",$obrazky,$html);
     }
 
 

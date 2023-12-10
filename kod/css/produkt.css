@@ -17,10 +17,41 @@ main {
 .galerie img {
     height: 100%;
 }
-.info {
+.info-pridat {
     height: 50vh;
     padding: 1%;
     width: 36%;
-    background-color: #DCDCDCDC;
+    background-color: #dcdcdc5d;
     margin: 5% 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+form input[type=text] {
+    display: none;
+}
+form input[type=submit] {
+    width: 100%;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: large;
+    padding: 0.5rem 0;
+}
+form input[type=submit]:hover {
+    cursor: pointer;
+}
+.info h2 {
+    margin: 0;
+}
+.info h2:first-of-type {
+    color: rgb(133, 133, 133)
+}
+.info {
+    display: flex;
+    flex-direction: column;
+}
+.obrazky-produktu div {
+    background-color: #dcdcdc5d;
 }
