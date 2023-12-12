@@ -161,3 +161,47 @@ WHERE
   obrazek.src LIKE "%main%" 
 ORDER BY 
   produkt.nazev ASC;
+
+  SELECT obrazky_k_produktu.id_obrazku FROM obrazky_k_produktu WHERE id_obrazku NOT IN (SELECT id FROM obrazek WHERE src IN (:src)) AND id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev)
+
+  SELECT id,src FROM obrazek WHERE id IN (SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev)) AND src NOT IN (:src)
+
+  SELECT obrazky_k_produktu.id_obrazku FROM obrazky_k_produktu WHERE id_obrazku NOT IN (SELECT id FROM obrazek WHERE src IN ("adidas-eastrail-2-r-rdy-yel_6.jpg","adidas-eastrail-2-r-rdy_0.jpg") AND src NOT LIKE "%main%") AND id_produktu = (SELECT id FROM produkt WHERE nazev = "EASTRAIL 2 R.RDY");
+
+  SELECT obrazky_k_produktu.id_obrazku FROM obrazky_k_produktu WHERE id_obrazku NOT IN (SELECT id FROM obrazek WHERE src IN ("adidas-eastrail-2-r-rdy-yel_6.jpg","adidas-eastrail-2-r-rdy_0.jpg")) AND id_produktu = (SELECT id FROM produkt WHERE nazev = "EASTRAIL 2 R.RDY") 
+  SELECT obrazky_k_produktu.id_obrazku
+FROM obrazky_k_produktu
+WHERE id_obrazku NOT IN (
+    SELECT id
+    FROM obrazek
+    WHERE src IN ("adidas-eastrail-2-r-rdy-yel_6.jpg", "adidas-eastrail-2-r-rdy_0.jpg")
+)
+AND id_produktu = (
+    SELECT id
+    FROM produkt
+    WHERE nazev = "EASTRAIL 2 R.RDY"
+)
+AND (
+    SELECT COUNT(*)
+    FROM obrazek
+    WHERE obrazky_k_produktu.id_obrazku = obrazek.id
+    AND obrazek.src LIKE '%main%'
+) = 0;
+
+SELECT id_obrazku FROM obrazky_k_produktu
+WHERE id_obrazku NOT IN (
+SELECT id
+FROM obrazek
+WHERE src IN (:src)
+)
+AND id_produktu = (
+SELECT id
+FROM produkt
+WHERE nazev = :puvodniNazev
+)
+AND (
+SELECT COUNT(*)
+FROM obrazek
+WHERE obrazky_k_produktu.id_obrazku = obrazek.id
+AND obrazek.src LIKE '%main%'
+) = 0;

@@ -60,11 +60,11 @@ try {
     SELECT nazev FROM sport;
     SELECT nazev FROM material;
     SELECT nazev FROM barva;
-    SELECT produkt.nazev,velikost.nazev AS velikost, barva.nazev AS barva, mnozstvi_produktu_urcite_barvy_a_velikosti.pocet AS pocet
+    SELECT produkt.nazev,velikost.nazev AS velikost, barva.nazev AS barva, mnozstvi.pocet AS pocet
     FROM produkt
-    JOIN mnozstvi_produktu_urcite_barvy_a_velikosti ON mnozstvi_produktu_urcite_barvy_a_velikosti.id_produktu = produkt.id
-    JOIN velikost ON velikost.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_velikosti
-    JOIN barva ON barva.id = mnozstvi_produktu_urcite_barvy_a_velikosti.id_barvy
+    JOIN mnozstvi ON mnozstvi.id_produktu = produkt.id
+    JOIN velikost ON velikost.id = mnozstvi.id_velikosti
+    JOIN barva ON barva.id = mnozstvi.id_barvy
     ORDER BY barva.nazev ASC,velikost.nazev ASC;
     SELECT produkt.nazev,material.nazev AS material, materialy_produktu.procento_materialu AS procento
     FROM produkt 
@@ -135,7 +135,7 @@ try {
     foreach ($arr as $key => $value) {
         # code...
         $moznosti .= "<input id='materialProduktu' type='checkbox' value=\"" . $value["nazev"] . "\" name='materialy[]' >" . $value["nazev"] . " ";
-        $moznosti .= "<input id='procentoMaterialu' name=" . $value["nazev"] . "Procento' type='number' min='0' max='100'>%<br>";
+        $moznosti .= "<input id='procentoMaterialu' name='procento[]' type='number' min='0' max='100'>%<br>";
     }
     $html = preg_replace("/\[@materialy-produkty\]/",$moznosti,$html);
     
@@ -208,17 +208,6 @@ try {
         ":cenaVeSleve" => htmlspecialchars($cenaVeSleve),
         ":puvodniNazev" => $_POST["puvodniNazev"]]);
 
-        // $sql = "INSERT INTO `materialy_produktu`(`id_produktu`, `id_materialu`, `procento_materialu`) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM material WHERE nazev = :material),:procento)";
-
-        // $stmt = $db->prepare($sql);
-
-        // foreach ($_POST["materialy"] as $key => $value) {
-        //   $procento = $value . "Procento";
-        //   # code...
-        //   $stmt->execute([":nazev" => htmlspecialchars($_POST["nazev"]),
-        //   ":material" => htmlspecialchars($value),
-        //   ":procento" => $_POST[$procento]]);
-        // }
         if(getimagesize($_FILES["hlavniObrazek"]["tmp_name"])) {
           $hlavniObrazek = htmlspecialchars($_FILES["hlavniObrazek"]["name"]);
           $src =  "obrazky/main-" . $hlavniObrazek;
@@ -237,23 +226,10 @@ try {
           }
       }
 
-
-        // $sql = "INSERT INTO ";
-
-        // $sql = "INSERT INTO obrazek (src) VALUES (:novyObrazek)
-        // INSERT INTO obrazky_k_produktu (id_produktu,id_barvy,id_obrazku) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM produkt WHERE nazev = :barva),(SELECT id FROM obrazek WHERE src = :obrazek))";
-
-        // $stmt = $db->prepare($sql);
-        
-        // foreach ($_POST["barvy"] as $key => $value) {
-        //   # code...
-
-        // }
-
   }
   if(isset($_POST["odstranit"])) {
     $sql = "DELETE FROM obrazky_k_produktu WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
-    DELETE FROM mnozstvi_produktu_urcite_barvy_a_velikosti WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
+    DELETE FROM mnozstvi WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
     DELETE FROM zakoupene_produkty WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
     DELETE FROM materialy_produktu WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
     DELETE FROM produkty_v_objednavce WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
