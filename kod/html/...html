@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="cz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="kod/css/index.css" rel="stylesheet" type="text/css">
+    <link href="kod/css/administraceSprava.css" rel="stylesheet" type="text/css">
+    <script defer src="kod/js/administraceSprava.js"></script>
+    <title>Pro sportovce</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.php">
+                <h1>PRO SPORTOVCE</h1>
+                <img src="obrazky/logo_ikona.svg" alt="logo_ikona">
+            </a>
+        </nav>
+    </header>
+    <div class="modal-pozadi">
+        <div class="modal">
+            Přidat novou velikost:
+            <select name="kategorie" id="velikost">
+                [@velikosti]
+            </select>
+            Počet kusů:
+            <input type="number" id="pocet">
+            <div class="modal-tlacitka">
+                <input type="button" value="zavřít okno">
+                <input type="button" value="vytvořit novou velikost">
+            </div>
+        </div>
+    </div>
+    <main>
+        <div class="vypln">
+        </div>
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li>Produkty</li>
+                    <li>Atributy Produktů</li>
+                    <li>Uživatelé</li>
+                    <li>Slevové kódy</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="produkty">
+            <div class="hledani-navrhy">
+                Hledat Produkt:
+                <input type="search" list="produkty" id="hledatProduktSearch">
+                <input type="button" value="hledat" id="hledat-produkt">
+                <datalist id="produkty">
+                    [@navrhy-produkty]
+                </datalist>
+                <datalist id="mnozstviProduktu">
+                    [@mnozstvi-produkty]
+                </datalist>
+                <datalist id="daneMaterialyProduktu">
+                     [@dane-materialy-produktu]
+                </datalist>
+                <datalist id="daneObrazkyProduktu">
+                    [@dane-obrazky-produktu]
+                </datalist>
+            </div>
+            <div class="produkt">
+                <div class="nazev">
+                    <h1>Vyhledaný produkt:</h1>
+                </div>
+                <form method="post" enctype="multipart/form-data" class="vytvorit" action="test.php">
+                    <input type="text" name="puvodniNazev" id="puvodniNazev" readonly>
+                    <div class="hlavni-info">
+                        <div class="parametry-hlavni-obrazek">
+                            <h1>Základní informace</h1>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Název</td>
+                                        <td><input type="text" name="nazev"id="nazevProduktu" value="" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Popis</td>
+                                        <td>
+                                            <textarea id="popisProduktu" name="popis" required maxlength="450"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cena</td>
+                                        <td>
+                                            <div>
+                                                <input type="number" name="cena" value="" id="cenaProduktu" required>Kč
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cena ve slevě</td>
+                                        <td>
+                                            <div>
+                                                <input type="number" name="cenaVeSleve" id="cenaProduktuVeSleve" value="">Kč
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kategorie</td>
+                                        <td>
+                                            <select name="kategorie" id="kategorieProduktu" required>
+                                                [@kategorie-produkty]
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Podkategorie</td>
+                                        <td>
+                                            <select name="podkategorie" id="podkategorieProduktu" required>
+                                                [@podkategorie-produkty]
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Znacka</td>
+                                        <td>
+                                            <select name="znacka" id="znackaProduktu" required>
+                                                [@znacka-produkty]
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sport</td>
+                                        <td>
+                                            <select name="sport" id="sportProduktu" required >
+                                                [@sport-produkty]
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Materiály<br> 
+                                            (+procento materiálu v produktu)
+                                        </td>
+                                        <td>
+                                            [@materialy-produkty]
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Barvy</td>
+                                        <td>
+                                            [@barvy-produkty]
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="hlavni-obrazek">
+                                <h2>Hlavní obrázek</h2>
+                                <img src="" hidden id="hlavniObrazekProduktu">
+                                <label for="novyHlavniObrazek">Nový hlavní obrázek:</label>
+                                <input value="" id="puvodniHlavniObrazek" name="puvodniHlavniObrazek">
+                                <input type="file" name="hlavniObrazek" id="novyHlavniObrazek" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="obrazky-mnozstvi">
+                            <h1>Barvy</h1>
+                        </div>
+                    </div>
+                    <div class="tlacitka">
+                        <input type="button" name="reset" value="Resetovat hodnoty produktu">
+                        <input type="submit" name="odstranit" value="Odstranit produkt">
+                        <input type="submit" name="aktualizovat" value="Aktualizovat produkt">
+                    </div>
+                </form>
+            </div>
+            <div class="novy-produkt">
+                <div class="produkt">
+                    <div class="nazev">
+                        <h1>Vytvořit nový produkt:</h1>
+                    </div>
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="hlavni-info">
+                            <div class="parametry-hlavni-obrazek">
+                                <h1>Základní informace</h1>
+                                <table id="atributyNovehoProduktu">
+                                    <tbody>
+                                        <tr>
+                                            <td>Název</td>
+                                            <td><input type="text" name="nazevProduktu"id="nazevProduktu" value="" required></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Popis</td>
+                                            <td>
+                                                <textarea id="popisProduktu" name="popis" required maxlength="450"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cena</td>
+                                            <td>
+                                                <div>
+                                                    <input type="number" name="cena" value="" id="cenaProduktu" required>Kč
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cena ve slevě</td>
+                                            <td>
+                                                <div>
+                                                    <input type="number" name="cenaVeSleve" id="cenaProduktuVeSleve" value="">Kč
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kategorie</td>
+                                            <td>
+                                                <select name="kategorie" id="kategorieProduktu" required>
+                                                    [@kategorie-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Podkategorie</td>
+                                            <td>
+                                                <select name="podkategorie" id="podkategorieProduktu" required>
+                                                    [@podkategorie-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Znacka</td>
+                                            <td>
+                                                <select name="znacka" id="znackaProduktu" required>
+                                                    [@znacka-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sport</td>
+                                            <td>
+                                                <select name="sport" id="sportProduktu" required >
+                                                    [@sport-produkty]
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Materiály<br> 
+                                                (+procento materiálu v produktu)
+                                            </td>
+                                            <td>
+                                                [@materialy-produkty]
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Barvy</td>
+                                            <td>
+                                                [@barvy-produkty]
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="hlavni-obrazek">
+                                    <h2>Hlavní obrázek</h2>
+                                    <img src="" hidden id="hlavniObrazekProduktu">
+                                    <input type="file" name="hlavniOrazek">
+                                </div>
+                            </div>
+                            <div class="obrazky-mnozstvi">
+                                <h1>Barvy</h1>
+                            </div>
+                        </div>
+                        <div class="tlacitka">
+                            <input type="submit" name="vytvorit" value="Vytvořit produkt">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <form class="atributy-produktu">
+            <div class="atribut">
+                <h2>Kategorie</h2>
+                <h3>Oblečení</h3>
+                <table>
+                    <tbody>
+                        [@obleceni-atribut]
+                    </tbody>
+                </table>
+                <h3>Doplňky</h3>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="atribut">
+                <h2>Značky</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="atribut">
+                <h2>Sport</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="atribut">
+                <h2>Materiály</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="atribut">
+                <h2>Velikost</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="atribut">
+                <h2>Barva</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" value="obuv">
+                            </td>
+                            <td>
+                                <input type="button" value="smazat podkategorii">
+                            </td>
+                            <td>
+                                <input type="button" value="aktualizovat podkategorii">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <form class="uzivatele" method="post">
+            <div class="hledani">
+                Hledat uživatele: 
+                <input type="search" name="hledat">
+            </div>
+            <!--pak vygenerovat data-value="mail" ke každému účtu-->
+            <table>
+                <thead>
+                    <tr>
+                        <td>
+                            Jméno
+                        </td>
+                        <td>
+                            Email
+                        </td>
+                        <td>
+                            Akce
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            Jméno: pepa
+                        </td>
+                        <td>
+                            Email: Pepajede@gmail.com
+                        </td>
+                        <td>
+                            <input type="button" name="smazatUcet" value="smazat účet">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <div class="slevove-kody">
+            <div class="hledani">
+                Hledat slevový kód: 
+                <input type="search" name="hledat">
+            </div>
+            <div class="kody">
+                <form method="post">
+                    <h2>Slevový kód</h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Slevový kód
+                                </td>
+                                <td>
+                                    <input type="text" value="65486das">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Značka/sport
+                                </td>
+                                <td>
+                                    <input type="text" value="65486das">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Sleva
+                                </td>
+                                <td>
+                                    <input type="num" value="20" max="99">%
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="resetovat vybraný kód">
+                        <input type="button" value="smazat vybraný kód">
+                        <input type="button" value="aktualizovat vybraný kód">
+                    </div>
+                </form>
+                <form method="post">
+                    <h2>Nový kódy</h2>
+                    Počet nových kódů pro vygenerování
+                    <input type="number">
+                    <h3>Použít kódy na:</h3>
+                    <div class="sporty">
+                        <label>
+                            <input type="radio" name="k" value="sport">Sporty
+                            <select name="kategorie" id="velikost">
+                                <option value="volvo">Oblečení</option>
+                                <option value="saab">Doplňky</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="znacky">
+                        <label for="k">
+                            <input type="radio" name="k" value="znacka">Značky
+                            <select name="kategorie" id="velikost">
+                                <option value="volvo">Oblečení</option>
+                                <option value="saab">Doplňky</option>
+                            </select>
+                        </label>
+                    </div>
+                    <input type="submit" name="vytvoritKod" value="Vytvořit kódy">
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

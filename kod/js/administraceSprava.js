@@ -17,28 +17,40 @@ let tlacitkoVytvoritVelikost = document.querySelector(".modal-tlacitka input[typ
 
 tlacitkoVytvoritVelikost.addEventListener("click",pridatNovouVelikost)
 
+let indexVelikosti = 0
 
 function pridatNovouVelikost() {
-    let barvy = document.querySelectorAll(".barva")
+    let selectorBarvy = '.barva[data-barva="' + barvaTlacitka + '"]'
 
     modalniPozadi.style.display = "none"
     
     let radek = document.createElement("tr")
+    radek.setAttribute("data-velikost",indexVelikosti)
     
     let velikostSloupec = document.createElement("td")
-    velikostSloupec.innerHTML = "Velikost: " + document.querySelector(".modal #velikost").value + "<input name=\"" +  barvy[indexBarvy - 1].getAttribute("data-barva").replace(/ /g,"-") + "Velikost[]\" value=\"" + document.querySelector(".modal #velikost").value +"\" hidden>"
+    velikostSloupec.innerHTML = "Velikost: " + document.querySelector(".modal #velikost").value + "<input name=\"" +  barvaTlacitka.replace(/ /g,"-") + "Velikost[]\" value=\"" + document.querySelector(".modal #velikost").value +"\" hidden>"
     radek.appendChild(velikostSloupec)
 
     let skladSloupec = document.createElement("td");
-    skladSloupec.innerHTML = "<div>Skladem <input type=\"number\" min=\"0\" name=\"" + barvy[indexBarvy - 1].getAttribute("data-barva").replace(/ /g,"-") +  "Pocet[]\" value=\"" + document.querySelector(".modal #pocet").value  + "\">ks</div>"
+    skladSloupec.innerHTML = "<div>Skladem <input type=\"number\" min=\"0\" name=\"" + barvaTlacitka.replace(/ /g,"-") +  "Pocet[]\" value=\"" + document.querySelector(".modal #pocet").value  + "\">ks</div>"
     radek.appendChild(skladSloupec)
 
     let odstranitSloupec = document.createElement("td")
-    odstranitSloupec.innerHTML = "<input type=\"button\" name=\"odstranitVelikost\" value=\"odstranit\">"
+    let input = document.createElement("input")
+    input.type = "button"
+    input.value = "odstranit"
+    input.id= "odstranitVelikost"
+    input.setAttribute("data-velikost",indexVelikosti++)
+
+    input.addEventListener("click",function() {
+        document.querySelector('tr[data-velikost="' + input.getAttribute("data-velikost") + '"]').parentElement.removeChild(document.querySelector('tr[data-velikost="' + input.getAttribute("data-velikost") + '"]'))
+    })
+
+    odstranitSloupec.appendChild(input)
     radek.appendChild(odstranitSloupec)
     
     //nemam to přes css jeden selektor, protože to nefungovalo když jsem tam dal jakykoliv nth-child
-    barvy[indexBarvy - 1].querySelector("tbody").appendChild(radek)
+    document.querySelector(selectorBarvy).querySelector("tbody").appendChild(radek)
 }
 
 tlacitkoZavritModalniOkno.addEventListener("click",function() {
@@ -47,35 +59,35 @@ tlacitkoZavritModalniOkno.addEventListener("click",function() {
 
 
 
-let menu = document.querySelectorAll("nav ul li")
+// let menu = document.querySelectorAll("nav ul li")
 
-let main = document.querySelector("main").children
-main = Array.from(main).slice(2)
+// let main = document.querySelector("main").children
+// main = Array.from(main).slice(2)
 
-for (let index = 0; index < 4; index++) {
-    menu[index].addEventListener("click", function() {
+// for (let index = 0; index < 4; index++) {
+//     menu[index].addEventListener("click", function() {
         
-        menu[index].style.background = "#DDDDDD"
-        main[index].style.display = "flex"
+//         menu[index].style.background = "#DDDDDD"
+//         main[index].style.display = "flex"
         
-        //dojmenovat
-        let n = Array.from(main).filter(element => {
-            return element !== main[index]
-        })
-        n.forEach(element => {
-            element.style.display = "none"
-        })
+//         //dojmenovat
+//         let n = Array.from(main).filter(element => {
+//             return element !== main[index]
+//         })
+//         n.forEach(element => {
+//             element.style.display = "none"
+//         })
         
-        let nevybrany = Array.from(menu).filter(element => {
-            return element !== menu[index]
-        })
-        nevybrany.forEach(element => {
-            element.style.background = "unset"
-        })
+//         let nevybrany = Array.from(menu).filter(element => {
+//             return element !== menu[index]
+//         })
+//         nevybrany.forEach(element => {
+//             element.style.background = "unset"
+//         })
         
-    })
-}
-let indexBarvy = 0;
+//     })
+// }
+let barvaTlacitka = "";
 
 let hledatProduktSearch = document.querySelector("#hledatProduktSearch")
 let hledatProdukt = document.querySelector("#hledat-produkt")
@@ -174,7 +186,7 @@ vsechnyBarvyProduktu.forEach(el => {
             for (let index = 0; index < pridatVelikostiTlacitka.length; index++) {
                 pridatVelikostiTlacitka[index].addEventListener("click",function() {
                     modalniPozadi.style.display = "flex"
-                    indexBarvy = parseInt(pridatVelikostiTlacitka[index].getAttribute("data-barva"))
+                    barvaTlacitka = pridatVelikostiTlacitka[index].getAttribute("data-barva")
                 })
             }
 
@@ -262,7 +274,6 @@ function vyhledejProdukt() {
     obrazkyMnozstviDiv.innerHTML = "<h1>Barvy</h1>"
     
     let pouziteBarvyVelikosti = []
-    let indexVelikosti = 0
     
     for (let index = 0; index < produkty[indexHledanehoProduktu].getAttribute("data-pocetBarev"); index++) {
         for (let i = 0; i < mnozstviProduktu.length; i++) {
@@ -296,7 +307,7 @@ function vyhledejProdukt() {
                     novaVelikostButton.type = 'button'
                     novaVelikostButton.value = 'Přidat novou velikost'
                     novaVelikostButton.id = "pridat"
-                    novaVelikostButton.setAttribute("data-barva",pouziteBarvyVelikosti.length)
+                    novaVelikostButton.setAttribute("data-barva",mnozstviProduktu[i].getAttribute("data-barva"))
                     velikostiDiv.appendChild(novaVelikostButton)
                     velikostiDiv.appendChild(document.createElement("br"))
 
@@ -393,7 +404,7 @@ function vyhledejProdukt() {
     for (let index = 0; index < pridatVelikostiTlacitka.length; index++) {
         pridatVelikostiTlacitka[index].addEventListener("click",function() {
             modalniPozadi.style.display = "flex"
-            indexBarvy = parseInt(pridatVelikostiTlacitka[index].getAttribute("data-barva"))
+            barvaTlacitka = pridatVelikostiTlacitka[index].getAttribute("data-barva")
         })
     }
 
