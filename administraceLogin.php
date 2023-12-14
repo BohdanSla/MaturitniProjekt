@@ -2,25 +2,22 @@
 
 declare(strict_types=1);
 
+session_start();
+
 $html = file_get_contents("kod/html/administraceLogin.html");
-
-
-if (isset($_SESSION["user_id"])) {
-    # code...
-    unset($_SESSION["userd_id"]);
-    session_regenerate_id();
-}
 
 $db = new PDO("mysql:host=localhost;dbname=pro_sportovce;charset=utf8","root","");
 
 $administrator = "administrator";
+
+
 
 if (isset($_POST["odeslat"])) {
     # code...
     if (strcmp($_POST["jmeno"],$administrator) == 0) {
         # code...
         
-        $stmt = $db->prepare("SELECT heslo FROM uzivatel WHERE jmeno = :jmeno");
+        $stmt = $db->prepare("SELECT heslo FROM uzivatel WHERE jmeno = :jmeno AND id_role = 1");
         $stmt->execute([":jmeno" => $administrator]);
 
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,8 +26,8 @@ if (isset($_POST["odeslat"])) {
             # code...
             if (password_verify($_POST["heslo"],$arr[0]["heslo"])) {
                 # code...
-                $_SESSION["username"] = $login;
-                echo "User: $login";
+                $_SESSION["username"] = $administrator;
+                echo "User: $administrator";
 
                 header("Location: administraceSprava.php");
             } else {
@@ -41,14 +38,15 @@ if (isset($_POST["odeslat"])) {
             //predelat
             echo "uzivatel neexistuje";
         }
-
+        
     } else {
         //predelat jeste
         echo "spatne zadane jmeno";
     }
-
+    
 }
 
-
+if(isset($_SESSION["username"])) {
+}
 
 echo $html;

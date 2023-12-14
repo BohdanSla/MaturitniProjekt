@@ -13,7 +13,7 @@ if (isset($_POST["odeslat"])) {
     $db = new Db();
     # code...
     
-    $stmt = $db->prepare("insert into uzivatel(heslo,jmeno,prijmeni,email,telefonni_cislo,psc,ulice,mesto) values(:heslo,:jmeno,:prijmeni,:email,:telefonni_cislo,:psc,:ulice,:mesto)");
+    $stmt = $db->prepare("insert into uzivatel(heslo,jmeno,prijmeni,email,telefonni_cislo,psc,ulice,mesto,id_role) values(:heslo,:jmeno,:prijmeni,:email,:telefonni_cislo,:psc,:ulice,:mesto,:id_role)");
     
     $stmt->execute([
     ":heslo" => password_hash($_POST["heslo"],PASSWORD_BCRYPT),
@@ -24,6 +24,7 @@ if (isset($_POST["odeslat"])) {
     ":psc" => htmlspecialchars($_POST["psc"]),
     ":ulice" => htmlspecialchars($_POST["ulice"]),
     ":mesto" => htmlspecialchars($_POST["mesto"]),
+    ":id_role" => 3
     ]);
 
     header("Location: ucet.php");

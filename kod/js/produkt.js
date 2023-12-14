@@ -54,41 +54,59 @@ function otevriPostraniMenu() {
     }
 }
 
-
-let Vsechnyobrazky = document.querySelectorAll(".ostatni-obrazky option");
-
+let vsechnyObrazkyProduktu = document.querySelectorAll(".obrazky-produktu option")
 let hlavniObrazek = document.createElement("img")
-let src = Array.from(Vsechnyobrazky).filter((el) => {
+
+let src = Array.from(vsechnyObrazkyProduktu).filter(el => {
     return el.value.includes("main")
-})
-hlavniObrazek.src = src[0].value
-document.querySelector(".galerie").insertBefore(hlavniObrazek,document.querySelector(".ostatni-obrazky"))
+},vsechnyObrazkyProduktu)
+
+hlavniObrazek.setAttribute("data-barva",src[0].getAttribute("data-barva"))
+hlavniObrazek.src = src[0].value;
+
+document.querySelector(".hlavni-obrazek").appendChild(hlavniObrazek);
 
 let barvyProduktu = []
 
-obrazky.forEach((el)=> {
+document.querySelectorAll("form datalist option").forEach((el) => {
     if(!barvyProduktu.includes(el.getAttribute("data-barva"))) {
-        if (el.value.includes("main")) {
-            barvyProduktu.unshift(el.getAttribute("data-barva"))
-        } else {
-            barvyProduktu.push(el.getAttribute("data-barva"))
-        }
+        barvyProduktu.push(el.getAttribute("data-barva"))
     }
 })
 
-barvyProduktu.forEach((el) => {
-    let barva = document.createElement("option")
-    barva.value = el
-    barva.innerHTML = el
+let barvaHlavnihoObrazku = barvyProduktu[barvyProduktu.indexOf(hlavniObrazek.getAttribute("data-barva"))];
+
+barvyProduktu.splice(barvyProduktu.indexOf(barvaHlavnihoObrazku),1)
+barvyProduktu.unshift(barvaHlavnihoObrazku)
+
+barvyProduktu.forEach(el => {
+    let option = document.createElement("option")
+    option.value = el
+    option.innerHTML = el
+    document.querySelector("form select").appendChild(option)
+});
+
+
+
+let barva = document.querySelector("form select[name=barva]")
+barva.addEventListener("change",vypisVelikosti)
+
+function vypisVelikosti() {
+    let velikosti = document.querySelector("form select[name=velikost]")
+    velikosti.replaceChildren("");
     
-    document.querySelector("form select").appendChild(barva)        
-})
+    let velikostiBarvy = document.querySelectorAll("form datalist option[data-barva=\"" + barva.value +"\"]")
+    
+    velikostiBarvy.forEach(el => {
+        let option = document.createElement("option")
+        option.value = el.getAttribute("data-velikost")
+        option.innerHTML = el.getAttribute("data-velikost")
+        velikosti.appendChild(option)
+    })
+}
 
-let obrazkyProduktu = document.querySelector(".obrazky-produktu div")
+vypisVelikosti()
 
-Vsechnyobrazky.filter((el) => {
-    if (el.getAttribute("data-barva") == document.querySelector("form select").options[document.querySelector("form select").selectedIndex]) {
-        
-    }
-})
+
+
 

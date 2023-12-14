@@ -18,7 +18,8 @@ if(isset($_GET["nazev"])) {
     JOIN znacka ON znacka.id = produkt.id_znacky
     JOIN sport ON sport.id = produkt.id_sportu
     WHERE produkt.nazev = :nazev;
-    SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.nazev = :nazev ORDER BY barva.nazev;');
+    SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.nazev = :nazev ORDER BY barva.nazev;
+    SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev);');
 
     $stmt->execute([":nazev" => $_GET["nazev"]]);
 
@@ -47,6 +48,8 @@ if(isset($_GET["nazev"])) {
         $html .= "hledaný produkt nebyl nalezen...";
     }
 
+
+
     $stmt->nextRowset();
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -59,12 +62,21 @@ if(isset($_GET["nazev"])) {
             # code...
             $src  = "obrazky/" . $value["src"];
             $obrazky .= '<option value="obrazky/' . $value["src"] . '" data-barva=' . $value["nazev"] . '></option>';
-
-
         }
 
-        $html = preg_replace("/\[@ostatni-obrazky\]/",$obrazky,$html);
+        $html = str_replace("[@ostatni-obrazky]",$obrazky,$html);
     }
+
+    $stmt->nextRowset();
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $velikosti = "";
+
+    foreach ($arr as $key => $value) {
+        # code...
+        $velikosti .= '<option data-barva="' . $value["barva"] . '" data-velikost="' . $value["velikost"] . '" data-pocet=' . $value["pocet"] . '></option>';
+    }
+    $html = str_replace("[@velikosti]",$velikosti,$html);
 
 
 } else {

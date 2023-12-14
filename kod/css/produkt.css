@@ -12,7 +12,8 @@ main {
     flex-direction: column;
     align-items: center;
     height: 50vh;
-    padding: 5% 1%;
+    margin: 5% 1%;
+    justify-content: center;
 }
 .galerie img {
     height: 100%;
@@ -52,6 +53,19 @@ form input[type=submit]:hover {
     display: flex;
     flex-direction: column;
 }
+.hlavni-obrazek img {
+    width: 22rem;
+}
 .obrazky-produktu div {
     background-color: #dcdcdc5d;
+    display: flex;
+}
+.info-pridat form  {
+    display: flex;
+    flex-direction: column;
+}
+.info-pridat form div {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-evenly;
 }
