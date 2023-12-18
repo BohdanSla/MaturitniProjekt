@@ -35,7 +35,7 @@ foreach ($arr as $key => $value) {
 
 
     $src = "obrazky/" . $value["src"];
-    $odkaz = "produkt.php?nazev=" . $value["nazev"] ;
+    $odkaz = "produkt.php?nazev=" . urlencode($value["nazev"]);
     $cenaVesleve = "";
     $maCenuVeSleve = "";
 

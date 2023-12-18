@@ -105,7 +105,46 @@ function vypisVelikosti() {
     })
 }
 
+
+function vypisObrazky() {
+    let obrazkyBarvyProduktu = document.querySelectorAll(".obrazky-produktu option[data-barva=\"" + barva.value + "\"]")
+
+    let obrazky = document.querySelector(".obrazky-produktu div")
+    obrazky.replaceChildren("")
+
+    obrazkyBarvyProduktu.forEach(el => {
+        let img = document.createElement("img")
+        img.src = el.value
+        
+        if (document.querySelector(".hlavni-obrazek img").getAttribute("src") == el.value) {
+            img.style.border = "1px solid #11111155"
+        }
+
+
+        obrazky.appendChild(img)
+    })
+}
+
+barva.addEventListener("change",vypisObrazky)
+
+function zmenHlavniObrazek() {
+    hlavniObrazek.setAttribute("data-barva",barva.value)
+
+    let novyHlavniObrazek = false;
+    
+    vsechnyObrazkyProduktu.forEach(element => {
+        
+        if (element.getAttribute("data-barva") == hlavniObrazek.getAttribute("data-barva") && !novyHlavniObrazek) {
+            hlavniObrazek.src = element.value
+            novyHlavniObrazek = true
+        }
+    });
+}
+
+barva.addEventListener("change",zmenHlavniObrazek)
+
 vypisVelikosti()
+vypisObrazky()
 
 
 

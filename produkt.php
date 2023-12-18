@@ -19,9 +19,9 @@ if(isset($_GET["nazev"])) {
     JOIN sport ON sport.id = produkt.id_sportu
     WHERE produkt.nazev = :nazev;
     SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.nazev = :nazev ORDER BY barva.nazev;
-    SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev);');
+    SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev) ORDER BY velikost.nazev;');
 
-    $stmt->execute([":nazev" => $_GET["nazev"]]);
+    $stmt->execute([":nazev" => rawurldecode($_GET["nazev"])]);
 
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -37,13 +37,13 @@ if(isset($_GET["nazev"])) {
 
         }
 
-        $html = preg_replace("/\[@nazev\]/",$arr[0]["nazev"],$html);
-        $html = preg_replace("/\[@popis\]/",$arr[0]["popis"],$html);
-        $html = preg_replace("/\[@cena\]/",zformulujCenu(strval($arr[0]["cena"])),$html);
-        $html = preg_replace("/\[@cena-ve-sleve\]/",$cenaVeSleve,$html);
-        $html = preg_replace("/\[@znacka\]/",$arr[0]["znacka"],$html);
-        $html = preg_replace("/\[@sport\]/",$arr[0]["sport"],$html);
-        $html = preg_replace("/\[@hodnoceni-produktu\]/",strval($arr[0]["hodnoceni_produktu"]),$html);
+        $html = str_replace("[@nazev]",$arr[0]["nazev"],$html);
+        $html = str_replace("[@popis]",$arr[0]["popis"],$html);
+        $html = str_replace("[@cena]",zformulujCenu(strval($arr[0]["cena"])),$html);
+        $html = str_replace("[@cena-ve-sleve]",$cenaVeSleve,$html);
+        $html = str_replace("[@znacka]",$arr[0]["znacka"],$html);
+        $html = str_replace("[@sport]",$arr[0]["sport"],$html);
+        $html = str_replace("[@hodnoceni-produktu]",strval($arr[0]["hodnoceni_produktu"]),$html);
     } else {
         $html .= "hledaný produkt nebyl nalezen...";
     }

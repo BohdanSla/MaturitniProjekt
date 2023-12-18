@@ -56,9 +56,20 @@ form input[type=submit]:hover {
 .hlavni-obrazek img {
     width: 22rem;
 }
-.obrazky-produktu div {
-    background-color: #dcdcdc5d;
+.obrazky-produktu {
     display: flex;
+    flex-direction: column;
+}
+.obrazky-produktu div {
+    background-color: #dcdcdcDC;
+    display: flex;
+    padding: 1rem;
+}
+.obrazky-produktu div img {
+    width: 5rem;
+    border-radius: 0.25rem;
+    margin: 0 0.5rem;
+    padding: 0.1rem;
 }
 .info-pridat form  {
     display: flex;
