@@ -86,10 +86,10 @@ barvyProduktu.forEach(el => {
     document.querySelector("form select").appendChild(option)
 });
 
-
-
 let barva = document.querySelector("form select[name=barva]")
 barva.addEventListener("change",vypisVelikosti)
+barva.addEventListener("change",zmenHlavniObrazek)
+barva.addEventListener("change",vypisObrazky)
 
 function vypisVelikosti() {
     let velikosti = document.querySelector("form select[name=velikost]")
@@ -105,27 +105,31 @@ function vypisVelikosti() {
     })
 }
 
+let ostatniObrazky= document.querySelectorAll("img[alt=ostatni]")
 
 function vypisObrazky() {
     let obrazkyBarvyProduktu = document.querySelectorAll(".obrazky-produktu option[data-barva=\"" + barva.value + "\"]")
-
+    
     let obrazky = document.querySelector(".obrazky-produktu div")
     obrazky.replaceChildren("")
-
+    
     obrazkyBarvyProduktu.forEach(el => {
         let img = document.createElement("img")
         img.src = el.value
+        console.log(img.src);
+        img.alt = "ostatni"
         
         if (document.querySelector(".hlavni-obrazek img").getAttribute("src") == el.value) {
-            img.style.border = "1px solid #11111155"
+            img.style.border = "1px solid #111111BB"
         }
-
-
-        obrazky.appendChild(img)
+        
+        
+        obrazky.appendChild(img);
     })
+
+    ostatniObrazky = document.querySelectorAll("img[alt=ostatni]")
 }
 
-barva.addEventListener("change",vypisObrazky)
 
 function zmenHlavniObrazek() {
     hlavniObrazek.setAttribute("data-barva",barva.value)
@@ -141,11 +145,45 @@ function zmenHlavniObrazek() {
     });
 }
 
-barva.addEventListener("change",zmenHlavniObrazek)
 
 vypisVelikosti()
 vypisObrazky()
 
 
+let sipky = document.querySelectorAll('img[alt=sipka_ikona]')
+let indexHlavnihoObrazku = 0;
+for (let index = 0; index < ostatniObrazky.length; index++) {
+    if (ostatniObrazky[index].src == hlavniObrazek.src) {
+        indexHlavnihoObrazku = index;
+        break;
+    }
+}
+
+console.log(indexHlavnihoObrazku);
+
+sipky[0].addEventListener("click",function() {
+
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "unset"
+    if (indexHlavnihoObrazku > 0) {
+        indexHlavnihoObrazku--;
+    } else {
+        indexHlavnihoObrazku = ostatniObrazky.length - 1
+    }
+    hlavniObrazek.src = ostatniObrazky[indexHlavnihoObrazku].src;
+    hlavniObrazek.src = ostatniObrazky[indexHlavnihoObrazku].src;
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid #111111BB"
+})
+
+sipky[1].addEventListener("click",function(){
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "unset"
+    if (indexHlavnihoObrazku + 1 < ostatniObrazky.length) {
+        indexHlavnihoObrazku++;
+    } else {
+        indexHlavnihoObrazku = 0
+    }
+    hlavniObrazek.src = ostatniObrazky[indexHlavnihoObrazku].src;
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid #111111BB"
+})
 
 
+    

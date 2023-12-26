@@ -58,7 +58,16 @@ form input[type=submit]:hover {
 }
 .obrazky-produktu {
     display: flex;
-    flex-direction: column;
+}
+.obrazky-produktu img {
+    width: 1.5rem;
+    margin: 0 1rem;
+}
+img[alt=sipka_ikona]:last-of-type {
+    transform: scaleX(-1)
+}
+img[alt=sipka_ikona]:hover {
+    cursor: pointer;
 }
 .obrazky-produktu div {
     background-color: #dcdcdcDC;
@@ -79,4 +88,62 @@ form input[type=submit]:hover {
     margin-bottom: 2rem;
     display: flex;
     justify-content: space-evenly;
+}
+.popis, .recenze {
+    padding: 1rem;
+}
+
+.popis {
+    background-color: #f2f2f2dc;
+    margin: 1rem;
+}
+
+.popis > p {
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.recenze {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.recenze > div {
+    background-color: #f2f2f2dc;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 0.25rem;
+}
+
+.recenze div p {
+    margin: 0;
+    padding: 1rem;
+    background-color: white;
+}
+
+.recenze > div:hover {
+    border: solid 1px rgb(213, 213, 213);
+}
+
+.jmeno-hodnoceni {
+    display: flex;
+    align-items: center;
+}
+
+.jmeno-hodnoceni img {
+    width: 2rem;
+}
+
+.jmeno-hodnoceni > div {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-left: 1rem;
+}
+.jmeno-hodnoceni > div > * {
+    margin: 0 0.2rem;
 }

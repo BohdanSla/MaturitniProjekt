@@ -1,0 +1,17 @@
+main form {
+    background-color: #f6f6f6;
+    padding: 1rem;
+}
+main ul {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(202, 202, 202);
+    margin: 0;
+    padding: 1rem;
+}
+main li {
+    list-style-type: none;
+    background-color: white;
+    padding: 0.2rem;
+    border-radius: 0.25rem;
+}

@@ -19,7 +19,8 @@ if(isset($_GET["nazev"])) {
     JOIN sport ON sport.id = produkt.id_sportu
     WHERE produkt.nazev = :nazev;
     SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.nazev = :nazev ORDER BY barva.nazev;
-    SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev) ORDER BY velikost.nazev;');
+    SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev) ORDER BY velikost.nazev;
+    SELECT uzivatel.jmeno AS jmeno,uzivatel.prijmeni, recenze.recenze, recenze.pocet_hvezd FROM recenze JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele WHERE recenze.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1);');
 
     $stmt->execute([":nazev" => rawurldecode($_GET["nazev"])]);
 
@@ -77,6 +78,26 @@ if(isset($_GET["nazev"])) {
         $velikosti .= '<option data-barva="' . $value["barva"] . '" data-velikost="' . $value["velikost"] . '" data-pocet=' . $value["pocet"] . '></option>';
     }
     $html = str_replace("[@velikosti]",$velikosti,$html);
+
+
+
+    $stmt->nextRowset();
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    $recenze = '';
+
+    if(count($arr) > 0) {
+        foreach ($arr as $key => $value) {
+            # code...
+            $recenze .= '<div><div class="jmeno-hodnoceni"><h3>' . $value["jmeno"] . ' ' . $value["prijmeni"] .'</h3><div><b>' . $value["pocet_hvezd"] . '/5 </b><img src="obrazky/hvezda_ikona.svg"></div></div><p>' . $value["recenze"] .'</p></div>';
+        }
+    } else {
+        $recenze = "<b>Zatím tu nejsou žádné recenze</b>";
+    }
+
+
+    $html = str_replace("[@recenze]",$recenze,$html);
 
 
 } else {
