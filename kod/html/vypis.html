@@ -18,7 +18,7 @@
             </a>
         </nav>
         <nav>
-            <form method="get" enctype="text/plain">
+            <form method="get">
                 <input type="search" name="hledat" placeholder="Vyhledat vybavení">
                 <button type="submit" name="odeslat">
                     <img src="obrazky/lupa_ikona_cerna.svg" alt="lupa_ikona">
@@ -63,7 +63,7 @@
         <div class="vypln">
         </div>
         <div class="vypis">
-            <div class="filtry">
+            <form method="get">
                 Filtry
                 <div class="filtr">
                     <div class="nazev-filtru">
@@ -128,7 +128,8 @@
                         [@barva]
                     </div>
                 </div>
-            </div>
+                <input type="submit" name="filtrovat" value="Vyfiltrovat">
+            </form>
             <div class="nadpis-produkty">
                 <h1>Výsledky vyhledávání</h1>
                 <div class="produkty">

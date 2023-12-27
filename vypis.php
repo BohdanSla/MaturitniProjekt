@@ -11,6 +11,29 @@ use Databaze as Db;
 
 $db = new Db();
 
+$sql = '
+SELECT nazev FROM znacka ORDER BY nazev ASC;
+SELECT nazev FROM sport ORDER BY nazev ASC;
+SELECT nazev FROM velikost ORDER BY nazev ASC;
+SELECT nazev FROM barva ORDER BY nazev ASC;';
+
+$stmt = $db->prepare($sql);
+
+$stmt->execute();
+vypisFiltry("znacka",$arr,$stmt,$html);
+
+$stmt->nextRowSet();
+vypisFiltry("sport",$arr,$stmt,$html);
+
+$stmt->nextRowSet();
+vypisFiltry("velikost",$arr,$stmt,$html);
+$stmt->nextRowSet();
+vypisFiltry("barva",$arr,$stmt,$html);
+
+
+
+
+
 $stmt = $db->prepare("SELECT 
 MAX(GREATEST(produkt.cena,produkt.cena_ve_sleve)) AS nejvetsi_cena 
 FROM produkt");
@@ -23,9 +46,58 @@ foreach ($arr as $key => $value) {
     $html = preg_replace("/\[@maximum\]/",strval($value["nejvetsi_cena"]),$html);
 }
 
-$stmt = $db->prepare('SELECT obrazek.src, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, kategorie_produktu.podkategorie FROM produkt JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE "%main%";');
 
-$stmt->execute();
+
+
+
+
+
+$filtry = "";
+if (isset($_GET["filtrovat"])) {
+    # code...
+    if ($_GET["znacka"]) {
+        # code...
+        
+        
+        foreach ($_GET["znacka"] as $key => $value) {
+            # code...
+            $html = str_replace( $value . '="[@' . $value . ']"',"checked",$html);
+        }
+
+        $znacky = array_map(function($element) {
+            return "'" . $element . "'";
+        },$_GET["znacka"]);
+        
+        $filtry .= " AND znacka.nazev IN (" . implode(",",$znacky) .")";
+    }
+}
+
+
+$sql = 'SELECT obrazek.src, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, kategorie_produktu.podkategorie 
+FROM produkt 
+JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
+JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
+JOIN znacka ON znacka.id = produkt.id_znacky
+JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE "%main%"';
+
+$sql .= $filtry;
+
+if(isset($_GET["odeslat"])) {
+    if(trim($_GET["hledat"]) != "") {
+        $sql .= " AND produkt.nazev LIKE :nazev";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([":nazev" => '%' . $_GET["hledat"] . '%']);
+    } else {
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+    }
+} else {
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+}
+
+
+
 
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -38,7 +110,7 @@ foreach ($arr as $key => $value) {
     $odkaz = "produkt.php?nazev=" . urlencode($value["nazev"]);
     $cenaVesleve = "";
     $maCenuVeSleve = "";
-
+    
     $produkty .= '<a [@ma-cenu-ve-sleve] href="' . $odkaz . '"><img src="' . $src .'"><div class="parametry"><h2>' . $value["nazev"] . '</h2><b id="podkategorie">' . $value["podkategorie"] . '</b><b id="cena">' . $value["cena"] . '</b> [@cena-ve-sleve] </div></a>';
     
     if ($value["cena_ve_sleve"] != null) {
@@ -50,6 +122,21 @@ foreach ($arr as $key => $value) {
     $produkty = preg_replace("/\[@ma-cenu-ve-sleve\]/",$maCenuVeSleve,$produkty,1);
 }
 
-$html = preg_replace("/\[@produkty\]/",$produkty,$html,1);
+$html = str_replace("[@produkty]",$produkty,$html);
+
+function vypisFiltry(String $typFiltru,&$arr,&$stmt,&$html) {
+    $filtry = "";
+
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($arr as $key => $value) {
+        # code...
+        $filtr = $value["nazev"];
+        $filtry .= '<div><input type="checkbox" value="' . $filtr . '" name="' . $typFiltru . '[]" id="' . $filtr .'" ' . $filtr . '="[@' . $filtr .  ']"><label for="' . $filtr .'">' . $filtr . '</label></div>';
+    }
+
+    $html = str_replace("[@" . $typFiltru ."]",$filtry,$html);
+}
+
+
 
 echo $html;
