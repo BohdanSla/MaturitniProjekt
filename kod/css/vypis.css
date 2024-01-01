@@ -100,11 +100,22 @@ input[type="number"] {
 .parametry h2 {
     margin-bottom: 0;
 }
-#podkategorie {
-    color: rgb(26, 26, 26);
+#sport {
+    color: rgb(141, 141, 141);
 }
 
 .hodnoty-filtru {
     display: flex;
     flex-direction: column;
+}
+.vypis input[type=submit] {
+    width: 100%;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding:0.2rem
+}
+.vypis input[type=submit]:hover {
+    cursor: pointer;
 }

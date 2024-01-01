@@ -6,17 +6,73 @@ main {
     min-height: 100vh;
     position: relative;
 }
-
-
 .kosik {
     background-color: #DCDCDC;
-    width: 46%;
     padding: 2%;
     border-radius: 0.15rem;
     font-size: 1rem;
     min-height: 30rem;
+    display: flex;
+    flex-direction: column;
+    width: 50rem;
+    margin-bottom: 2rem;
 }
-#platba {
+.kosik > div {
+    display: flex;
+    background-color: white;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+.kosik > div section{
+    display: flex;
+}
+.kosik > div section > *{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.kosik > div section > *:last-child{
+    flex-direction: row;
+}
+.kosik > div section:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 22rem;
+}
+.kosik > div section p {
+    margin: 0;
+}
+.kosik > div img {
+    height: 5rem;
+}
+.kosik div img:last-child {
+    height: 2rem;
+}
+.kosik > div input {
+    width: 2rem;
+    height: 1rem;
+}
+.kosik > div button {
+    display: flex;
+    background: white;
+    border: none;
+}
+.kosik > div button:hover {
+    cursor: pointer;
+}
+.kosik > section {
+    display: flex;
+    background-color: white;
+    border-radius: 0.25rem;
+    padding: 0 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+}
+main .kosik a:last-of-type {
     background-color: red;
     color: white;
     padding: 1vw;
@@ -31,7 +87,7 @@ main {
         padding: 5% 10%;
         font-size: 1.5rem;
     }
-    #platba {
+    main a:last-of-type {
         margin: 1rem 0;
         padding: 0.5rem;
         font-size: 1.5rem;

@@ -4,6 +4,7 @@ main {
 .galerie-info {
     display: flex;
     flex-direction: row;
+    margin: 1rem;
 }
 
 .galerie {
@@ -11,7 +12,6 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 50vh;
     margin: 5% 1%;
     justify-content: center;
 }
@@ -19,7 +19,6 @@ main {
     height: 100%;
 }
 .info-pridat {
-    height: 50vh;
     padding: 1%;
     width: 36%;
     background-color: #dcdcdc5d;
@@ -28,10 +27,10 @@ main {
     flex-direction: column;
     justify-content: space-between;
 }
-form input[type=text] {
+.info-pridat input[type=text] {
     display: none;
 }
-form input[type=submit] {
+.info-pridat input[type=submit] {
     width: 100%;
     background-color: red;
     color: white;
@@ -40,18 +39,11 @@ form input[type=submit] {
     font-size: large;
     padding: 0.5rem 0;
 }
-form input[type=submit]:hover {
+.info-pridat input[type=submit]:hover {
     cursor: pointer;
 }
-.info h2 {
+form h2 {
     margin: 0;
-}
-.info h2:first-of-type {
-    color: rgb(133, 133, 133)
-}
-.info {
-    display: flex;
-    flex-direction: column;
 }
 .hlavni-obrazek img {
     width: 22rem;
@@ -83,11 +75,15 @@ img[alt=sipka_ikona]:hover {
 .info-pridat form  {
     display: flex;
     flex-direction: column;
+    background: white;
+    padding: 1rem;
+    height: 80%;
 }
-.info-pridat form div {
-    margin-bottom: 2rem;
+.info-pridat form > div {
+    margin:1rem 0;
     display: flex;
-    justify-content: space-evenly;
+    align-items: center;
+    justify-content: space-between;
 }
 .popis, .recenze {
     padding: 1rem;
@@ -102,16 +98,20 @@ img[alt=sipka_ikona]:hover {
     background-color: white;
     padding: 0.5rem;
     border-radius: 0.25rem;
+    font-size: larger;
 }
 
 .recenze {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    background-color: #f2f2f2dc;
+    margin: 1rem;
+    border-radius: 0.25rem;
 }
 
 .recenze > div {
-    background-color: #f2f2f2dc;
+    background-color: #e7e7e7;
     padding: 1rem;
     margin-bottom: 2rem;
     border-radius: 0.25rem;
@@ -121,10 +121,6 @@ img[alt=sipka_ikona]:hover {
     margin: 0;
     padding: 1rem;
     background-color: white;
-}
-
-.recenze > div:hover {
-    border: solid 1px rgb(213, 213, 213);
 }
 
 .jmeno-hodnoceni {
@@ -146,4 +142,82 @@ img[alt=sipka_ikona]:hover {
 }
 .jmeno-hodnoceni > div > * {
     margin: 0 0.2rem;
+}
+.parametry {
+    margin: 1rem;
+    background-color: #dcdcdc5d;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+.parametry table, .parametry td {
+    border: 2px solid #9a9a9a9a;
+    border-collapse: collapse;
+}
+.parametry table {
+    text-align: center;
+    font-size: large;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+.parametry td {
+    padding: 1.5rem 0.5rem;
+}
+.parametry tr {
+    background-color: rgb(222, 222, 222);
+}
+.parametry tr:nth-child(2n) {
+    background-color: white;
+}
+.info-pridat button {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    border: none;
+    border-radius: 0.15rem;
+    align-items: center;    
+    padding: 0.1rem;
+    width: 2.5rem;  
+}
+.info-pridat button:hover {
+    cursor: pointer;
+}
+.info-pridat button img {
+    width: 2rem;
+}
+.info-pridat form > div:first-of-type {
+    background-color: #ebebebdc;
+    align-items: center;
+    width: 3rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+.info-pridat form > div:first-of-type img {
+    width: 2rem;
+}
+.info-pridat form[method=post] select {
+    background-color: #ffffff;
+    border: solid 1px rgb(116, 116, 116);
+    outline: none;
+    border-radius: 0.25rem;
+    font-size: medium;
+}
+
+
+input[type=number] {
+    width: 3rem;
+    border-radius: 0.25rem;
+    border: solid 1px rgb(116, 116, 116);
+    outline: none;
+}
+label {
+    font-weight: 600;
+}
+.info-pridat section {
+    display: flex;
+}
+.info-pridat section > div {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
 }

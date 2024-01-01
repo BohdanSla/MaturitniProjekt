@@ -41,12 +41,6 @@
                         Účet
                     </li>
                 </a>
-                <a href="oblibene.php">
-                    <li>
-                        <img src="obrazky/srdce_ikona.svg" alt="srdce_ikona">
-                        Oblíbené produkty
-                    </li>
-                </a>
                 <a href="vypis.php">
                     <li>Všechny produkty</li>
                 </a>
@@ -73,12 +67,12 @@
                     <div class="hodnoty-filtru">
                         Od
                         <div class="vstup-ceny">
-                            <input type="number" min="0" max="[@maximum]">
+                            <input type="number" name="nejmensiCena" value="[@nejmensiCena]" min="0" max="[@maximum]">
                             Kč
                         </div>
                         Do
                         <div class="vstup-ceny">
-                            <input type="number" min="0" max="[@maximum]">
+                            <input type="number" name="nejvetsiCena" value="[@nejvetsiCena]" min="0" max="[@maximum]">
                             Kč
                         </div>
                     </div>

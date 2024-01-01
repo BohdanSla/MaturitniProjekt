@@ -42,12 +42,6 @@
                         Účet
                     </li>
                 </a>
-                <a href="oblibene.php">
-                    <li>
-                        <img src="obrazky/srdce_ikona.svg" alt="srdce_ikona">
-                        Oblíbené produkty
-                    </li>
-                </a>
                 <a href="vypis.php">
                     <li>Všechny produkty</li>
                 </a>
@@ -79,31 +73,81 @@
                     </div>
                 </div>
                 <div class="info-pridat">
-                    <div class="info">
+                    <form method="post" id="pridat">
                         <h1>[@nazev]</h1>
-                        <h2>[@znacka]</h2>
-                        <h2>[@sport]</h2>
                         <h2>[@cena]</h2>
                         <h2>[@cena-ve-sleve]</h2>
-                        <h2>[@hodnoceni-produktu]</h2>
-                    </div>
-                    <form method="post">
+                        <div>
+                            <b>[@hodnoceni-produktu]</b>    
+                            <img src="obrazky/hvezda_ikona.svg">
+                        </div>
+                        <div>
+                            <section>
+                                <div>
+                                    <label for="barva">Barva:</label>
+                                    <select name="barva" id="barva">
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="velikost">Velikost:</label>
+                                    <select name="velikost" id="velikost">
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="mnozstvi">Množství:</label>
+                                    <input type="number" id="mnozstvi" name="mnozstvi" min="0" max="5">
+                                </div>
+                            </section>
+                            <button type="submit" name="oblibene">
+                                <img src="[@oblibene]">
+                            </button>
+                        </div>
                         <datalist>
                             [@velikosti]
                         </datalist>
-                        <div>
-                            <select name="barva">
-                                
-                            </select>
-                            <select name="velikost">
-
-                            </select>
-                            <input type="number" name="pocet" placeholder="množství" max="5">
-                        </div>
-                        <input value="[@nazev]" type="text">
-                        <input type="submit" value="Přidat do košíku">
+                        <input value="[@nazev]" name="puvodniNazev" type="text">
                     </form>
+                    <input type="submit" for="pridat" name="odeslat" value="Přidat do košíku">
                 </div>
+            </div>
+            <div class="parametry">
+                <h2>Parametry</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Typ zboží
+                            </td>
+                            <td>
+                                [@kategorie]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Značka
+                            </td>
+                            <td>
+                                [@znacka]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Sport
+                            </td>
+                            <td>
+                                [@sport]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Materiály
+                            </td>
+                            <td>
+                                [@materialy]
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="popis">
                 <h2>Popis</h2>

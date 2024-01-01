@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="kod/css/index.css" rel="stylesheet" type="text/css">
+    <link href="kod/css/udaje.css" rel="stylesheet" type="text/css">
     <script defer src="kod/js/sablona.js"></script>
     <title>Pro sportovce</title>
 </head>
@@ -40,12 +41,6 @@
                         Účet
                     </li>
                 </a>
-                <a href="oblibene.php">
-                    <li>
-                        <img src="obrazky/srdce_ikona.svg" alt="srdce_ikona">
-                        Oblíbené produkty
-                    </li>
-                </a>
                 <a href="vypis.php">
                     <li>Všechny produkty</li>
                 </a>
@@ -60,6 +55,37 @@
     </aside>
     <main>
         <div class="vypln">
+        </div>
+        <div>
+            <form method="post">
+                <h4>Osobní údaje</h4>
+                <div class="udaj">
+                    Jméno<input type="text" name="jmeno" value="[@jmeno]" required>
+                </div>
+                <div class="udaj">
+                    Příjmení<input type="text" name="prijmeni" value="[@prijmeni]" required>
+                </div>
+                <div class="udaj">
+                    Email<input type="email" name="email" value="[@email]" required>
+                </div>
+                <div class="udaj">
+                    Telefonní číslo<input type="tel" name="telefonniCislo" value="[@telefonniCislo]" required>
+                </div>
+                <h4>Dodávací údaje</h4>
+                <div class="udaj">
+                    Město<input type="text" name="mesto" value="[@mesto]">
+                </div>
+                <div class="udaj">
+                    Ulice<input type="text" name="ulice" value="[@ulice]">
+                </div>
+                <div class="udaj">
+                    PSČ<input type="text" name="psc" value="[@psc]">
+                </div>
+                <section>
+                    <a href="kosik.php">Zpět</a>
+                    <input type="submit" name="odeslat" value="Pokračovat k shrnutí">
+                </section>
+            </form>
         </div>
     </main>
     <footer>

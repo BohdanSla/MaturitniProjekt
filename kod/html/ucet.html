@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="kod/css/index.css" rel="stylesheet" type="text/css">
     <link href="kod/css/ucet.css" rel="stylesheet" type="text/css">
-    <script defer src="kod/js/sablona.js"></script>
+    <script defer src="kod/js/ucet.js"></script>
     <title>Pro sportovce</title>
 </head>
 <body>
@@ -41,12 +41,6 @@
                         Účet
                     </li>
                 </a>
-                <a href="oblibene.php">
-                    <li>
-                        <img src="obrazky/srdce_ikona.svg" alt="srdce_ikona">
-                        Oblíbené produkty
-                    </li>
-                </a>
                 <a href="vypis.php">
                     <li>Všechny produkty</li>
                 </a>
@@ -62,41 +56,46 @@
     <main>
         <div class="vypln">
         </div>
-        <ul>
-            <li>Údaje</li>
-            <li>Objednávky</li>
-        </ul>
+        <menu>
+            <ul>
+                <li>Údaje</li>
+                <li>Objednávky</li>
+                <li>Oblíbené produkty</li>
+            </ul>
+            <a href="odhlasit.php">Odhlásit se<img src="/obrazky/otevrene_dvere_ikona.svg"></a>
+        </menu>
         <div>
             <form method="post">
                 <h4>Osobní údaje</h4>
-                <div class="jmeno-prijmeni">
-                    <div class="udaj">
-                        Jméno<input type="text" name="jmeno" required>
-                    </div>
-                    <div class="udaj">
-                        Příjmení<input type="text" name="prijmeni" required>
-                    </div>
+                <div class="udaj">
+                    Jméno<input type="text" name="jmeno" value="[@jmeno]" required>
                 </div>
                 <div class="udaj">
-                    Email<input type="email" name="email" required>
+                    Příjmení<input type="text" name="prijmeni" value="[@prijmeni]" required>
                 </div>
                 <div class="udaj">
-                    Telefonní číslo<input type="tel" name="telefonniCislo" required>
+                    Email<input type="email" name="email" value="[@email]" required>
+                </div>
+                <div class="udaj">
+                    Telefonní číslo<input type="tel" name="telefonniCislo" value="[@telefonniCislo]" required>
                 </div>
                 <h4>Dodávací údaje</h4>
                 <div class="udaj">
-                    Město<input type="text" name="mesto" required>
+                    Město<input type="text" name="mesto" value="[@mesto]">
                 </div>
                 <div class="udaj">
-                    Ulice<input type="text" name="ulice" required>
+                    Ulice<input type="text" name="ulice" value="[@ulice]">
                 </div>
                 <div class="udaj">
-                    PSČ<input type="text" name="psc" required>
+                    PSČ<input type="text" name="psc" value="[@psc]">
                 </div>
                 <input type="submit" name="odeslat" value="Změnit údaje">
             </form>
             <div class="objednavky">
                 [@objednavky]
+            </div>
+            <div class="oblibene">
+                [@oblibene]
             </div>
         </div>
     </main>
