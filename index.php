@@ -59,7 +59,7 @@ foreach ($arr as $key => $value) {
     $html = preg_replace("/\[@produkt-ve-sleve-obrazek]/",$src, $html,1);
     $html = preg_replace("/\[@produkt-ve-sleve-odkaz]/",$odkaz, $html,1);
     $html = preg_replace("/\[@produkt-ve-sleve-nazev\]/",$value["nazev"], $html,1);
-    $html = preg_replace("/\[@produkt-ve-sleve-znacka\]/",strval($value["znacka"]), $html,1);
+    $html = preg_replace("/\[@produkt-ve-sleve-znacka\]/",$value["znacka"], $html,1);
     $html = preg_replace("/\[@produkt-ve-sleve-cena\]/",zformulujCenu(strval($value["cena"])), $html,1);
     $html = preg_replace("/\[@produkt-ve-sleve-cena_ve_sleve\]/",zformulujCenu(strval($value["cena_ve_sleve"])), $html,1);
 }

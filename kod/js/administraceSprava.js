@@ -59,34 +59,32 @@ tlacitkoZavritModalniOkno.addEventListener("click",function() {
 
 
 
-// let menu = document.querySelectorAll("nav ul li")
+let menu = document.querySelectorAll("nav ul li")
 
-// let main = document.querySelector("main").children
-// main = Array.from(main).slice(2)
-
-// for (let index = 0; index < 4; index++) {
-//     menu[index].addEventListener("click", function() {
+let main = document.querySelector("main").children
+for (let index = 0; index < menu.length; index++) {
+    menu[index].addEventListener("click", function() {
         
-//         menu[index].style.background = "#DDDDDD"
-//         main[index].style.display = "flex"
+        menu[index].style.background = "#DDDDDD"
+        main[index].style.display = "flex"
         
-//         //dojmenovat
-//         let n = Array.from(main).filter(element => {
-//             return element !== main[index]
-//         })
-//         n.forEach(element => {
-//             element.style.display = "none"
-//         })
+        //dojmenovat
+        let n = Array.from(main).filter(element => {
+            return element !== main[index]
+        })
+        n.forEach(element => {
+            element.style.display = "none"
+        })
         
-//         let nevybrany = Array.from(menu).filter(element => {
-//             return element !== menu[index]
-//         })
-//         nevybrany.forEach(element => {
-//             element.style.background = "unset"
-//         })
+        let nevybrany = Array.from(menu).filter(element => {
+            return element !== menu[index]
+        })
+        nevybrany.forEach(element => {
+            element.style.background = "unset"
+        })
         
-//     })
-// }
+    })
+}
 let barvaTlacitka = "";
 
 let hledatProduktSearch = document.querySelector("#hledatProduktSearch")

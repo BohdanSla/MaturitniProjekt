@@ -84,12 +84,8 @@ input[type="number"] {
     margin: 0.25rem 0;
     color: rgb(126, 126, 126);
 }
-#cenaVeSleve {
-    color: red;
-    font-size: x-large;
-}
-#cena {
-    color: red;
+#cenaVeSleve,#cena {
+    color: #C70000;
     font-size: x-large;
 }
 .maCenuVeSleve #cena  {

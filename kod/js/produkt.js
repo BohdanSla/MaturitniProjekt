@@ -15,7 +15,6 @@ if (window.innerWidth > 650) {
 window.addEventListener("resize",zmenPolohuPostrannihoMenu)
 
 function zmenPolohuPostrannihoMenu() {
-    console.log(this.innerWidth);
     if (this.innerWidth > 650) {
         if (tmavaPlocha.style.visibility == "visible") {
             postranniMenu.style.left = "0";
@@ -90,6 +89,14 @@ let barva = document.querySelector("form select[name=barva]")
 barva.addEventListener("change",vypisVelikosti)
 barva.addEventListener("change",zmenHlavniObrazek)
 barva.addEventListener("change",vypisObrazky)
+barva.addEventListener("change",vypisSkladem)
+
+
+let velikost = document.querySelector("form select[name=velikost]");
+velikost.addEventListener("change",vypisSkladem)
+
+
+
 
 function vypisVelikosti() {
     let velikosti = document.querySelector("form select[name=velikost]")
@@ -113,14 +120,14 @@ function vypisObrazky() {
     let obrazky = document.querySelector(".obrazky-produktu div")
     obrazky.replaceChildren("")
     
-    obrazkyBarvyProduktu.forEach(el => {
+    obrazkyBarvyProduktu.forEach((el,index) => {
         let img = document.createElement("img")
         img.src = el.value
-        console.log(img.src);
         img.alt = "ostatni"
         
         if (document.querySelector(".hlavni-obrazek img").getAttribute("src") == el.value) {
             img.style.border = "1px solid #111111BB"
+            indexHlavnihoObrazku = index
         }
         
         
@@ -145,24 +152,37 @@ function zmenHlavniObrazek() {
     });
 }
 
+function vypisSkladem() {
+    let skladem = document.querySelector("form datalist option[data-barva=\"" + barva.value +"\"][data-velikost=\"" + velikost.value + "\"]")
 
-vypisVelikosti()
-vypisObrazky()
+    let p = document.querySelector("main form p")
 
+    if(skladem.getAttribute("data-skladem").toLowerCase().includes("není")) {
+        p.style.color = "red"
+    } else {
+        p.style.color = "green"
+    }
+
+    p.innerHTML = skladem.getAttribute("data-skladem");
+}
 
 let sipky = document.querySelectorAll('img[alt=sipka_ikona]')
-let indexHlavnihoObrazku = 0;
 for (let index = 0; index < ostatniObrazky.length; index++) {
     if (ostatniObrazky[index].src == hlavniObrazek.src) {
         indexHlavnihoObrazku = index;
+        let indexHlavnihoObrazku = 0;
         break;
     }
 }
 
-console.log(indexHlavnihoObrazku);
+vypisVelikosti()
+vypisObrazky()
+vypisSkladem()
+
+
 
 sipky[0].addEventListener("click",function() {
-
+    
     ostatniObrazky[indexHlavnihoObrazku].style.border = "unset"
     if (indexHlavnihoObrazku > 0) {
         indexHlavnihoObrazku--;

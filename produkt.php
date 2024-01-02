@@ -39,20 +39,17 @@ if(isset($_GET["nazev"])) {
 
     if (count($arr) > 0) {
         # code...
-        $cenaVeSleve = "";
+        $cena = "<h2>" . zformulujCenu(strval($arr[0]["cena"])) . "</h2>";
 
         if (isset($arr[0]["cena_ve_sleve"])) {
             # code...
-            $cenaVeSleve = zformulujCenu(strval($arr[0]["cena_ve_sleve"]));
-        }
-        if (isset($arr[0]["hodnoceni_produktu"])) {
-
+            $cena = "<b>Původní cena: <s>" . zformulujCenu(strval($arr[0]["cena"])) . "</s></b><h2>Akční cena: " . zformulujCenu(strval($arr[0]["cena_ve_sleve"])) . "</h2>";
         }
 
         $html = str_replace("[@nazev]",$arr[0]["nazev"],$html);
         $html = str_replace("[@popis]",$arr[0]["popis"],$html);
-        $html = str_replace("[@cena]",zformulujCenu(strval($arr[0]["cena"])),$html);
-        $html = str_replace("[@cena-ve-sleve]",$cenaVeSleve,$html);
+        $html = str_replace("[@cena]",$cena,$html);
+
         $html = str_replace("[@znacka]",$arr[0]["znacka"],$html);
         $html = str_replace("[@sport]",$arr[0]["sport"],$html);
         $html = str_replace("[@hodnoceni-produktu]",strval($arr[0]["hodnoceni_produktu"]),$html);
@@ -91,13 +88,13 @@ if(isset($_GET["nazev"])) {
 
         if($pocet == 0) {
             $skladem = "Není skladem";
-        } else if($pocet > 5) {
-            $skladem = "Skladem $pocet>";
+        } else if($pocet < 5) {
+            $skladem = "Skladem $pocet ks";
         } else {
             $skladem = "Skladem";
         }
 
-        $velikosti .= '<option data-barva="' . $value["barva"] . '" data-velikost="' . $value["velikost"] . '" data-skladem=' . $skladem . '></option>';
+        $velikosti .= '<option data-barva="' . $value["barva"] . '" data-velikost="' . $value["velikost"] . '" data-skladem="' . $skladem . '"></option>';
     }
     $html = str_replace("[@velikosti]",$velikosti,$html);
 

@@ -4,25 +4,23 @@ main {
 .galerie-info {
     display: flex;
     flex-direction: row;
-    margin: 1rem;
+    justify-content: space-evenly;
+    margin: 1rem 2rem;
+    flex-wrap: wrap;
 }
 
 .galerie {
-    width: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 5% 1%;
     justify-content: center;
 }
 .galerie img {
     height: 100%;
 }
 .info-pridat {
-    padding: 1%;
-    width: 36%;
+    padding: 1%;    
     background-color: #dcdcdc5d;
-    margin: 5% 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -38,6 +36,7 @@ main {
     border-radius: 0.25rem;
     font-size: large;
     padding: 0.5rem 0;
+    margin-top: 1rem;
 }
 .info-pridat input[type=submit]:hover {
     cursor: pointer;
@@ -62,7 +61,7 @@ img[alt=sipka_ikona]:hover {
     cursor: pointer;
 }
 .obrazky-produktu div {
-    background-color: #dcdcdcDC;
+    background-color: #dcdcdc5d;
     display: flex;
     padding: 1rem;
 }
@@ -77,13 +76,8 @@ img[alt=sipka_ikona]:hover {
     flex-direction: column;
     background: white;
     padding: 1rem;
-    height: 80%;
-}
-.info-pridat form > div {
-    margin:1rem 0;
-    display: flex;
-    align-items: center;
     justify-content: space-between;
+    flex-grow: 1;
 }
 .popis, .recenze {
     padding: 1rem;
@@ -91,7 +85,7 @@ img[alt=sipka_ikona]:hover {
 
 .popis {
     background-color: #f2f2f2dc;
-    margin: 1rem;
+    margin: 1rem 2rem;
 }
 
 .popis > p {
@@ -106,7 +100,7 @@ img[alt=sipka_ikona]:hover {
     flex-direction: column;
     justify-content: space-evenly;
     background-color: #f2f2f2dc;
-    margin: 1rem;
+    margin: 1rem 2rem;
     border-radius: 0.25rem;
 }
 
@@ -144,7 +138,7 @@ img[alt=sipka_ikona]:hover {
     margin: 0 0.2rem;
 }
 .parametry {
-    margin: 1rem;
+    margin: 1rem 2rem;
     background-color: #dcdcdc5d;
     display: flex;
     flex-direction: column;
@@ -185,12 +179,16 @@ img[alt=sipka_ikona]:hover {
 .info-pridat button img {
     width: 2rem;
 }
-.info-pridat form > div:first-of-type {
+.info-pridat form .info > div {
+    display: flex;
     background-color: #ebebebdc;
     align-items: center;
-    width: 3rem;
     padding: 0.5rem;
     border-radius: 0.25rem;
+    margin-top: 1rem;
+}
+.info-pridat form .info > div > b {
+margin-right: 0.5rem;
 }
 .info-pridat form > div:first-of-type img {
     width: 2rem;
@@ -220,4 +218,26 @@ label {
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
+}
+main form p  {
+    font-weight: 600;
+    margin-top: 0;
+}
+.info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+main form .pridat > div {
+    display: flex;
+    justify-content: space-between;
+}
+main form .info > b {
+    color:#70707090;
+}
+main form .info > h2 {
+    color: #C70000;
+}
+.dekorace-cara {
+    position: relative;
 }

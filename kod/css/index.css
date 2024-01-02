@@ -245,6 +245,10 @@ main .doporucene-produkty {
     text-decoration: none;
     padding:1vw;
 }
+.produkty-ve-sleve a:hover {
+    border: 1px solid rgb(129, 129, 255);
+    cursor: pointer;
+}
 .produkt-ve-sleve {
     display: flex;
     justify-content: center;

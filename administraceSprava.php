@@ -81,7 +81,9 @@ if(isset($_SESSION["username"])) {
       JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
       JOIN barva ON barva.id = obrazky_k_produktu.id_barvy
       ORDER BY barva.nazev ASC;
-      SELECT velikost.nazev FROM velikost ORDER BY velikost.nazev';
+      SELECT velikost.nazev FROM velikost ORDER BY velikost.nazev;
+      SELECT DISTINCT kod,expirace,sport.nazev FROM slevovy_kod,sport JOIN slevovy_kod_sport ON slevovy_kod_sport.id_sportu = sport.id WHERE slevovy_kod.id = slevovy_kod_sport.id_slevoveho_kodu;
+      SELECT DISTINCT kod,expirace,znacka.nazev FROM slevovy_kod,znacka JOIN slevovy_kod_znacka ON slevovy_kod_znacka.id_znacky = znacka.id WHERE slevovy_kod.id = slevovy_kod_znacka.id_slevoveho_kodu;';
 
       $moznosti = "";
       $stmt = $db->prepare($sql);
@@ -121,6 +123,7 @@ if(isset($_SESSION["username"])) {
           $moznosti .= "<option value=\"" . $value["nazev"] . "\">" . $value["nazev"] . "</option>";
       }
       $html = preg_replace("/\[@znacka-produkty\]/",$moznosti,$html);
+      $html = preg_replace("/\[@znacka-kody\]/",$moznosti,$html);
 
       $moznosti = "";
       $stmt->nextRowset();
@@ -130,6 +133,7 @@ if(isset($_SESSION["username"])) {
           $moznosti .= "<option value=\"" . $value["nazev"] . "\">" . $value["nazev"] . "</option>";
       }
       $html = preg_replace("/\[@sport-produkty\]/",$moznosti,$html);
+      $html = preg_replace("/\[@sport-kody\]/",$moznosti,$html);
 
       $moznosti = "";
       $stmt->nextRowset();
@@ -185,6 +189,24 @@ if(isset($_SESSION["username"])) {
           $moznosti .= "<option value=\"" . $value["nazev"] . "\">" . $value["nazev"] . "</option>";
       }
       $html = preg_replace("/\[@velikosti\]/",$moznosti,$html);
+      
+      $moznosti = "";
+      $stmt->nextRowset();
+      $kody = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($kody as $key => $value) {
+        # code...
+        $moznosti .= "<tr><td>" . $value["kod"] . "</td><td>" . $value["expirace"] . "</td><td>" . $value["nazev"] ."</td></tr>";
+      }
+      $html = str_replace("[@kody-sport]",$moznosti,$html);
+
+      $moznosti = "";
+      $stmt->nextRowset();
+      $kody = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      foreach ($kody as $key => $value) {
+        # code...
+        $moznosti .= "<tr><td>" . $value["kod"] . "</td><td>" . $value["expirace"] . "</td><td>" . $value["nazev"] ."</td></tr>";
+      }
+      $html = str_replace("[@kody-znacka]",$moznosti,$html);
       
       
     if(isset($_POST["aktualizovat"])) {
@@ -396,12 +418,43 @@ if(isset($_SESSION["username"])) {
 
       $stmt->execute([":puvodniNazev" => $_POST["puvodniNazev"]]);
     }
+
+    if(isset($_POST["kody"])) {
+
+      //! dodelat overeni zda kod nahodou uz neni v tabulce pres promenoou $kody
+
+      $kategorie = $_POST["kodKategorie"];
+
+      $stmt = $db->prepare("INSERT INTO slevovy_kod (kod,expirace) VALUES (:kod,:expirace)");
+      
+      $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":expirace" => htmlspecialchars($_POST["datum"])]);
+      
+
+
+      $sql = "";
+
+      if($_POST["kodKategorie"] == "sport") {
+        $sql = "INSERT INTO slevovy_kod_" . $kategorie . " (id_slevoveho_kodu,id_sportu) VALUES ((SELECT id FROM slevovy_kod WHERE kod = :kod LIMIT 1),(SELECT id FROM sport WHERE nazev = :nazev LIMIT 1))";
+      } else {
+        $sql = "INSERT INTO slevovy_kod_" . $kategorie . " (id_slevoveho_kodu,id_znacky) VALUES ((SELECT id FROM slevovy_kod WHERE kod = :kod LIMIT 1),(SELECT id FROM znacka WHERE nazev = :nazev LIMIT 1))";
+      }
+
+      $stmt = $db->prepare($sql);
+
+      $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":nazev" => htmlspecialchars($_POST[$kategorie])]);
+
+
+    }
+
+
+
+
     $db->commit();
     } catch(Exception $e) {
+      echo $e;
       $db->rollBack();
     }
 } else {
-  echo "HAS";
   header("Location: administraceLogin.php");
 }
     

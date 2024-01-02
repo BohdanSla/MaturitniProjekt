@@ -17,6 +17,8 @@
             </a>
         </nav>
     </header>
+    <div class="vypln">
+    </div>
     <div class="modal-pozadi">
         <div class="modal">
             Přidat novou velikost:
@@ -31,9 +33,13 @@
             </div>
         </div>
     </div>
+    <nav>
+        <ul>
+            <li>Editace Produktu</li>
+            <li>Slevové kódy</li>
+        </ul>
+    </nav>
     <main>
-        <div class="vypln">
-        </div>
         <div class="produkty">
             <div class="hledani-navrhy">
                 Hledat Produkt:
@@ -155,6 +161,66 @@
                         <input type="submit" name="aktualizovat" value="Aktualizovat produkt">
                     </div>
                 </form>
+            </div>
+        </div>
+        <div class="kody">
+            <form method="post">
+                <h3>Vygenerovat nový kód:</h3>
+                Kód:<input type="text" name="kod" required>
+                <div>
+                    <input type="radio" name="kodKategorie" value="sport" required>
+                    <label for="kodySport">Pro Sport</label>
+                    <select name="sport">
+                        [@sport-kody]
+                    </select>
+                </div>
+                <div>
+                    <input type="radio" name="kodKategorie" value="znacka" required>
+                    <label for="znackySport">Pro Značku</label>
+                    <select name="znacka">
+                        [@znacka-kody]
+                    </select>
+                </div>
+                Expirace:<input type="date" name="datum" required>
+                <input type="submit" name="kody" value="vygenerovat kódy">
+            </form>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Kód
+                            </th>
+                            <th>
+                                Datum expirace
+                            </th>
+                            <th>
+                                Sport
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [@kody-sport]
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Kód
+                            </th>
+                            <th>
+                                Datum expirace
+                            </th>
+                            <th>
+                                Značka
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [@kody-znacka]
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
