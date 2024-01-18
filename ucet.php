@@ -41,22 +41,16 @@ if(isset($_SESSION["user"])) {
 
         foreach ($arr as $key => $value) {
             # code...
-            $src = "obrazky/" . $value["src"];
-
-            /////////////////////////
-            // !
-    
-            // if($value["jeOblibeny"] < 0) {
-            //     $oblibenyObrazek = "obrazky/srdce_cervene_prazdne_ikona.svg";
-            // } else {
-            //     $oblibenyObrazek = "obrazky/srdce_cervene_plne_ikona.svg";
-            // }
-            // <img src="' . $oblibenyObrazek .'">
-    
+            $src = "obrazky/" . $value["src"];    
             $oblibene .= '<div><section><img src="' . $src . '"><h3>' . $value["nazev"] . '</h3></section><a href="produkt.php?nazev=' . urlencode($value["nazev"]) .'">Podívat se</a></div>';
         }
 
         $html = str_replace("[@oblibene]",$oblibene,$html);
+    }
+
+    if (isset($_POST["odeslat"])) {
+        # code...
+        $stmt = $db->prepare("REPLACE INTO uzivatel");
     }
 
 

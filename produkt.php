@@ -18,12 +18,15 @@ $db = new Db();
 
 if(isset($_GET["nazev"])) {
 
-    $stmt = $db->prepare('SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,produkt.hodnoceni_produktu,
-    znacka.nazev AS znacka,sport.nazev AS sport
+    $stmt = $db->prepare('SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,FORMAT(AVG(recenze.pocet_hvezd),1) AS hodnoceni_produktu,
+    znacka.nazev AS znacka,sport.nazev AS sport,kategorie_produktu.podkategorie
     FROM produkt
     JOIN znacka ON znacka.id = produkt.id_znacky
     JOIN sport ON sport.id = produkt.id_sportu
-    WHERE produkt.nazev = :nazev;
+    JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu
+    JOIN recenze ON recenze.id_produktu = produkt.id
+    WHERE produkt.nazev = :nazev
+    GROUP BY produkt.id;
     SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.nazev = :nazev ORDER BY barva.nazev;
     SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev) ORDER BY velikost.nazev;
     SELECT uzivatel.jmeno AS jmeno,uzivatel.prijmeni, recenze.recenze, recenze.pocet_hvezd FROM recenze JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele WHERE recenze.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1);
@@ -47,12 +50,12 @@ if(isset($_GET["nazev"])) {
         }
 
         $html = str_replace("[@nazev]",$arr[0]["nazev"],$html);
-        $html = str_replace("[@popis]",$arr[0]["popis"],$html);
         $html = str_replace("[@cena]",$cena,$html);
-
+        $html = str_replace("[@hodnoceni-produktu]",strval($arr[0]["hodnoceni_produktu"]),$html);
+        $html = str_replace("[@popis]",$arr[0]["popis"],$html);
+        $html = str_replace("[@kategorie]",$arr[0]["podkategorie"],$html);
         $html = str_replace("[@znacka]",$arr[0]["znacka"],$html);
         $html = str_replace("[@sport]",$arr[0]["sport"],$html);
-        $html = str_replace("[@hodnoceni-produktu]",strval($arr[0]["hodnoceni_produktu"]),$html);
     } else {
         $html .= "hledaný produkt nebyl nalezen...";
     }
@@ -122,12 +125,21 @@ if(isset($_GET["nazev"])) {
 
     $materialy = "";
 
-    foreach ($arr as $key => $value) {
-        # code...
-        $materialy .= $value["nazev"] . ": " . $value["procento_materialu"] . " %";
-    }
+    if(count($arr) > 0) {
+    
+        $materialy .= "<tr><td>Materiály</td><td>";
 
+        foreach ($arr as $key => $value) {
+            # code...
+            $materialy .= $value["nazev"] . ": " . $value["procento_materialu"] . " %";
+        }
+
+        $materialy .= "</td></tr>";
+
+    }
+    
     $html = str_replace("[@materialy]",$materialy,$html);
+
 
 } else {
     $html .= "Něco je blbě...";
@@ -135,9 +147,17 @@ if(isset($_GET["nazev"])) {
 
 if(isset($_SESSION["user"])) {
     if(isset($_POST["odeslat"])) {
-        $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES ((SELECT id FROM uzivatel WHERE email = :email LIMIT 1),:jeObjednana)");
+        $stmt = $db->prepare("SELECT jeObjednana FROM objednavka WHERE id_uzivatele = (SELECT id FROM uzivatel WHERE email = :uzivatel) AND jeObjednana = 0");
 
-        $stmt->execute(["email" => $_SESSION["user"],"jeObjednana" => 0]);
+        $stmt->execute([":uzivatel" => $_SESSION["user"]]);
+
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(count($arr) < 1) {
+            $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES ((SELECT id FROM uzivatel WHERE email = :email LIMIT 1),:jeObjednana)");
+    
+            $stmt->execute(["email" => $_SESSION["user"],"jeObjednana" => 0]);
+        }
 
         $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, mnozstvi) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM objednavka WHERE jeObjednana = 0),(SELECT id FROM barva WHERE nazev = :barva),(SELECT id FROM velikost WHERE nazev = :velikost),:mnozstvi)");
 

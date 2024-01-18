@@ -260,6 +260,13 @@ nav ul li:hover {
 .kody > div {
     background-color: white;
     padding: 1rem;
+    width: 25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.kody > div > *:last-child {
+    margin-top: 1rem;
 }
 .sporty, .znacky {
     display: flex;

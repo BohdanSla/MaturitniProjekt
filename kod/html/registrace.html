@@ -77,9 +77,19 @@
                 <div class="udaj">
                     Heslo<input type="password" name="heslo" required>
                 </div>
+                <ul>
+                    <li>Minimálně 8 znaků</li>
+                    <li>Minimálně 1 malé písmeno</li>
+                    <li>Minimálně 1 velké písmeno</li>
+                    <li>Minimálně 1 číslo</li>
+                    <li>Minimálně 1 speciální znak</li>
+                </ul>
                 <div class="udaj">
-                    Heslo znovu<input type="password" name="hesloZnvou" required>
+                    Heslo znovu<input type="password" name="hesloZnovu" required>
                 </div>
+                <ul>
+                    <li>Hesla se musí shodovat</li>
+                </ul>
                 <h4>Dodávací údaje</h4>
                 <div class="udaj">
                     Město<input type="text" name="mesto" required>
@@ -90,9 +100,10 @@
                 <div class="udaj">
                     PSČ<input type="text" name="psc" required>
                 </div>
-                <input type="submit" name="odeslat" value="Registrovat se">
+                <input type="button" name="odeslat" value="Registrovat se">
                 <a href="ucet.php">Mám už účet</a>
             </form>
+            <p></p>
         </div>
     </main>
     <footer>

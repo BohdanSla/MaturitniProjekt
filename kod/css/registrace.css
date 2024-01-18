@@ -4,10 +4,11 @@
     align-items: center;
     width: 100%;
     min-height: 100vh;
+    flex-direction: column;
 }
 
 .registrace form {
-    background-color: #DCDCDCDC;
+    background-color: rgb(128, 128, 128, 0.093);
     width: 40%;
     border-radius: 0.15rem;
     display: flex;
@@ -15,8 +16,9 @@
     align-items: center;
     font-size: larger;
     padding-bottom: 2%;
+    margin-bottom: 2rem;
 }
-.registrace form input[type="submit"] {
+.registrace form input[type="button"] {
     background-color: #C70000;
     padding: 0.5rem 1rem;
     text-decoration: none;
@@ -27,7 +29,7 @@
     border: none;
     margin-top: 5%;
 }
-.registrace form input[type="submit"]:hover {
+.registrace form input[type="button"]:hover {
     cursor: pointer;
 }
 .registrace form h2 {
@@ -63,4 +65,22 @@
     width: 80%;
     justify-content: space-between;
 }
-
+.registrace form > ul {
+    margin: 0.1rem 0 1.5rem 0;
+    font-size: small;
+    padding: 0;
+    font-weight: 700;
+    color: red;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 7rem;
+}
+.registrace p {
+    color: red;
+    font-weight: 600;
+    margin: 0;
+}
+.udaj:nth-of-type(4),.udaj:nth-of-type(5){
+    margin: 0;
+}

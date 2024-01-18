@@ -46,6 +46,16 @@ $nejvetsiCena = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $html = preg_replace("/\[@maximum\]/",strval($nejvetsiCena["nejvetsi_cena"]),$html);
 
+$sql = 'SELECT DISTINCT obrazek.src, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, sport.nazev AS sport 
+FROM produkt 
+JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
+JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
+JOIN znacka ON znacka.id = produkt.id_znacky
+JOIN sport ON sport.id = produkt.id_sportu
+JOIN mnozstvi ON mnozstvi.id_produktu = produkt.id
+JOIN velikost ON velikost.id = mnozstvi.id_velikosti
+JOIN barva ON barva.id = mnozstvi.id_barvy
+JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE "%main%"';
 
 
 if(isset($_GET["odeslat"])) {
@@ -53,41 +63,34 @@ if(isset($_GET["odeslat"])) {
         $sql .= " AND produkt.nazev LIKE :nazev";
         $stmt = $db->prepare($sql);
         $stmt->execute([":nazev" => '%' . $_GET["hledat"] . '%']);
-    } else {
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-    }
-} else {
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-}
-
+    } 
+} 
 
 $filtry = "";
 $nazvy = ["sport","znacka","velikost","barva"];
 $parametry = [];
+$nejmensiCena = "";
+$nejvetsiCena = "";
 
 if (isset($_GET["filtrovat"])) {
 
-    $nejmensiCena = "";
-    $nejvetsiCena = "";
-
     # code...
-    if($_GET["nejmensiCena"] != "") {
-        $filtry .= " AND COALESCE(produkt.cena_ve_sleve,produkt.cena) >= :nejmensiCena";
-        $parametry[":nejmensiCena"] = $_GET["nejmensiCena"];
-        $nejmensiCena = $_GET["nejmensiCena"];
+    if(isset($_GET["nejmejnsiCena"])) {
+        if($_GET["nejmensiCena"] != "") {
+            $filtry .= " AND COALESCE(produkt.cena_ve_sleve,produkt.cena) >= :nejmensiCena";
+            $parametry[":nejmensiCena"] = $_GET["nejmensiCena"];
+            $nejmensiCena = $_GET["nejmensiCena"];
+        }
+    }
+    if(isset($_GET["nejvetsiCena"])) {
+        if($_GET["nejvetsiCena"] != "") {
+            $filtry .= " AND COALESCE(produkt.cena_ve_sleve,produkt.cena) <= :nejvetsiCena";
+            $parametry[":nejvetsiCena"] = $_GET["nejvetsiCena"];
+            $nejvetsiCena = $_GET["nejvetsiCena"];
+        }
     }
 
-    if($_GET["nejvetsiCena"] != "") {
-        $filtry .= " AND COALESCE(produkt.cena_ve_sleve,produkt.cena) <= :nejvetsiCena";
-        $parametry[":nejvetsiCena"] = $_GET["nejvetsiCena"];
-        $nejvetsiCena = $_GET["nejvetsiCena"];
-    }
-
-    $html = str_replace("[@nejmensiCena]",$nejmensiCena,$html);
-    $html = str_replace("[@nejvetsiCena]",$nejvetsiCena,$html);
-
+    
     if(isset($_GET["kategorie"])) {
 
         $placeholdery = "";
@@ -96,7 +99,7 @@ if (isset($_GET["filtrovat"])) {
             $placeholdery .= ":kategorie$key2,";
             $parametry[":kategorie$key2"] = $value2;
 
-            $html = str_replace( $value2 . '="[@' . $value2 . ']"',"checked",$html);
+            $html = str_replace('filtr="[@' . $value2 . ']"',"checked",$html);
         }
         
         $placeholdery = rtrim($placeholdery,",");
@@ -115,7 +118,7 @@ if (isset($_GET["filtrovat"])) {
                 $placeholdery .= ":$value$key2,";
                 $parametry[":$value$key2"] = $value2;
 
-                $html = str_replace( $value2 . '="[@' . $value2 . ']"',"checked",$html);
+                $html = str_replace('filtr="[@' . $value2 . ']"',"checked",$html);
             }
             
             $placeholdery = rtrim($placeholdery,",");
@@ -123,24 +126,16 @@ if (isset($_GET["filtrovat"])) {
             $filtry .= " AND $value.nazev IN ($placeholdery)";
         }
     }
+    $sql .= $filtry;
+    
+    $stmt = $db->prepare($sql);
+    $stmt->execute($parametry);
 }
 
+$html = str_replace("[@nejmensiCena]",$nejmensiCena,$html);
+$html = str_replace("[@nejvetsiCena]",$nejvetsiCena,$html);
 
-$sql = 'SELECT DISTINCT obrazek.src, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, sport.nazev AS sport 
-FROM produkt 
-JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
-JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
-JOIN znacka ON znacka.id = produkt.id_znacky
-JOIN sport ON sport.id = produkt.id_sportu
-JOIN mnozstvi ON mnozstvi.id_produktu = produkt.id
-JOIN velikost ON velikost.id = mnozstvi.id_velikosti
-JOIN barva ON barva.id = mnozstvi.id_barvy
-JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE "%main%"';
 
-$sql .= $filtry;
-
-$stmt = $db->prepare($sql);
-$stmt->execute($parametry);
 
 
 
@@ -176,14 +171,13 @@ function vypisFiltry(String $typFiltru,&$arr,&$stmt,&$html) {
     foreach ($arr as $key => $value) {
         # code...
         $filtr = $value["nazev"];
-        $filtry .= '<div><input type="checkbox" value="' . $filtr . '" name="' . $typFiltru . '[]" id="' . $filtr .'" ' . $filtr . '="[@' . $filtr .  ']"><label for="' . $filtr .'">' . $filtr . '</label></div>';
+        $filtry .= '<div><input type="checkbox" value="' . $filtr . '" name="' . $typFiltru . '[]" id="' . $filtr .'" filtr="[@' . $filtr .  ']"><label for="' . $filtr .'">' . $filtr . '</label></div>';
     }
 
     $html = str_replace("[@" . $typFiltru ."]",$filtry,$html);
 }
 
+$html = preg_replace('/filtr="\[@[a-zA-Z0-9\s]+\]"/',"",$html);
 
-// ! DODDDDDDDDDDDDDDDDDDDDDDDDDDDELAT
-// $html = preg_replace("/\w+=\"\[@\w+\]\"/","",$html);
 
 echo $html;

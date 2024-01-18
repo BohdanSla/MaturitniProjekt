@@ -29,6 +29,11 @@ if(isset($_SESSION["user"])) {
     $html = str_replace("[@mesto]",$arr["mesto"],$html);
     $html = str_replace("[@ulice]",$arr["ulice"],$html);
     $html = str_replace("[@psc]",$arr["psc"],$html);
+
+    if(isset($_POST["odeslat"])) {
+        header("Location: shrnuti.php");
+    }
+
 } else {
     $html = ":)";
 }

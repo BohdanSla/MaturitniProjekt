@@ -29,7 +29,8 @@ if (isset($_SESSION["user"])) {
     JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti
     JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
     JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
-    WHERE id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = (SELECT id FROM uzivatel WHERE email = :email)) AND obrazek.src LIKE "%main%";');
+    WHERE id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = (SELECT id FROM uzivatel WHERE email = :email)) AND obrazek.src LIKE "%main%"
+    ORDER BY produkt.nazev;');
 
     $stmt->execute([":email" => $_SESSION["user"]]);
 

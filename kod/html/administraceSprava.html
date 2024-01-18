@@ -167,6 +167,7 @@
             <form method="post">
                 <h3>Vygenerovat nový kód:</h3>
                 Kód:<input type="text" name="kod" required>
+                Sleva:<input type="number" name="sleva" required>
                 <div>
                     <input type="radio" name="kodKategorie" value="sport" required>
                     <label for="kodySport">Pro Sport</label>
@@ -185,6 +186,7 @@
                 <input type="submit" name="kody" value="vygenerovat kódy">
             </form>
             <div>
+                <h3>Kódy v databázi</h3>
                 <table>
                     <thead>
                         <tr>

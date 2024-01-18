@@ -108,8 +108,7 @@ header button {
     font-size: 1.25rem;
 }
 main .doporucene-produkty {
-    background-color: #DCDCDC;
-    
+    background-color: rgb(128, 128, 128, 0.093);
 }
 .sipky-doporuceny-produkt {
     display: flex;

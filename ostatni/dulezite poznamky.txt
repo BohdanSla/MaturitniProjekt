@@ -6,3 +6,9 @@ nedelat intranet!!!!
 
 jmeno pro administratora: administrator
 heslo pro administratora: AdmnstrtrProSprotvce23$
+
+
+CO CHYBY
+// ! opravit administraci - editace, A dodelat - vytvareni noveho produktu, kategorie, uzivatelu
+// ! overeni registrace na serveru!!!
+// ! dodelat objednani produktu pri neregistraci.

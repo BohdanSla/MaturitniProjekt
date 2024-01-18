@@ -7,7 +7,7 @@
 }
 
 .login form {
-    background-color: #DCDCDCDC;
+    background-color: rgb(128, 128, 128, 0.093);
     width: 30%;
     height: 20rem;
     border-radius: 0.15rem;

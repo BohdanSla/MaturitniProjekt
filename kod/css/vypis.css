@@ -49,7 +49,6 @@ input[type="number"] {
     text-align: center;
 }
 .nadpis-produkty a {
-    border: solid 1px rgb(220, 220, 220);
     width: 17rem;
     display: flex;
     flex-direction: column;
@@ -95,6 +94,8 @@ input[type="number"] {
 }
 .parametry h2 {
     margin-bottom: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 #sport {
     color: rgb(141, 141, 141);
@@ -114,4 +115,10 @@ input[type="number"] {
 }
 .vypis input[type=submit]:hover {
     cursor: pointer;
+}
+
+@media only screen and (max-width: 1100px) {
+    .info-pridat {
+        margin-top: 1rem;
+    }
 }

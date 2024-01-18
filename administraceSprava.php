@@ -380,7 +380,7 @@ if(isset($_SESSION["username"])) {
             ":procento" => $procenta[$key]]);
         }
         # code...
-    }          
+      }          
           $sql = 'UPDATE `produkt` SET `nazev`= :nazev,`popis`= :popis ,`cena`= :cena,`cena_ve_sleve`= :cenaVeSleve,`id_znacky`= (SELECT id FROM znacka WHERE nazev  = :znacka LIMIT 1),`id_sportu`= (SELECT id FROM sport where nazev = :sport LIMIT 1),`id_kategorie_produktu`= (SELECT id FROM kategorie_produktu where kategorie = :kategorie LIMIT 1) WHERE nazev = :puvodniNazev;
           ';
 
@@ -403,7 +403,9 @@ if(isset($_SESSION["username"])) {
           ":cenaVeSleve" => htmlspecialchars($cenaVeSleve),
           ":puvodniNazev" => $_POST["puvodniNazev"]]);
 
+          header("Location: administraceSprava.php");
     }
+
     if(isset($_POST["odstranit"])) {
       $sql = "DELETE FROM obrazky_k_produktu WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
       DELETE FROM mnozstvi WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :puvodniNazev);
@@ -417,32 +419,39 @@ if(isset($_SESSION["username"])) {
       $stmt = $db->prepare($sql);
 
       $stmt->execute([":puvodniNazev" => $_POST["puvodniNazev"]]);
+
+      header("Location: administraceSprava.php");
     }
 
     if(isset($_POST["kody"])) {
 
-      //! dodelat overeni zda kod nahodou uz neni v tabulce pres promenoou $kody
+      $kody = array_map(function($value){
+        return $value["kod"];
+      },$kody);
 
-      $kategorie = $_POST["kodKategorie"];
-
-      $stmt = $db->prepare("INSERT INTO slevovy_kod (kod,expirace) VALUES (:kod,:expirace)");
-      
-      $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":expirace" => htmlspecialchars($_POST["datum"])]);
-      
-
-
-      $sql = "";
-
-      if($_POST["kodKategorie"] == "sport") {
-        $sql = "INSERT INTO slevovy_kod_" . $kategorie . " (id_slevoveho_kodu,id_sportu) VALUES ((SELECT id FROM slevovy_kod WHERE kod = :kod LIMIT 1),(SELECT id FROM sport WHERE nazev = :nazev LIMIT 1))";
-      } else {
-        $sql = "INSERT INTO slevovy_kod_" . $kategorie . " (id_slevoveho_kodu,id_znacky) VALUES ((SELECT id FROM slevovy_kod WHERE kod = :kod LIMIT 1),(SELECT id FROM znacka WHERE nazev = :nazev LIMIT 1))";
+      if(!in_array($_POST["kodKategorie"],$kody)) {
+        $kategorie = $_POST["kodKategorie"];
+  
+        $stmt = $db->prepare("INSERT INTO slevovy_kod (kod,expirace,sleva) VALUES (:kod,:expirace,:sleva)");
+        
+        $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":expirace" => htmlspecialchars($_POST["datum"]),":sleva" => htmls]);
+        
+  
+  
+        $sql = "";
+  
+        if($_POST["kodKategorie"] == "sport") {
+          $sql = "INSERT INTO slevovy_kod_" . $kategorie . " (id_slevoveho_kodu,id_sportu) VALUES ((SELECT id FROM slevovy_kod WHERE kod = :kod LIMIT 1),(SELECT id FROM sport WHERE nazev = :nazev LIMIT 1))";
+        } else {
+          $sql = "INSERT INTO slevovy_kod_" . $kategorie . " (id_slevoveho_kodu,id_znacky) VALUES ((SELECT id FROM slevovy_kod WHERE kod = :kod LIMIT 1),(SELECT id FROM znacka WHERE nazev = :nazev LIMIT 1))";
+        }
+  
+        $stmt = $db->prepare($sql);
+  
+        $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":nazev" => htmlspecialchars($_POST[$kategorie])]);
+  
+        header("Location: administraceSprava.php");
       }
-
-      $stmt = $db->prepare($sql);
-
-      $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":nazev" => htmlspecialchars($_POST[$kategorie])]);
-
 
     }
 
