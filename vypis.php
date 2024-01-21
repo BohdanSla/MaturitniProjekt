@@ -57,15 +57,6 @@ JOIN velikost ON velikost.id = mnozstvi.id_velikosti
 JOIN barva ON barva.id = mnozstvi.id_barvy
 JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE "%main%"';
 
-
-if(isset($_GET["odeslat"])) {
-    if(trim($_GET["hledat"]) != "") {
-        $sql .= " AND produkt.nazev LIKE :nazev";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([":nazev" => '%' . $_GET["hledat"] . '%']);
-    } 
-} 
-
 $filtry = "";
 $nazvy = ["sport","znacka","velikost","barva"];
 $parametry = [];
@@ -130,13 +121,22 @@ if (isset($_GET["filtrovat"])) {
     
     $stmt = $db->prepare($sql);
     $stmt->execute($parametry);
+} else if(isset($_GET["odeslat"])) {
+    if(trim($_GET["hledat"]) != "") {
+        $sql .= " AND produkt.nazev LIKE :nazev";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([":nazev" => '%' . $_GET["hledat"] . '%']);
+    } else if (trim($_GET["odeslat"]) == "") {
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+    }
+} else {
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
 }
 
 $html = str_replace("[@nejmensiCena]",$nejmensiCena,$html);
 $html = str_replace("[@nejvetsiCena]",$nejvetsiCena,$html);
-
-
-
 
 
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);

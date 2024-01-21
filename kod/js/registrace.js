@@ -112,27 +112,41 @@ function zkontrolujHesla() {
 odeslat.addEventListener("click",function(){
     let zprava = ""
     let validace = true
-
-    if(!emailRegex.test(email.value)) {
-        zprava += " špatně zadaný email"
-        validace = false
-    }
-    if (!telefonniCisloRegex.test(telefonniCislo.value)) {
-        zprava += " špatně zadané telefonní číslo"
-        validace = false
-    }
-    if(!hesloRegex.test(hesla[0].value)) {
-        zprava += " heslo neopovídá daným požadavkům"
-        validace = false
-    }
-    if (hesla[0].value !== hesla[1].value) {
-        zprava += " Heslo není stejné"
-        validace = false
+    
+    inputy = document.querySelectorAll("main input:not(input[type=button])")
+    for (const element of inputy) {
+        if(element.value == "") {
+            zprava += "máte nevyplněná pole"
+            validace = false
+            break
+        }
     }
 
+    if(validace) {
+        if(!emailRegex.test(email.value)) {
+            zprava += "špatně zadaný email, "
+            validace = false
+        }
+        if (!telefonniCisloRegex.test(telefonniCislo.value)) {
+            zprava += "špatně zadané telefonní číslo, "
+            validace = false
+        }
+        if(!hesloRegex.test(hesla[0].value)) {
+            zprava += "heslo neopovídá daným požadavkům, "
+            validace = false
+        }
+        if (hesla[0].value !== hesla[1].value) {
+            zprava += "Hesla nejsou stejná, "
+            validace = false
+        }
+    }
+
+    
     if (validace) {
         document.querySelector("main form").submit();
     } else {
+        zprava = zprava.trimEnd()
+        zprava = zprava.endsWith(",") ? zprava.slice(0,-1) : zprava
         document.querySelector(".registrace p").innerHTML = zprava
     }
 

@@ -16,7 +16,7 @@
     align-items: center;
     font-size: larger;
     padding-bottom: 2%;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 .registrace form input[type="button"] {
     background-color: #C70000;
@@ -79,7 +79,8 @@
 .registrace p {
     color: red;
     font-weight: 600;
-    margin: 0;
+    margin: 0 0 1rem 0;
+
 }
 .udaj:nth-of-type(4),.udaj:nth-of-type(5){
     margin: 0;

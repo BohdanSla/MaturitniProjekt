@@ -11,8 +11,6 @@ spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.
 use Databaze as Db;
 $db = new Db();
 
-
-
 if(isset($_SESSION["user"])) {
     $html = file_get_contents("kod/html/ucet.html");
 
