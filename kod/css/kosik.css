@@ -80,6 +80,17 @@ main .kosik a:last-of-type {
     border-radius: 0.15rem;
     text-decoration: 0;
 }
+main .kosik > section input {
+    background-color: #C70000;
+    color: white;
+    padding: 0.5rem;
+    outline: none;
+    border: none;
+    border-radius: 0.15rem;
+}
+main .kosik > section input:hover {
+    cursor: pointer;
+}
 
 @media only screen and (max-width: 600px) {
     .kosik {

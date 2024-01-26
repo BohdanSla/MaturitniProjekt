@@ -44,11 +44,14 @@
                 <a href="vypis.php">
                     <li>Všechny produkty</li>
                 </a>
-                <a href="vypis.php?typ=obleceni">
-                    <li>Oblečení</li>
+                <a href="vypis.php?kategorie%5B%5D=obuv&filtrovat=Vyfiltrovat">
+                    <li>Boty</li>
                 </a>
-                <a href="vypis.php?typ=doplnky">
-                    <li>Doplňky</li>
+                <a href="vypis.php?kategorie%5B%5D=tričko&filtrovat=Vyfiltrovat">
+                    <li>Trička</li>
+                </a>
+                <a href="vypis.php?kategorie%5B%5D=míč&filtrovat=Vyfiltrovat">
+                    <li>Míče</li>
                 </a>
             </ul>
         </nav>
@@ -67,7 +70,9 @@
         <div class="kosik">
             [@kosik]
             <section>
-                <h3>Celková cena: [@celkovaCena] Kč</h3>
+                <form method="post">
+                    <input type="submit" value="Zrušit objednávku" name="zrusit">
+                </form>
                 <a href="udaje.php">
                     Pokračovat k údajům
                 </a>

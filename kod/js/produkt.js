@@ -206,4 +206,129 @@ sipky[1].addEventListener("click",function(){
 })
 
 
+
+
+let b = document.querySelector("main .recenze form b")
+let p = document.querySelector(".recenze > p")
+
+let upravuje = false
+
+if(b != null) {
+    let hvezdy = document.querySelector(".recenze div:first-of-type .jmeno-hodnoceni b")
+    let recenze = document.querySelector(".recenze div:first-of-type p");
+    let formRecenze = document.querySelector("main .recenze form")
+    if(formRecenze != null) {
+        formRecenze.id = "recenze"
+    }
+    
+    let odstranitRecenzi = document.createElement("input")
+    odstranitRecenzi.type = "submit"
+    odstranitRecenzi.name = "odstranit"
+    odstranitRecenzi.value = "Odstranit recenzi"
+    
+    let upravaHvezdy = document.createElement("input");
+    upravaHvezdy.type = "number"
+    upravaHvezdy.name = "hvezdy"
+    upravaHvezdy.max = 5
+    upravaHvezdy.min = 0
+    upravaHvezdy.setAttribute("form","recenze")
+    
+    let upravaRecenze = document.createElement("textarea")
+    upravaRecenze.name = "recenze"
+    upravaRecenze.setAttribute("form","recenze")
+    
+    let potvrdit = document.createElement("input");
+    potvrdit.type = "submit"
+    potvrdit.name = "upravit"
+    potvrdit.value = "změnit"
+    potvrdit.style.outline = "none"
+
+
+    b.addEventListener("click",function() {
+    if(!upravuje) {
+        hvezdy.textContent = hvezdy.textContent.slice(0,1)
+        
+        upravaHvezdy.value = hvezdy.textContent
+        hvezdy.replaceWith(upravaHvezdy)
+    
+        upravaRecenze.value = recenze.textContent
+        recenze.replaceWith(upravaRecenze)
+    
+        b.textContent = "Zahodit změnit"
+    
+        formRecenze.appendChild(odstranitRecenzi)
+        
+        formRecenze.appendChild(potvrdit)
+        
+        upravuje = true
+    } else {
+        formRecenze.removeChild(odstranitRecenzi)
+    
+        formRecenze.removeChild(potvrdit)
+        
+        b.textContent = "Upravit recenzi"
+    
+        upravaHvezdy.replaceWith(hvezdy)
+        hvezdy.textContent = hvezdy.textContent + "/5"
+    
+        upravaRecenze.replaceWith(recenze)
+        upravuje = false
+    }
+    
+    })
+}
+
+if(p != null) {
+    let h2 = document.createElement("h2")
+    h2.textContent = "Recenze:"
+    let h4 = document.createElement("h4")
+    h4.textContent = "Počet hvězd (0-5):"
+
+    let div = document.createElement("div")
+    div.style.display = "flex"
+    div.style.alignItems = "center"
+
+    let napsatRecenzi = document.createElement("input")
+    napsatRecenzi.type = "submit"
+    napsatRecenzi.value = "Napsat recenzi"
+    napsatRecenzi.name = "napsat"
+
+    let form = document.createElement("form")
+    form.method = "post"
+    form.style.width = "unset"
+    form.style.display = "flex"
+    form.style.flexDirection = "column"
+    form.style.alignItems = "flex-start"
+    let input = document.createElement("input");
+    input.type = "number"
+    input.name = "hvezdy"
+    input.max = 5
+    input.min = 0
+    input.style.marginLeft = "1rem"
+    let textarea = document.createElement("textarea")
+    textarea.name = "recenze"
+
+    p.addEventListener("click",function() {
+        if(!upravuje) {
+            form.appendChild(h2)
+            form.appendChild(textarea)
+            form.appendChild(div)
+            div.appendChild(h4)
+            div.appendChild(input)
+            div.appendChild(napsatRecenzi)
+    
+            document.querySelector(".recenze >p:first-of-type").after(form)
+
+            p.textContent = "Zrušit"
+
+            upravuje = true
+        } else {
+            upravuje = false
+
+            p.textContent = "Napsat recenzi"
+
+            document.querySelector(".recenze").removeChild(document.querySelector(".recenze form"))
+        }
+    })
+}
     

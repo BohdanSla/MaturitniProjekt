@@ -29,14 +29,17 @@ if(isset($_GET["nazev"])) {
     GROUP BY produkt.id;
     SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.nazev = :nazev ORDER BY barva.nazev;
     SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev) ORDER BY velikost.nazev;
-    SELECT uzivatel.jmeno AS jmeno,uzivatel.prijmeni, recenze.recenze, recenze.pocet_hvezd FROM recenze JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele WHERE recenze.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1);
+    SELECT uzivatel.jmeno AS jmeno,uzivatel.prijmeni, recenze.recenze, recenze.pocet_hvezd FROM recenze JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele WHERE recenze.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1) AND recenze.id_uzivatele = :id;
+    SELECT uzivatel.jmeno AS jmeno,uzivatel.prijmeni, recenze.recenze, recenze.pocet_hvezd FROM recenze JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele WHERE recenze.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1) AND recenze.id_uzivatele != :id;
     SELECT material.nazev,materialy_produktu.procento_materialu
     FROM produkt 
     JOIN materialy_produktu ON materialy_produktu.id_produktu = produkt.id
     JOIN material ON material.id = materialy_produktu.id_materialu
     WHERE produkt.nazev = :nazev;');
 
-    $stmt->execute([":nazev" => rawurldecode($_GET["nazev"])]);
+    $uzivatel = $_SESSION["user"] ?? "";
+
+    $stmt->execute([":nazev" => rawurldecode($_GET["nazev"]),":id" => $uzivatel]);
 
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -106,9 +109,30 @@ if(isset($_GET["nazev"])) {
     $stmt->nextRowset();
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    $recenze = '';
+    $tlacitko = '';
+
+    if(count($arr) > 0) {
+        foreach ($arr as $key => $value) {
+            # code...
+            $recenze .= '<div><div class="jmeno-hodnoceni"><h3>' . $value["jmeno"] . ' ' . $value["prijmeni"] .'</h3><div><b>' . $value["pocet_hvezd"] . '/5 </b><img src="obrazky/hvezda_ikona.svg"></div></div><p>' . $value["recenze"] .'</p><form method="post">[@tlacitko]</form></div>';
+        }
+    }  else {
+        $tlacitko = '<b>Napsat recenzi</b>';
+    }
+
+    if(isset($_SESSION["user"])) {
+        $recenze = str_replace("[@tlacitko]",$tlacitko,$recenze);
+    }
+
+    $html = str_replace("[@mojeRecenze]",$recenze,$html);
+
+
+
+    $stmt->nextRowset();
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $recenze = '';
-
     if(count($arr) > 0) {
         foreach ($arr as $key => $value) {
             # code...
@@ -147,42 +171,75 @@ if(isset($_GET["nazev"])) {
 
 if(isset($_SESSION["user"])) {
     if(isset($_POST["odeslat"])) {
-        $stmt = $db->prepare("SELECT jeObjednana FROM objednavka WHERE id_uzivatele = (SELECT id FROM uzivatel WHERE email = :uzivatel) AND jeObjednana = 0");
+        $stmt = $db->prepare("SELECT jeObjednana FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0");
 
-        $stmt->execute([":uzivatel" => $_SESSION["user"]]);
+        $stmt->execute([":id" => $_SESSION["user"]]);
 
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if(count($arr) < 1) {
-            $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES ((SELECT id FROM uzivatel WHERE email = :email LIMIT 1),:jeObjednana)");
+            $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES (:id,:jeObjednana)");
     
-            $stmt->execute(["email" => $_SESSION["user"],"jeObjednana" => 0]);
+            $stmt->execute([":id" => $_SESSION["user"],"jeObjednana" => 0]);
         }
 
-        $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, mnozstvi) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM objednavka WHERE jeObjednana = 0),(SELECT id FROM barva WHERE nazev = :barva),(SELECT id FROM velikost WHERE nazev = :velikost),:mnozstvi)");
+        //!zkontrolovat
+        $stmt = $db->prepare("SELECT pocet FROM mnozstvi WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev)AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost)");
 
-        $stmt->execute([":mnozstvi" => $_POST["mnozstvi"],":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":nazev" => $_POST["puvodniNazev"]]);
+        $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":nazev" => $_POST["puvodniNazev"]]);
+
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if($arr[0]["pocet"] > $_POST["mnozstvi"]) {
+            $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM objednavka WHERE jeObjednana = 0),(SELECT id FROM barva WHERE nazev = :barva),(SELECT id FROM velikost WHERE nazev = :velikost),:mnozstvi)");
+    
+            $stmt->execute([":mnozstvi" => $_POST["mnozstvi"],":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":nazev" => $_POST["puvodniNazev"]]);
+        }
     }
 
     if(isset($_POST["oblibene"])) {
-        $stmt = $db->prepare("SELECT id_produktu,id_uzivatele FROM oblibene_produkty WHERE id_produktu =(SELECT id FROM produkt WHERE nazev = :nazev) AND id_uzivatele = (SELECT id FROM uzivatel WHERE email = :email)");
+        $stmt = $db->prepare("SELECT id_produktu,id_uzivatele FROM oblibene_produkty WHERE id_produktu =(SELECT id FROM produkt WHERE nazev = :nazev) AND id_uzivatele = :id");
 
-        $stmt->execute(["email" => $_SESSION["user"],":nazev" => $_POST["puvodniNazev"]]);
+        $stmt->execute([":id" => $_SESSION["user"],":nazev" => $_POST["puvodniNazev"]]);
 
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if(count($arr) > 0) {
-            $stmt = $db->prepare("DELETE FROM oblibene_produkty WHERE id_produktu =(SELECT id FROM produkt WHERE nazev = :nazev) AND id_uzivatele = (SELECT id FROM uzivatel WHERE email = :email)");
+            $stmt = $db->prepare("DELETE FROM oblibene_produkty WHERE id_produktu =(SELECT id FROM produkt WHERE nazev = :nazev) AND id_uzivatele = :id");
         } else {
-            $stmt = $db->prepare("INSERT INTO oblibene_produkty (id_produktu,id_uzivatele) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),(SELECT id FROM uzivatel WHERE email = :email LIMIT 1))");
+            $stmt = $db->prepare("INSERT INTO oblibene_produkty (id_produktu,id_uzivatele) VALUES ((SELECT id FROM produkt WHERE nazev = :nazev),:id)");
         }
         
-        $stmt->execute(["email" => $_SESSION["user"],":nazev" => $_POST["puvodniNazev"]]);
+        $stmt->execute([":id" => $_SESSION["user"],":nazev" => $_POST["puvodniNazev"]]);
     }
 
-    $stmt = $db->prepare("SELECT id_produktu,id_uzivatele FROM oblibene_produkty WHERE id_produktu =(SELECT id FROM produkt WHERE nazev = :nazev) AND id_uzivatele = (SELECT id FROM uzivatel WHERE email = :email)");
+    if(isset($_POST["napsat"])) {
+        $stmt = $db->prepare("INSERT INTO recenze (recenze, pocet_hvezd, id_produktu, id_uzivatele) VALUES (:recenze, :pocetHvezd, (SELECT id FROM produkt WHERE nazev = :nazev), :id)");
 
-    $stmt->execute(["email" => $_SESSION["user"],":nazev" => rawurldecode($_GET["nazev"])]);
+        $stmt->execute([":recenze" => htmlspecialchars($_POST["recenze"]),":pocetHvezd" => htmlspecialchars($_POST["hvezdy"]),":nazev" => rawurldecode($_GET["nazev"]),":id" => $_SESSION["user"]]);
+
+        header("Location: produkt.php?nazev=" . rawurldecode($_GET["nazev"]));
+    }
+    
+    if(isset($_POST["odstranit"])) {
+        $stmt = $db->prepare("DELETE FROM recenze WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev) AND id_uzivatele = :id");
+
+        $stmt->execute([":id" => $_SESSION["user"],":nazev" => rawurldecode($_GET["nazev"])]);
+
+        header("Location: produkt.php?nazev=" . rawurldecode($_GET["nazev"]));
+    }
+
+    if(isset($_POST["upravit"])) {
+        $stmt = $db->prepare("UPDATE recenze SET recenze = :recenze,pocet_hvezd = :pocetHvezd WHERE recenze.id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev) AND recenze.id_uzivatele = :id");
+
+        $stmt->execute([":recenze" => htmlspecialchars($_POST["recenze"]),":pocetHvezd" => htmlspecialchars($_POST["hvezdy"]),":nazev" => rawurldecode($_GET["nazev"]),":id" => $_SESSION["user"]]);
+
+        header("Location: produkt.php?nazev=" . rawurldecode($_GET["nazev"]));
+    }
+
+    $stmt = $db->prepare("SELECT id_produktu,id_uzivatele FROM oblibene_produkty WHERE id_produktu =(SELECT id FROM produkt WHERE nazev = :nazev) AND id_uzivatele = :id");
+
+    $stmt->execute([":id" => $_SESSION["user"],":nazev" => rawurldecode($_GET["nazev"])]);
 
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

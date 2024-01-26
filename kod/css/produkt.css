@@ -104,14 +104,14 @@ img[alt=sipka_ikona]:hover {
     border-radius: 0.25rem;
 }
 
-.recenze > div {
+.recenze > div,.recenze > form {
     background-color: #e7e7e7;
     padding: 1rem;
     margin-bottom: 2rem;
     border-radius: 0.25rem;
 }
 
-.recenze div p {
+.recenze div p, .recenze form p {
     margin: 0;
     padding: 1rem;
     background-color: white;
@@ -119,7 +119,8 @@ img[alt=sipka_ikona]:hover {
 
 .jmeno-hodnoceni {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
 }
 
 .jmeno-hodnoceni img {
@@ -132,7 +133,7 @@ img[alt=sipka_ikona]:hover {
     background-color: white;
     border-radius: 0.25rem;
     padding: 0.5rem;
-    margin-left: 1rem;
+    margin-bottom: 1rem;
 }
 .jmeno-hodnoceni > div > * {
     margin: 0 0.2rem;
@@ -203,7 +204,6 @@ margin-left: 0.5rem;
 
 
 input[type=number] {
-    width: 3rem;
     border-radius: 0.25rem;
     border: solid 1px rgb(116, 116, 116);
     outline: none;
@@ -239,5 +239,64 @@ main form .info > h2 {
     color: #C70000;
 }
 .dekorace-cara {
-    position: relative;
+    position: static;
+}
+main .recenze form b {
+    background-color: #C70000;
+    color:#ffffff;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+main .recenze form input[type=submit] {
+    margin-left: 1rem;
+    background-color: red;
+    color: white;
+    width: unset;
+    height: 2.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    border: none;
+    border-radius: 0.15rem;
+}
+main .recenze form b:hover,main .recenze form input[type=submit]:hover {
+    cursor: pointer;
+}
+main .recenze form {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1rem;
+}
+.recenze textarea {
+    max-width: 100%;
+    width: 100%;
+    height: 3rem;
+    outline: none;   
+}
+.recenze > p {
+    background-color:#C70000;
+    color: white;
+    padding: 0.25rem;
+    width: 7rem;
+    text-align: center;
+    border-radius: 0.25rem;
+}
+.recenze > p:hover {
+    cursor:pointer;
+}
+.recenze > div input[type=submit] {
+    background-color: red;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.15rem;
+    border: none;
+    margin-left: 1rem;
+}
+.recenze > div input[type=submit]:hover {
+    cursor: pointer;
+}
+.recenze > div h4 {
+    margin: 0;
+    width: 8rem;
 }

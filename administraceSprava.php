@@ -434,7 +434,7 @@ if(isset($_SESSION["username"])) {
   
         $stmt = $db->prepare("INSERT INTO slevovy_kod (kod,expirace,sleva) VALUES (:kod,:expirace,:sleva)");
         
-        $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":expirace" => htmlspecialchars($_POST["datum"]),":sleva" => htmls]);
+        $stmt->execute([":kod" => htmlspecialchars($_POST["kod"]),":expirace" => htmlspecialchars($_POST["datum"]),":sleva" => htmlspecialchars($_POST["sleva"])]);
         
   
   

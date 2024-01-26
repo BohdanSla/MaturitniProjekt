@@ -12,12 +12,13 @@ use Databaze as Db;
 $db = new Db();
 
 if(isset($_SESSION["user"])) {
+
     $html = file_get_contents("kod/html/ucet.html");
 
-    $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc FROM uzivatel WHERE email = :email;
-    SELECT produkt.nazev,obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN oblibene_produkty ON oblibene_produkty.id_produktu = produkt.id JOIN uzivatel ON uzivatel.id = oblibene_produkty.id_uzivatele WHERE obrazek.src LIKE "%main%" AND id_uzivatele = (SELECT id FROM uzivatel WHERE email = :email) GROUP BY oblibene_produkty.id_produktu;');
+    $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc FROM uzivatel WHERE id = :id;
+    SELECT produkt.nazev,obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN oblibene_produkty ON oblibene_produkty.id_produktu = produkt.id JOIN uzivatel ON uzivatel.id = oblibene_produkty.id_uzivatele WHERE obrazek.src LIKE "%main%" AND id_uzivatele = :id GROUP BY oblibene_produkty.id_produktu;');
 
-    $stmt->execute([":email" => $_SESSION["user"]]);
+    $stmt->execute([":id" => $_SESSION["user"]]);
 
     $arr = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -57,7 +58,7 @@ if(isset($_SESSION["user"])) {
 
 
     if(isset($_POST["odeslat"])) {
-        $stmt = $db->prepare("SELECT email,heslo FROM uzivatel WHERE email = :email");
+        $stmt = $db->prepare("SELECT id,email,heslo FROM uzivatel WHERE email = :email");
 
         $stmt->execute([":email" => $_POST["email"]]);
 
@@ -66,7 +67,7 @@ if(isset($_SESSION["user"])) {
         if ($uzivatel) {
             # code...
             if (password_verify($_POST["heslo"],$uzivatel["heslo"])) {
-                $_SESSION["user"] = $uzivatel["email"];
+                $_SESSION["user"] = $uzivatel["id"];
                 header("Location: ucet.php");
                 # code...
             } else {

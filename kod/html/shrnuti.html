@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="kod/css/index.css" rel="stylesheet" type="text/css">
+    <link href="kod/css/shrnuti.css" rel="stylesheet" type="text/css">
     <script defer src="kod/js/sablona.js"></script>
     <title>Pro sportovce</title>
 </head>
@@ -43,11 +44,14 @@
                 <a href="vypis.php">
                     <li>Všechny produkty</li>
                 </a>
-                <a href="vypis.php?typ=obleceni">
-                    <li>Oblečení</li>
+                <a href="vypis.php?kategorie%5B%5D=obuv&filtrovat=Vyfiltrovat">
+                    <li>Boty</li>
                 </a>
-                <a href="vypis.php?typ=doplnky">
-                    <li>Doplňky</li>
+                <a href="vypis.php?kategorie%5B%5D=tričko&filtrovat=Vyfiltrovat">
+                    <li>Trička</li>
+                </a>
+                <a href="vypis.php?kategorie%5B%5D=míč&filtrovat=Vyfiltrovat">
+                    <li>Míče</li>
                 </a>
             </ul>
         </nav>
@@ -56,17 +60,27 @@
         <div class="vypln">
         </div>
         <div class="shrnuti">
-            <div>
-                [@zbozi]
-            </div>
-            <div>
-                [@udaje]
-            </div>
-            <form method="post">
-                Uplatnit slevový kód:
-                <input type="text" name="kod">
-                <input type="submit" name="odeslat" value="Uplatnit kód">
+            <h1>Shrnutí:</h1>
+            <table>
+                <tbody>
+                    [@zbozi]
+                </tbody>
+            </table>
+            <table>
+                <tbody>
+                    [@udaje]
+                </tbody>
+            </table>
+            <form method="post" id="kod">
+                <div>
+                    Uplatnit slevový kód:
+                    <input type="text" name="kod">
+                    <input type="submit" name="uplatnit" value="Uplatnit kód">
+                    [@sleva]
+                </div>
+                <p>! Na objednávku lze uplatnit pouze 1 slevový kód !</p>
             </form>
+            <input type="submit" name="odeslat" value="Objednat" form="kod">
         </div>
     </main>
     <footer>

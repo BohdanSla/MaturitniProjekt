@@ -1,0 +1,94 @@
+.shrnuti {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.shrnuti table {
+    border-collapse: collapse;
+    width: 40rem;
+}
+.shrnuti > * {
+    margin:1.5rem 0 0 0;
+}
+.shrnuti table tr:first-child td:first-child {
+    border-top-left-radius: 0.5rem;
+}
+.shrnuti table tr:first-child td:last-child {
+    border-top-right-radius: 0.5rem;
+}
+.shrnuti table tr:last-child td:first-child {
+    border-bottom-left-radius: 0.5rem;
+}
+.shrnuti table tr:last-child td:last-child {
+    border-bottom-right-radius: 0.5rem;
+}
+.shrnuti table td:first-child div {
+    background-color: white;
+    padding: 0.45rem;
+    border-radius: 0.25rem;
+}
+.shrnuti td {
+    padding: 0.75rem;
+    text-align: center;
+    background-color: #f7f7f7dc;
+}
+.shrnuti td:nth-child(2) {
+    padding-right: 5rem;
+}
+.shrnuti table tr td:last-child {
+    text-align: left;
+}
+.shrnuti table:first-of-type tr:last-child td b {
+    color: red;
+    display: flex;
+    justify-content: flex-end;
+    font-size: x-large;
+}
+.shrnuti table:first-of-type tr:nth-last-child(2) td {
+    padding-right: 1.25rem;
+}
+.shrnuti table:first-of-type tr:last-child td {
+    padding-right: 1.25rem;
+}
+.shrnuti img {
+    width: 4rem;
+}
+.shrnuti form {
+    background-color: #f7f7f7dc;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 38rem;
+}
+.shrnuti form input {
+    outline:none;
+}
+.shrnuti input[type=submit]:hover {
+    cursor: pointer;
+}
+.shrnuti input[type=submit] {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.15rem;
+}
+.shrnuti > input {
+    width: 40rem;
+    padding: 1rem;
+    font-size: larger;
+}
+.shrnuti form input[type=submit] {
+    margin-left: 0.75rem;
+}
+.shrnuti form > p {
+    font-size: smaller;
+    color: #7c7c7c;
+    margin-top: 0.5rem;
+}
+.shrnuti > input[type=submit]:last-of-type {
+    margin-bottom: 1rem;
+}
