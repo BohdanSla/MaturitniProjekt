@@ -43,7 +43,7 @@ if (isset($_SESSION["user"])) {
         # code...
         $src = "obrazky/" . $value["src"];
 
-        $produkty .= '<div><section><img src="' . $src . '"><h2>' . $value["nazev"] .'</h2></section><section><div><p>Barva: ' . $value["barva"] . '</p><p>Velikost: ' . $value["velikost"] .'</p></div><b>' . $value["cena"] . ' Kč</b><form method="get">množství:<input type="number" name="mnozstvi" id="mnozstvi" min="0" max="5" value="' . $value["mnozstvi"] . '"><button name="odstranit" type="submit"><img src="obrazky/krizek_ikona.svg"></button></form></section></div>';
+        $produkty .= '<div><section><img src="' . $src . '"><h2>' . $value["nazev"] .'</h2></section><section><div><p>Barva: ' . $value["barva"] . '</p><p>Velikost: ' . $value["velikost"] .'</p></div><b>' . $value["cena"] . ' Kč</b><form method="post">množství:<input type="number" name="mnozstvi" id="mnozstvi" min="0" max="5" value="' . $value["mnozstvi"] . '"><button name="odstranit" type="submit"><img src="obrazky/krizek_ikona.svg"></button></form></section></div>';
 
     }
 

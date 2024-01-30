@@ -19,6 +19,10 @@ main menu a {
     display: flex;
     align-items: center;
 }
+main div form b {
+    color: red;
+    margin: 1rem 0;
+}
 main menu a img {
     width: 2rem;
 }
@@ -119,4 +123,24 @@ main > div {
 .oblibene > div img:first-of-type {
     height:  6rem;
     margin-right: 0.5rem;
+}
+main .objednavky {
+    width: 40rem;
+}
+main .objednavky img {
+    height: 4rem;
+}
+main .objednavky td {
+    text-align: center;
+}
+main .objednavky > div {
+    background-color: white;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+}
+h3 {
+    margin: 1rem 0;
 }

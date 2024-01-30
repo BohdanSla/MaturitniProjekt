@@ -354,7 +354,7 @@ aside {
 aside nav {
     height: inherit;
     width: 15rem;
-    background-color: #105295;
+    background-color: #1967b5;
     position: fixed;
     transition:left 0.07s ease-in,top 0.07s ease-in;
     display: flex;
@@ -388,7 +388,7 @@ aside nav a  {
     text-decoration: none;
 }
 aside nav li:hover {
-    background-color: #aed2f8;
+    background-color: #54a6ff;
     color: #1c1c1c;
 }
 

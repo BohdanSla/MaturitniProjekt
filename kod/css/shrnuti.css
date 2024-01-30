@@ -33,9 +33,6 @@
     text-align: center;
     background-color: #f7f7f7dc;
 }
-.shrnuti td:nth-child(2) {
-    padding-right: 5rem;
-}
 .shrnuti table tr td:last-child {
     text-align: left;
 }

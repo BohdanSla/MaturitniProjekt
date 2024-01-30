@@ -300,3 +300,13 @@ main .recenze form {
     margin: 0;
     width: 8rem;
 }
+.recenze h2 {
+    margin-bottom: 0;
+}
+h5 {
+    color: rgb(135, 135, 135);
+    margin: 0;
+}
+.recenze > b {
+    margin-top: 1rem;
+}

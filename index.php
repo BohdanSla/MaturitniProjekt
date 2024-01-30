@@ -11,8 +11,7 @@ $db = new Db();
 
 
 $html = file_get_contents("kod/html/index.html");
-// !odstranit sloupec hodnoceni_produktu z db a zmenit selecty na vzorutohohle: SELECT produkt.nazev,AVG(recenze.pocet_hvezd) AS prumer FROM produkt JOIN recenze ON recenze.id_produktu = produkt.id WHERE recenze.id_produktu = 2,SELECT produkt.nazev,AVG(recenze.pocet_hvezd) AS prumer FROM produkt JOIN recenze ON recenze.id_produktu = produkt.id GROUP BY produkt.id;
-$stmt = $db->prepare("SELECT produkt.nazev, produkt.popis, COALESCE(produkt.cena_ve_sleve,produkt.cena) AS cena, FORMAT(AVG(recenze.pocet_hvezd),1) AS hodnoceni_produktu, obrazek.src FROM produkt JOIN obrazky_k_produktu ON produkt.id = obrazky_k_produktu.id_produktu JOIN obrazek ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN recenze ON recenze.id_produktu = produkt.id WHERE obrazek.src LIKE '%main%' GROUP BY produkt.id ORDER BY hodnoceni_produktu DESC LIMIT 4;");
+$stmt = $db->prepare("SELECT produkt.id,produkt.nazev, produkt.popis, COALESCE(produkt.cena_ve_sleve,produkt.cena) AS cena, FORMAT(AVG(recenze.pocet_hvezd),1) AS hodnoceni_produktu, obrazek.src FROM produkt JOIN obrazky_k_produktu ON produkt.id = obrazky_k_produktu.id_produktu JOIN obrazek ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN recenze ON recenze.id_produktu = produkt.id WHERE obrazek.src LIKE '%main%' GROUP BY produkt.id ORDER BY hodnoceni_produktu DESC LIMIT 4;");
 
 $stmt->execute();
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +20,7 @@ foreach ($arr as $key => $value) {
     # code...
 
     $src = "obrazky/" . $value["src"];
-    $odkaz = "produkt.php?nazev=" . $value["nazev"];
+    $odkaz = "produkt.php?id=" . $value["id"];
 
     $html = preg_replace("/\[@doporuceny-produkt-obrazek\]/",$src, $html,1);
     $html = preg_replace("/\[@doporuceny-produkt-odkaz\]/",$odkaz , $html,1);
@@ -32,7 +31,7 @@ foreach ($arr as $key => $value) {
 }
 
 // musim dat AS protoze php ma problem se stejnymi nazvy sloupce!!!
-$stmt = $db->prepare("SELECT produkt.nazev, znacka.nazev as znacka, produkt.cena, produkt.cena_ve_sleve, obrazek.src 
+$stmt = $db->prepare("SELECT produkt.id,produkt.nazev, znacka.nazev as znacka, produkt.cena, produkt.cena_ve_sleve, obrazek.src 
 FROM produkt, znacka, obrazek 
 JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id 
 WHERE znacka.id = produkt.id_znacky 
@@ -47,7 +46,7 @@ foreach ($arr as $key => $value) {
     # code...
 
     $src = "obrazky/" . $value["src"];
-    $odkaz = "produkt.php?nazev=" . $value["nazev"];
+    $odkaz = "produkt.php?id=" . $value["id"];
 
     $html = preg_replace("/\[@produkt-ve-sleve-obrazek]/",$src, $html,1);
     $html = preg_replace("/\[@produkt-ve-sleve-odkaz]/",$odkaz, $html,1);

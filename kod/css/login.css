@@ -4,12 +4,17 @@
     align-items: center;
     width: 100%;
     min-height: 100vh;
+    flex-direction: column;
+}
+.login > b {
+    color:red;
+    margin-top: 1rem;
 }
 
 .login form {
     background-color: rgb(128, 128, 128, 0.093);
     width: 30%;
-    height: 20rem;
+    padding-bottom: 2rem;
     border-radius: 0.15rem;
     display: flex;
     flex-direction: column;

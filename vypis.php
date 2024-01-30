@@ -46,7 +46,7 @@ $nejvetsiCena = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $html = preg_replace("/\[@maximum\]/",strval($nejvetsiCena["nejvetsi_cena"]),$html);
 
-$sql = 'SELECT DISTINCT obrazek.src, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, sport.nazev AS sport 
+$sql = 'SELECT DISTINCT obrazek.src,produkt.id, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, sport.nazev AS sport 
 FROM produkt 
 JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
 JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
@@ -64,9 +64,8 @@ $nejmensiCena = "";
 $nejvetsiCena = "";
 
 if (isset($_GET["filtrovat"])) {
-
     # code...
-    if(isset($_GET["nejmejnsiCena"])) {
+    if(isset($_GET["nejmensiCena"])) {
         if($_GET["nejmensiCena"] != "") {
             $filtry .= " AND COALESCE(produkt.cena_ve_sleve,produkt.cena) >= :nejmensiCena";
             $parametry[":nejmensiCena"] = $_GET["nejmensiCena"];
@@ -135,6 +134,10 @@ if (isset($_GET["filtrovat"])) {
     $stmt->execute();
 }
 
+if($nejmensiCena > $nejvetsiCena) {
+    $nejvetsiCena = $nejmensiCena;
+}
+
 $html = str_replace("[@nejmensiCena]",$nejmensiCena,$html);
 $html = str_replace("[@nejvetsiCena]",$nejvetsiCena,$html);
 
@@ -147,7 +150,7 @@ foreach ($arr as $key => $value) {
 
 
     $src = "obrazky/" . $value["src"];
-    $odkaz = "produkt.php?nazev=" . urlencode($value["nazev"]);
+    $odkaz = "produkt.php?id=" . $value["id"];
     $cenaVesleve = "";
     $maCenuVeSleve = "";
     

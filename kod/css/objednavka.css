@@ -2,10 +2,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    min-height: 80vh;
 }
 .objednavka > div {
     background-color: #F7F7F7;
     width: 20rem;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+}
+.objednavka > div > a {
+    text-decoration: none;
+    background-color: red;
+    color: white;
+    padding: 0.5rem;
 }

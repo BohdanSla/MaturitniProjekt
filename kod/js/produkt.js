@@ -254,7 +254,7 @@ if(b != null) {
         upravaRecenze.value = recenze.textContent
         recenze.replaceWith(upravaRecenze)
     
-        b.textContent = "Zahodit změnit"
+        b.textContent = "Zahodit změny"
     
         formRecenze.appendChild(odstranitRecenzi)
         

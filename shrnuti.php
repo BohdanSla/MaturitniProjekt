@@ -9,6 +9,7 @@ session_start();
 
 spl_autoload_register(fn($trida) => require_once "$trida.class.php");
 
+
 use Databaze as Db;
 
 $db = new Db();
@@ -67,6 +68,7 @@ if(isset($_SESSION["user"])) {
         }
     }
     $html = str_replace("[@udaje]",$objednavka,$html);
+
     
     if(isset($_POST["uplatnit"])) {
         
@@ -78,13 +80,13 @@ if(isset($_SESSION["user"])) {
         if(count($arr) > 0) {
             $stmt = $db->prepare("UPDATE slevovy_kod SET bylPouzit = 1 WHERE kod = :kod;
             UPDATE objednavka SET id_slevoveho_kodu WHERE id_uzivatele = :id");
-
+            
             $stmt->execute([":kod" => $_POST["kod"],":id" => $_SESSION["user"]]);
         }
     }
-
+    
     if(isset($_POST["odeslat"])) {
-
+        
         $nazvyProduktu = explode(",",$nazvyProduktu);
         $placeholdery = '';
         $values = [":id" => $_SESSION["user"]];
@@ -95,12 +97,21 @@ if(isset($_SESSION["user"])) {
             $values[":nazev$i"] = $nazvyProduktu[$i];
         }
         $placeholdery = rtrim($placeholdery,",");
+        
+
+        $stmt = $db->prepare("SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id");
+        $stmt->execute([":id" => $_SESSION["user"]]);
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //! poupravit maybe??????????????????????????
+        file_put_contents("temp.txt","cisloObjednavky:".$arr[0]["id"]);
 
         // ! pokud chci mit neduplicitni radky v tabulce pouziju CONSTRAINT na tabulku a hodnoty a v INSERTU dam IGNORE
         $stmt = $db->prepare("INSERT IGNORE INTO zakoupene_produkty (id_uzivatele,id_produktu) VALUES $placeholdery;UPDATE objednavka SET jeObjednana = 1 WHERE id_uzivatele = :id AND jeObjednana = 0");
         $stmt->execute($values);
+        
 
-        header("Location: objednavka.php");
+        header("Location: Objednavka.php");
     }
 } 
 
@@ -108,7 +119,7 @@ function zformulujCenu(string $cena): string {
     
     $zformulovanaCena = "";
     $delka = mb_strlen($cena);
-
+    
     for ($i=$delka - 1; $i >= 0; $i--) { 
         # code...
         $zformulovanaCena = $cena[$i] . $zformulovanaCena;
