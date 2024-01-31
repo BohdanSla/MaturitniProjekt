@@ -144,3 +144,16 @@ main .objednavky > div {
 h3 {
     margin: 1rem 0;
 }
+main .objednavky tr:nth-last-child(2) td b{
+    color: green;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+}
+
+main .objednavky tr:last-child td b{
+    margin-right: 1rem;
+    color: red;
+    display: flex;
+    justify-content: flex-end;
+}

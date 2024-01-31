@@ -32,9 +32,23 @@ if(isset($_SESSION["user"])) {
     $html = str_replace("[@psc]",$arr["psc"],$html);
 
     if(isset($_POST["odeslat"])) {
-        header("Location: shrnuti.php");
-    }
+        $emailRegex = "/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/";
+        $telefonniCisloregex = "/(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/";
+        # code...
+        if(isset($_POST["jmeno"]) && isset($_POST["prijmeni"]) && isset($_POST["email"]) && isset($_POST["telefonniCislo"]) && isset($_POST["psc"]) && isset($_POST["ulice"]) && isset($_POST["mesto"])) {
+            
+            
+            if(preg_match($telefonniCisloregex,$_POST["telefonniCislo"]) && preg_match($emailRegex,$_POST["email"])) {
 
+                
+                $stmt = $db->prepare("UPDATE uzivatel SET jmeno= :jmeno,prijmeni= :prijmeni,email= :email,telefonni_cislo= :telefonniCislo,psc= :psc,ulice= :ulice,mesto= :mesto WHERE id = :id");
+        
+                $stmt->execute([":jmeno" => htmlspecialchars($_POST["jmeno"]),":prijmeni" => htmlspecialchars($_POST["prijmeni"]),":email" => htmlspecialchars($_POST["email"]),":telefonniCislo" => htmlspecialchars($_POST["telefonniCislo"]),":psc" => htmlspecialchars($_POST["psc"]),":ulice" => htmlspecialchars($_POST["ulice"]),":mesto" => htmlspecialchars($_POST["mesto"]),":id" => $_SESSION["user"]]);
+
+                header("Location: shrnuti.php");
+            }
+        } 
+    }
 } else {
     $html = ":)";
 }

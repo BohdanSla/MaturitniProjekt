@@ -305,7 +305,7 @@ main .recenze form {
 }
 h5 {
     color: rgb(135, 135, 135);
-    margin: 0;
+    margin: 0.5rem 0;
 }
 .recenze > b {
     margin-top: 1rem;

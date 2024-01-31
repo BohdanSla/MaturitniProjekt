@@ -19,7 +19,7 @@ if(isset($_SESSION["user"])) {
 
     $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc FROM uzivatel WHERE id = :id;
     SELECT produkt.nazev,produkt.id,obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN oblibene_produkty ON oblibene_produkty.id_produktu = produkt.id JOIN uzivatel ON uzivatel.id = oblibene_produkty.id_uzivatele WHERE obrazek.src LIKE "%main%" AND id_uzivatele = :id GROUP BY oblibene_produkty.id_produktu;
-    SELECT produkty_v_objednavce.id_objednavky, produkt.nazev,barva.nazev AS barva, velikost.nazev AS velikost, COALESCE(cena_ve_sleve,cena) AS cena, pocet AS mnozstvi, obrazek.src FROM `produkty_v_objednavce` JOIN produkt ON produkt.id = produkty_v_objednavce.id_produktu JOIN barva ON barva.id = produkty_v_objednavce.id_barvy JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE id_objednavky IN (SELECT id FROM objednavka WHERE jeObjednana = 1 AND id_uzivatele = :id) AND obrazek.src LIKE "%main%" ORDER BY produkty_v_objednavce.id_objednavky;');
+    SELECT produkty_v_objednavce.id_objednavky, produkt.nazev,barva.nazev AS barva, velikost.nazev AS velikost, COALESCE(cena_ve_sleve,cena) AS cena, pocet AS mnozstvi, obrazek.src,slevovy_kod.sleva FROM produkty_v_objednavce JOIN produkt ON produkt.id = produkty_v_objednavce.id_produktu JOIN barva ON barva.id = produkty_v_objednavce.id_barvy JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN objednavka ON objednavka.id = produkty_v_objednavce.id_objednavky LEFT JOIN slevovy_kod ON slevovy_kod.id = objednavka.id_slevoveho_kodu WHERE id_objednavky IN (SELECT id FROM objednavka WHERE jeObjednana = 1 AND id_uzivatele = :id) AND obrazek.src LIKE "%main%" ORDER BY produkty_v_objednavce.id_objednavky;');
 
     $stmt->execute([":id" => $_SESSION["user"]]);
 
@@ -64,16 +64,21 @@ if(isset($_SESSION["user"])) {
         for ($i=0; $i < count($idObjednavky); $i++) {
             # code...
             $objednavky .= '<div><h3>č. objednávky: ' . $idObjednavky[$i] .'</h3><table><tbody>';
+            $celkovaCena = 0;
             foreach ($arr as $key => $value) { 
                 # code...
                 if($idObjednavky[$i] == $value["id_objednavky"]) {
                     $src = "obrazky/" . $value["src"];
 
-                    $objednavky .= '<tr><td><img src="' . $src .'"></td><td><b>' . $value["nazev"] . '</b></td><td>' . $value["barva"] .' | '. $value["velikost"] .' | '. $value["mnozstvi"] .' ks</td><td><b>' . $value["cena"] . ' Kč</b></td></tr>';
+                    $objednavky .= '<tr><td><img src="' . $src .'"></td><td><b>' . $value["nazev"] . '</b></td><td>' . $value["barva"] .' | '. $value["velikost"] .' | '. $value["mnozstvi"] .' ks</td><td><b>' .  ($value["mnozstvi"] * $value["cena"]) . ' Kč</b></td></tr>';
+                    $celkovaCena += $value["cena"] * $value["mnozstvi"];
                 }
             }
             // ! dopsat slevový kód a celkovou cenu
-            $objednavky .= '</table></tbody></div>';
+            $sleva = $arr[0]["sleva"] ?? 0;
+            $celkovaCena =  $celkovaCena - $sleva;
+            $objednavky .= '<tr><td colspan=4><b>Sleva: -' . $sleva .' Kč</b></td></tr>';
+            $objednavky .= '<tr><td colspan=4><b>Celková cena: ' . $celkovaCena .' Kč</b></td></tr></tbody></table></div>';
         }
         
         $html = str_replace("[@objednavky]",$objednavky,$html);
