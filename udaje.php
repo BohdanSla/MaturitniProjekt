@@ -12,9 +12,30 @@ use Databaze as Db;
 
 $db = new Db();
 
-$html = file_get_contents("kod/html/udaje.html");
+$inactivity_time = 15 * 60;
 
 if(isset($_SESSION["user"])) {
+    if (isset($_SESSION['last_timestamp']) && (time() - $_SESSION['last_timestamp']) > $inactivity_time) {
+        //Redirect user to login page
+        header("Location: odhlasit.php");
+      }else{
+        // Regenerate new session id and delete old one to prevent session fixation attack
+        session_regenerate_id(true);
+    
+        // Update the last timestamp
+        $_SESSION['last_timestamp'] = time();
+    }
+}
+
+$html = file_get_contents("kod/html/udaje.html");
+
+$timeout = '';
+
+
+if(isset($_SESSION["user"])) {
+
+    $timeout = '<script defer src="kod/js/timeout.js"></script>';
+    
 
     $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc FROM uzivatel WHERE id = :id;
     SELECT produkt.nazev,obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN oblibene_produkty ON oblibene_produkty.id_produktu = produkt.id JOIN uzivatel ON uzivatel.id = oblibene_produkty.id_uzivatele WHERE obrazek.src LIKE "%main%" AND id_uzivatele = :id GROUP BY oblibene_produkty.id_produktu;');
@@ -53,5 +74,6 @@ if(isset($_SESSION["user"])) {
     $html = ":)";
 }
 
+$html = str_replace("[@timeout]",$timeout,$html);
 
 echo $html;

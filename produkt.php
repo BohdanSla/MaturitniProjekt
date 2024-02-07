@@ -10,9 +10,26 @@ spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.
 
 use Databaze as Db;
 
+$inactivity_time = 15 * 60;
+
+if(isset($_SESSION["user"])) {
+    if (isset($_SESSION['last_timestamp']) && (time() - $_SESSION['last_timestamp']) > $inactivity_time) {
+        //Redirect user to login page
+        header("Location: odhlasit.php");
+      }else{
+        // Regenerate new session id and delete old one to prevent session fixation attack
+        session_regenerate_id(true);
+    
+        // Update the last timestamp
+        $_SESSION['last_timestamp'] = time();
+    }
+}
+
 
 
 $html = file_get_contents("kod/html/produkt.html");
+$zprava = '';
+$timeout = '';
 
 $db = new Db();
 
@@ -26,7 +43,7 @@ if(isset($_GET["id"])) {
     JOIN znacka ON znacka.id = produkt.id_znacky
     JOIN sport ON sport.id = produkt.id_sportu
     JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu
-    JOIN recenze ON recenze.id_produktu = produkt.id
+    LEFT JOIN recenze ON recenze.id_produktu = produkt.id
     WHERE produkt.id = :idProduktu;
     SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.id = :idProduktu ORDER BY barva.nazev;
     SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = :idProduktu ORDER BY velikost.nazev;
@@ -113,14 +130,16 @@ if(isset($_GET["id"])) {
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $recenze = '';
+    $mojeRecenze = null;
+
 
     if(count($arr) > 0) {
         $stmt->nextRowset();
-        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $mojeRecenze = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         
-        if(count($arr) > 0) {
-            foreach ($arr as $key => $value) {
+        if(count($mojeRecenze) > 0) {
+            foreach ($mojeRecenze as $key => $value) {
                 # code...
                 $recenze .= '<div><div class="jmeno-hodnoceni"><h3>' . $value["jmeno"] . ' ' . $value["prijmeni"] .'</h3><div><b>' . $value["pocet_hvezd"] . '/5 </b><img src="obrazky/hvezda_ikona.svg"></div></div><p>' . $value["recenze"] .'</p><form method="post"><b>Upravit recenzi</b></form></div>';
             }
@@ -150,11 +169,13 @@ if(isset($_GET["id"])) {
 
     $recenze = '';
     if(count($arr) > 0) {
-        foreach ($arr as $key => $value) {
-            # code...
-            $recenze .= '<div><div class="jmeno-hodnoceni"><h3>' . $value["jmeno"] . ' ' . $value["prijmeni"] .'</h3><div><b>' . $value["pocet_hvezd"] . '/5 </b><img src="obrazky/hvezda_ikona.svg"></div></div><p>' . $value["recenze"] .'</p></div>';
-        }
-    } else {
+            foreach ($arr as $key => $value) {
+                # code...
+                $recenze .= '<div><div class="jmeno-hodnoceni"><h3>' . $value["jmeno"] . ' ' . $value["prijmeni"] .'</h3><div><b>' . $value["pocet_hvezd"] . '/5 </b><img src="obrazky/hvezda_ikona.svg"></div></div><p>' . $value["recenze"] .'</p></div>';
+            }
+    } 
+
+    if($mojeRecenze == null && count($arr) < 0) {
         $recenze = "<b>Zatím tu nejsou žádné recenze</b>";
     }
 
@@ -185,24 +206,32 @@ if(isset($_GET["id"])) {
 
     
     if(isset($_SESSION["user"])) {
+
+        $timeout = '<script defer src="kod/js/timeout.js"></script>';
+
         if(isset($_POST["odeslat"])) {
             
-            $stmt = $db->prepare("SELECT pocet FROM produkty_v_objednavce WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost)");
-            $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu]);
+            $stmt = $db->prepare("SELECT pocet FROM produkty_v_objednavce WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)AND id_objednavky = (SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0)");
+            $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $uzivatel]);
 
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $pocet = 0;
+
             if(count($arr) > 0) {
                 $pocet = $arr[0]["pocet"];
             }
+
+
             //!zkontrolovat
-            $stmt = $db->prepare("SELECT pocet FROM mnozstvi WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost)");
+            $stmt = $db->prepare("SELECT pocet FROM mnozstvi WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
     
             $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu]);
     
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $dostupnyPocet = $arr[0]["pocet"];
     
-            if($arr[0]["pocet"] > ($_POST["mnozstvi"] + $pocet)) {
+            if($dostupnyPocet >= (intval($_POST["mnozstvi"]) + $pocet)) {
                 $stmt = $db->prepare("SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0");
     
                 $stmt->execute([":id" => $_SESSION["user"]]);
@@ -215,26 +244,28 @@ if(isset($_GET["id"])) {
                     $stmt->execute([":id" => $_SESSION["user"],":jeObjednana" => 0]);
                 }
 
-                $values = [":mnozstvi" => ($_POST["mnozstvi"] + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu];
+                $values = [":mnozstvi" => (intval($_POST["mnozstvi"]) + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu];
 
                 if($pocet == 0) {
-                    $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0),(SELECT id FROM barva WHERE nazev = :barva),(SELECT id FROM velikost WHERE nazev = :velikost),:mnozstvi)");
+                    $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0 LIMIT 1),(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1),:mnozstvi)");
                     
                 } else {
-                    $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost)");
+                    $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
                     $values[":id"] = $_SESSION["user"];
-                }
+                }       
                 $stmt->execute($values);
+
             } 
+            header("Location: produkt.php?id=" . $idProduktu);
         }
-    
+        
         if(isset($_POST["oblibene"])) {
             $stmt = $db->prepare("SELECT id_produktu,id_uzivatele FROM oblibene_produkty WHERE id_produktu = :idProduktu AND id_uzivatele = :id");
     
-            $stmt->execute([":id" => $_SESSION["user"],":idProduktu" => $_POST["idProduktu"]]);
-    
+            $stmt->execute([":id" => $_SESSION["user"],":idProduktu" => $idProduktu]);
+            
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+            
             if(count($arr) > 0) {
                 $stmt = $db->prepare("DELETE FROM oblibene_produkty WHERE id_produktu = :idProduktu AND id_uzivatele = :id");
             } else {
@@ -248,15 +279,15 @@ if(isset($_GET["id"])) {
             $stmt = $db->prepare("INSERT INTO recenze (recenze, pocet_hvezd, id_produktu, id_uzivatele) VALUES (:recenze, :pocetHvezd, :idProduktu, :id)");
     
             $stmt->execute([":recenze" => htmlspecialchars($_POST["recenze"]),":pocetHvezd" => htmlspecialchars($_POST["hvezdy"]),":idProduktu" => $idProduktu, ":id" => $_SESSION["user"]]);
-    
+            
             header("Location: produkt.php?id=" . $idProduktu);
         }
         
         if(isset($_POST["odstranit"])) {
             $stmt = $db->prepare("DELETE FROM recenze WHERE id_produktu = :idProduktu AND id_uzivatele = :id");
-    
+            
             $stmt->execute([":id" => $_SESSION["user"],":idProduktu" => $idProduktu]);
-    
+            
             header("Location: produkt.php?id=" . $idProduktu);
         }
     
@@ -264,7 +295,7 @@ if(isset($_GET["id"])) {
             $stmt = $db->prepare("UPDATE recenze SET recenze = :recenze,pocet_hvezd = :pocetHvezd WHERE recenze.id_produktu = :idProduktu AND recenze.id_uzivatele = :id");
     
             $stmt->execute([":recenze" => htmlspecialchars($_POST["recenze"]),":pocetHvezd" => htmlspecialchars($_POST["hvezdy"]),":idProduktu" => $idProduktu,":id" => $_SESSION["user"]]);
-    
+            
             header("Location: produkt.php?id=" . $idProduktu);
         }
     
@@ -284,20 +315,23 @@ if(isset($_GET["id"])) {
     } else {
         $html = str_replace("[@oblibene]","obrazky/srdce_cervene_prazdne_ikona.svg",$html);
     }
-
+    
 } else {
     $html .= "Něco je blbě...";
 }
 
 
+$html = str_replace("[@zprava]",$zprava,$html);
+
+$html = str_replace("[@timeout]",$timeout,$html);
 
 echo $html;
 
 function zformulujCenu(string $cena): string {
-
+    
     $zformulovanaCena = "";
     $delka = mb_strlen($cena);
-
+    
     for ($i=$delka - 1; $i >= 0; $i--) { 
         # code...
         $zformulovanaCena = $cena[$i] . $zformulovanaCena;

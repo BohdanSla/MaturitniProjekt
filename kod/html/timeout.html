@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="kod/css/index.css" rel="stylesheet" type="text/css">
-    <link href="kod/css/ucet.css" rel="stylesheet" type="text/css">
-    <script defer src="kod/js/ucet.js"></script>
-    [@timeout]
+    <link href="kod/css/timeout.css" rel="stylesheet" type="text/css">
+    <script defer src="kod/js/sablona.js"></script>
     <title>Pro sportovce</title>
 </head>
 <body>
@@ -60,49 +59,10 @@
     <main>
         <div class="vypln">
         </div>
-        <menu>
-            <ul>
-                <li>Údaje</li>
-                <li>Objednávky</li>
-                <li>Oblíbené produkty</li>
-            </ul>
-            <a href="odhlasit.php">Odhlásit se<img src="/obrazky/otevrene_dvere_ikona.svg"></a>
-        </menu>
-        <div>
-            <form method="post">
-                <h4>Osobní údaje</h4>
-                <div class="udaj">
-                    Jméno<input type="text" name="jmeno" value="[@jmeno]" required>
-                </div>
-                <div class="udaj">
-                    Příjmení<input type="text" name="prijmeni" value="[@prijmeni]" required>
-                </div>
-                <div class="udaj">
-                    Email<input type="email" name="email" value="[@email]" required>
-                </div>
-                <div class="udaj">
-                    Telefonní číslo<input type="tel" name="telefonniCislo" value="[@telefonniCislo]" required>
-                </div>
-                <h4>Dodávací údaje</h4>
-                <div class="udaj">
-                    Město<input type="text" name="mesto" value="[@mesto]">
-                </div>
-                <div class="udaj">
-                    Ulice<input type="text" name="ulice" value="[@ulice]">
-                </div>
-                <div class="udaj">
-                    PSČ<input type="text" name="psc" value="[@psc]">
-                </div>
-                <input type="submit" name="odeslat" value="Změnit údaje">
-                [@zprava]
-            </form>
-            <div class="objednavky">
-                [@objednavky]
-            </div>
-            <div class="oblibene">
-                [@oblibene]
-            </div>
-        </div>
+        <h1>Kvůli neaktivitě po dobu 15 minut jste byli odhlášeni</h1>
+        <img src="obrazky/laptop.png">
+        <a href='index.php'>Hlavní stránka</a><a href='ucet.php'>Zpátky k loginu</a>
+
     </main>
     <footer>
         Tento eshop je Maturitní projekt<br>

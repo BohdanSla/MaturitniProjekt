@@ -10,8 +10,14 @@ heslo pro administratora: AdmnstrtrProSprotvce23$
 
 CO CHYBY
 // ! opravit administraci - editace, A dodelat - vytvareni noveho produktu, kategorie, uzivatelu
-// ! doopravit slevove kody tak, aby se nemohla dat sleva 100kč na 50 kč produkt.
-// ! u uctu dopsat slevu a opravit cenu a vypsat celkovou cenu
-// ------
-SELECT produkty_v_objednavce.id_objednavky, produkt.nazev,barva.nazev AS barva, velikost.nazev AS velikost, COALESCE(cena_ve_sleve,cena) AS cena, pocet AS mnozstvi, obrazek.src,slevovy_kod.kod FROM produkty_v_objednavce JOIN produkt ON produkt.id = produkty_v_objednavce.id_produktu JOIN barva ON barva.id = produkty_v_objednavce.id_barvy JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN objednavka ON objednavka.id = produkty_v_objednavce.id_objednavky LEFT JOIN slevovy_kod ON slevovy_kod.id = objednavka.id_slevoveho_kodu WHERE id_objednavky IN (SELECT id FROM objednavka WHERE jeObjednana = 1 AND id_uzivatele = :id) AND obrazek.src LIKE "%main%" ORDER BY produkty_v_objednavce.id_objednavky;
+// ! doopravit slevove kody tak, aby se nemohla dat sleva 100kč na 50 kč produkt. HOTOVO
+// ! u produktu obrazku dat main jako prvni  obrazky mozna
 // ! dodelat objednani produktu pri neregistraci.
+// ! zkontrolovat prihlaseni (na porpve se to nevydari) a niv se nevypise ASI HOTOVO
+// !dodelat stranku kosiku HOTOVO
+// ! dodelat styly na mobily atd...
+// ! pridat snizeni zbozi v mnozstvi pri pridani
+
+private String $dbDsn = "mysql:host=db.mp.spse-net.cz;dbname=slawisbo20_1;charset=utf8";
+    private String $dbName = "slawisbo20";
+    private String $dbPassword = "wupidewoziche"; 

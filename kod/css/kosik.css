@@ -64,11 +64,11 @@ main {
 .kosik > div button:hover {
     cursor: pointer;
 }
-.kosik > section {
+.kosik > form {
     display: flex;
     background-color: white;
     border-radius: 0.25rem;
-    padding: 0 0.5rem;
+    padding: 0.5rem;
     justify-content: space-between;
     align-items: center;
 }
@@ -80,7 +80,7 @@ main .kosik a:last-of-type {
     border-radius: 0.15rem;
     text-decoration: 0;
 }
-main .kosik > section input {
+main .kosik > form input {
     background-color: #C70000;
     color: white;
     padding: 0.5rem;
@@ -88,7 +88,7 @@ main .kosik > section input {
     border: none;
     border-radius: 0.15rem;
 }
-main .kosik > section input:hover {
+main .kosik > form input:hover {
     cursor: pointer;
 }
 

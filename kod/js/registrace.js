@@ -58,7 +58,7 @@ let email = document.querySelector("input[type=\"email\"]")
 let pozadavkyHesla = document.querySelectorAll(".registrace li");
 
 let telefonniCisloRegex = /(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/
-let hesloRegex = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!#$%&?"])[a-zA-Z0-9!#$%&? ]{8,}$/
+let hesloRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d\s])[A-Za-z\d\W\S]{8,}$/
 let emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/ 
 
 let odeslat = document.querySelector(".registrace form input[name=odeslat]")

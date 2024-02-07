@@ -52,3 +52,20 @@ function otevriPostraniMenu() {
         }
     }
 }
+
+//[@zprava]
+
+// let logout;
+// let i = 0
+
+// logout = setTimeout(function() {
+//     window.location.href = "odhlasit.php";
+// },15 * 2000);
+
+
+// document.addEventListener("input",function() {
+//     clearTimeout(logout);
+//     logout = setTimeout(function() {
+//         window.location.href = "odhlasit.php";
+//     },15 * 2000);
+// });

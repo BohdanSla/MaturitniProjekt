@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(count($arr) < 1) {
         $emailRegex = "/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/";
         $telefonniCisloregex = "/(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/";
-        $hesloRegex = "/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!#$%&?\"])[a-zA-Z0-9!#$%&? ]{8,}$/";
+        $hesloRegex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d\s])[A-Za-z\d\W\S]{8,}$/";
         # code...
         if(isset($_POST["jmeno"]) && isset($_POST["prijmeni"]) && isset($_POST["heslo"]) && isset($_POST["hesloZnovu"]) && isset($_POST["email"]) && isset($_POST["telefonniCislo"]) && isset($_POST["psc"]) && isset($_POST["ulice"]) && isset($_POST["mesto"])) {
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if(strcmp($_POST["heslo"],$_POST["hesloZnovu"]) == 0 && preg_match($telefonniCisloregex,$_POST["telefonniCislo"]) && preg_match($hesloRegex,$_POST["heslo"]) && preg_match($emailRegex,$_POST["email"])) {
 
 
-                $stmt = $db->prepare("insert into uzivatel(heslo,jmeno,prijmeni,email,telefonni_cislo,psc,ulice,mesto,id_role) values(:heslo,:jmeno,:prijmeni,:email,:telefonni_cislo,:psc,:ulice,:mesto,:id_role)");
+                $stmt = $db->prepare("insert into uzivatel(heslo,jmeno,prijmeni,email,telefonni_cislo,psc,ulice,mesto,id_role,jeZaregistrovany) values(:heslo,:jmeno,:prijmeni,:email,:telefonni_cislo,:psc,:ulice,:mesto,:id_role,1)");
                 
                 $stmt->execute([
                 ":heslo" => password_hash($_POST["heslo"],PASSWORD_BCRYPT),

@@ -2,12 +2,30 @@
 
 declare(strict_types=1);
 
+session_start();
+
 $html = file_get_contents("kod/html/vypis.html");
+
 
 
 spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.php");
 
 use Databaze as Db;
+
+$inactivity_time = 15 * 60;
+
+if(isset($_SESSION["user"])) {
+    if (isset($_SESSION['last_timestamp']) && (time() - $_SESSION['last_timestamp']) > $inactivity_time) {
+        //Redirect user to login page
+        header("Location: odhlasit.php");
+      }else{
+        // Regenerate new session id and delete old one to prevent session fixation attack
+        session_regenerate_id(true);
+    
+        // Update the last timestamp
+        $_SESSION['last_timestamp'] = time();
+    }
+}
 
 $db = new Db();
 
@@ -146,24 +164,37 @@ $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $produkty = "";
 
-foreach ($arr as $key => $value) {
-
-
-    $src = "obrazky/" . $value["src"];
-    $odkaz = "produkt.php?id=" . $value["id"];
-    $cenaVesleve = "";
-    $maCenuVeSleve = "";
+if(count($arr) > 0) {
+    foreach ($arr as $key => $value) {
     
-    $produkty .= '<a [@ma-cenu-ve-sleve] href="' . $odkaz . '"><img src="' . $src .'"><div class="parametry"><h2>' . $value["nazev"] . '</h2><b id="sport">' . $value["sport"] . '</b><b id="cena">' . $value["cena"] . ' Kč</b> [@cena-ve-sleve] </div></a>';
     
-    if ($value["cena_ve_sleve"] != null) {
-        # code...
-        $cenaVesleve = "<b id=\"cenaVeSleve\">" . $value["cena_ve_sleve"] . " Kč</b>";
-        $maCenuVeSleve = 'class="maCenuVeSleve"';
+        $src = "obrazky/" . $value["src"];
+        $odkaz = "produkt.php?id=" . $value["id"];
+        $cenaVesleve = "";
+        $maCenuVeSleve = "";
+        
+        $produkty .= '<a [@ma-cenu-ve-sleve] href="' . $odkaz . '"><img src="' . $src .'"><div class="parametry"><h2>' . $value["nazev"] . '</h2><b id="sport">' . $value["sport"] . '</b><b id="cena">' . $value["cena"] . ' Kč</b> [@cena-ve-sleve] </div></a>';
+        
+        if ($value["cena_ve_sleve"] != null) {
+            # code...
+            $cenaVesleve = "<b id=\"cenaVeSleve\">" . $value["cena_ve_sleve"] . " Kč</b>";
+            $maCenuVeSleve = 'class="maCenuVeSleve"';
+        }
+        $produkty = preg_replace("/\[@cena-ve-sleve\]/",$cenaVesleve,$produkty,1);
+        $produkty = preg_replace("/\[@ma-cenu-ve-sleve\]/",$maCenuVeSleve,$produkty,1);
     }
-    $produkty = preg_replace("/\[@cena-ve-sleve\]/",$cenaVesleve,$produkty,1);
-    $produkty = preg_replace("/\[@ma-cenu-ve-sleve\]/",$maCenuVeSleve,$produkty,1);
+} else {
+    $nazevHledanehoProduktu = $_GET["hledat"];
+    $produkty = "<p>Bohužel nebyl nalezen produkt s názvem:<b> $nazevHledanehoProduktu </b></p>";
 }
+
+$timeout = '';
+
+if(isset($_SESSION["user"])) {
+    $timeout = '<script defer src="kod/js/timeout.js"></script>';
+}
+
+$html = str_replace("[@timeout]",$timeout,$html);
 
 $html = str_replace("[@produkty]",$produkty,$html);
 
@@ -180,7 +211,7 @@ function vypisFiltry(String $typFiltru,&$arr,&$stmt,&$html) {
     $html = str_replace("[@" . $typFiltru ."]",$filtry,$html);
 }
 
-$html = preg_replace('/filtr="\[@[a-zA-Z0-9\s]+\]"/',"",$html);
+$html = preg_replace('/filtr="\[@[a-žA-Ž0-9\s]+\]"/',"",$html);
 
 
 echo $html;
