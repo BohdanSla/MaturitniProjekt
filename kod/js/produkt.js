@@ -63,7 +63,7 @@ let src = Array.from(vsechnyObrazkyProduktu).filter(el => {
 hlavniObrazek.setAttribute("data-barva",src[0].getAttribute("data-barva"))
 hlavniObrazek.src = src[0].value;
 
-document.querySelector(".hlavni-obrazek").appendChild(hlavniObrazek);
+document.querySelector(".hlavni-obrazek").insertBefore(hlavniObrazek,document.querySelector("img[alt=sipka_ikona]:last-of-type"));
 
 let barvyProduktu = []
 
@@ -167,10 +167,11 @@ function vypisSkladem() {
 }
 
 let sipky = document.querySelectorAll('img[alt=sipka_ikona]')
+let indexHlavnihoObrazku = 0;
+
 for (let index = 0; index < ostatniObrazky.length; index++) {
     if (ostatniObrazky[index].src == hlavniObrazek.src) {
         indexHlavnihoObrazku = index;
-        let indexHlavnihoObrazku = 0;
         break;
     }
 }
@@ -331,4 +332,32 @@ if(p != null) {
         }
     })
 }
-    
+
+
+let galerie= document.querySelector(".galerie");
+let parametry= document.querySelector(".info-pridat");
+
+let vsechnyObrazky = document.querySelector(".obrazky-produktu div");
+
+let sirka = this.innerWidth;
+
+zmenStyly()
+
+window.addEventListener("resize",zmenStyly)
+
+function zmenStyly() {
+
+    if (galerie.offsetTop < parametry.offsetTop) {
+        // do something;
+        if(sirka < this.innerWidth) {
+            parametry.style.width = "unset"
+            parametry.style.marginTop = "0"
+            vsechnyObrazky.style.display = "flex"
+        } else {
+            parametry.style.marginTop = "1rem"
+            parametry.style.width = "100%"
+            document.querySelector(".dekorace-cara").style.margin = "1rem 0"
+            vsechnyObrazky.style.display = "none"
+        }
+    }
+}

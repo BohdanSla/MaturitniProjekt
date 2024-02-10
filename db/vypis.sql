@@ -205,3 +205,25 @@ FROM obrazek
 WHERE obrazky_k_produktu.id_obrazku = obrazek.id
 AND obrazek.src LIKE '%main%'
 ) = 0;
+
+DROP TABLE IF EXISTS barva;
+DROP TABLE IF EXISTS kategorie_produktu;
+DROP TABLE IF EXISTS material;
+DROP TABLE IF EXISTS materialy_produktu;
+DROP TABLE IF EXISTS mnozstvi;
+DROP TABLE IF EXISTS objednavka;
+DROP TABLE IF EXISTS oblibene_produkty;
+DROP TABLE IF EXISTS obrazek;
+DROP TABLE IF EXISTS obrazky_k_produktu;
+DROP TABLE IF EXISTS produkt;
+DROP TABLE IF EXISTS produkty_v_objednavce;
+DROP TABLE IF EXISTS recenze;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS slevovy_kod;
+DROP TABLE IF EXISTS slevovy_kod_sport;
+DROP TABLE IF EXISTS slevovy_kod_znacka;
+DROP TABLE IF EXISTS sport;
+DROP TABLE IF EXISTS uzivatel;
+DROP TABLE IF EXISTS velikost;
+DROP TABLE IF EXISTS zakoupene_produkty;
+DROP TABLE IF EXISTS znacka;

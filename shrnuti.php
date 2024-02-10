@@ -52,8 +52,8 @@ if(isset($_SESSION["user"])) {
     $stmt->nextRowset(); 
     $produkty = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    $objednavka = '';
     $nazvyProduktu = '';
+    $objednavka = '';
     $zpravaSleva = '<p>Není použit žádný slevový kód</p>';
     
     if(count($produkty) > 0) {
@@ -104,7 +104,7 @@ if(isset($_SESSION["user"])) {
         }, array_keys($nazvyProduktu));
         $placeholders = implode(',', $placeholdersArray);
 
-        $sql = "SELECT slevovy_kod.sleva, id_slevoveho_kodu, id_sportu AS kod FROM slevovy_kod_sport JOIN slevovy_kod ON slevovy_kod.id = slevovy_kod_sport.id_slevoveho_kodu WHERE id_sportu IN (SELECT id_sportu FROM produkt WHERE nazev IN ($placeholders)) AND kod = :kod AND expirace > CURRENT_DATE() AND bylPouzit = 0 UNION SELECT id_slevoveho_kodu, id_znacky FROM slevovy_kod_znacka JOIN slevovy_kod ON slevovy_kod.id = slevovy_kod_znacka.id_slevoveho_kodu WHERE id_znacky IN (SELECT id_znacky FROM produkt WHERE nazev IN ($placeholders)) AND kod = :kod AND expirace > CURRENT_DATE() AND bylPouzit = 0;";
+        $sql = "SELECT slevovy_kod.sleva, id_slevoveho_kodu, id_sportu AS kod FROM slevovy_kod_sport JOIN slevovy_kod ON slevovy_kod.id = slevovy_kod_sport.id_slevoveho_kodu WHERE id_sportu IN (SELECT id_sportu FROM produkt WHERE nazev IN ($placeholders)) AND kod = :kod AND expirace > CURRENT_DATE() AND bylPouzit = 0 UNION SELECT slevovy_kod.sleva,id_slevoveho_kodu, id_znacky FROM slevovy_kod_znacka JOIN slevovy_kod ON slevovy_kod.id = slevovy_kod_znacka.id_slevoveho_kodu WHERE id_znacky IN (SELECT id_znacky FROM produkt WHERE nazev IN ($placeholders)) AND kod = :kod AND expirace > CURRENT_DATE() AND bylPouzit = 0;";
 
         $stmt = $db->prepare($sql);
         foreach ($nazvyProduktu as $key => $value) {
@@ -162,7 +162,139 @@ if(isset($_SESSION["user"])) {
 
         header("Location: Objednavka.php");
     }
-} 
+} else {
+    $produkty = "";
+    if(isset($_SESSION["kosik"]) && count($_SESSION["kosik"]) > 0) {
+        $id = [];
+        $idPlaceholdery = "";
+
+        foreach ($_SESSION["kosik"] as $key => $value) {
+            # code..
+            $idProduktu = explode(";",$value)[0];
+            if(!in_array($idProduktu,$id)) {
+                $idPlaceholdery .= ":id$key" . ",";
+                $id[":id$key"] = $idProduktu; 
+            }
+        }
+        $idPlaceholdery = rtrim($idPlaceholdery,",");
+
+        $stmt = $db->prepare("SELECT produkt.nazev,produkt.id, COALESCE(cena_ve_sleve,cena) AS cena, obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE '%main%' AND produkt.id IN ($idPlaceholdery) ORDER BY produkt.nazev;");
+
+        $stmt->execute($id);
+
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(count($arr) > 0) {
+            $zpravaSleva = '<p>Není použit žádný slevový kód</p>';
+            $nazvyProduktu = '';
+            foreach ($arr as $key => $value) {
+                $objednavka = '';
+                $celkovaCena = 0;
+                $value["src"] = "obrazky/" . $value["src"];
+                # code...
+                foreach($_SESSION["kosik"] as $key2 => $value2) {
+                    $informace = explode(";",$value2);
+                    if($value["id"] == $informace[0]) {
+
+                        $value["cena"] = $value["cena"] * intval($informace[3]);
+                        $celkovaCena += $value["cena"];
+
+                        
+                        $objednavka .= '<tr><td><div><img src="' . $value["src"] . '"></div></td><td><b>' . $value["nazev"] . "</b></td><td>" . $informace[1] . " | " . $informace[2] . " | " . $informace[3] . " ks</td><td><b>" . zformulujCenu(strval($value["cena"])) ."</b></td></tr>";
+                        $nazvyProduktu = $nazvyProduktu . $value["nazev"] .  ",";
+                    }
+                }
+                if(isset($_SESSION["kod"])) {
+                    $stmt = $db->prepare("SELECT slevovy_kod.sleva FROM slevovy_kod WHERE slevovy_kod.kod = :kod;");
+                    $stmt->execute([":kod" => $_SESSION["kod"]]);
+
+                    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $celkovaCena -= $arr[0]["sleva"];
+                    $zpravaSleva = '<p style="color:green;">Sleva uplatněna!</p>';
+                    $objednavka .= "<tr><td colspan='4'><b style='display:flex;justify-content:flex-end;color:green'>Slevový kód: -". $arr[0]["sleva"] ." Kč</b></td></tr>";
+                }
+                $nazvyProduktu = rtrim($nazvyProduktu,",");
+                $objednavka .= "<tr><td colspan='4'><b> Celková cena: " . zformulujCenu(strval($celkovaCena)) . "</b></td></tr>";
+            }
+        }
+    }
+    $html = str_replace("[@zbozi]",$objednavka,$html);
+    $html = str_replace("[@sleva]",$zpravaSleva,$html);
+    if(isset($_SESSION["udaje"])) {
+        $udaje = explode(";",$_SESSION["udaje"]);
+        $objednavka = "<tr><td>" . $udaje[0] . " " . $udaje[1] . "</td></tr><tr><td>" . $udaje[2] . ", " . $udaje[3] . "</td></tr><tr><td>" . $udaje[4] .", " . $udaje[5] . ", " . $udaje[6] . " </td></tr>";
+    }
+    $html = str_replace("[@udaje]",$objednavka,$html);
+
+    if(isset($_POST["uplatnit"])) {
+        $nazvyProduktu = explode(",", $nazvyProduktu);
+        $values = [":kod" => $_POST["kod"]];
+
+        // Create named placeholders for each element in $nazvyProduktu
+        $placeholdersArray = array_map(function ($key) {
+            return ":nazev$key";
+        }, array_keys($nazvyProduktu));
+        $placeholders = implode(',', $placeholdersArray);
+
+        $sql = "SELECT slevovy_kod.sleva, id_slevoveho_kodu, id_sportu AS kod FROM slevovy_kod_sport JOIN slevovy_kod ON slevovy_kod.id = slevovy_kod_sport.id_slevoveho_kodu WHERE id_sportu IN (SELECT id_sportu FROM produkt WHERE nazev IN ($placeholders)) AND kod = :kod AND expirace > CURRENT_DATE() AND bylPouzit = 0 UNION SELECT slevovy_kod.sleva,id_slevoveho_kodu, id_znacky FROM slevovy_kod_znacka JOIN slevovy_kod ON slevovy_kod.id = slevovy_kod_znacka.id_slevoveho_kodu WHERE id_znacky IN (SELECT id_znacky FROM produkt WHERE nazev IN ($placeholders)) AND kod = :kod AND expirace > CURRENT_DATE() AND bylPouzit = 0;";
+
+        $stmt = $db->prepare($sql);
+        foreach ($nazvyProduktu as $key => $value) {
+            $stmt->bindParam(":nazev$key", $value);
+        }
+
+        $stmt->bindParam(":kod", $_POST["kod"]);
+        $stmt->execute();
+
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if(count($arr) > 0) {
+            if($celkovaCena - $arr[0]["sleva"] > $celkovaCena * 0.7) {
+                $stmt = $db->prepare("UPDATE slevovy_kod SET bylPouzit = 1 WHERE kod = :kod;");
+                $stmt->execute([":kod" => $_POST["kod"]]);
+                $_SESSION["kod"] = $_POST["kod"];
+            }
+        }
+        header("Location: shrnuti.php");
+    }
+    
+    if(isset($_POST["odeslat"])) {
+        $stmt = $db->prepare("insert into uzivatel(heslo,jmeno,prijmeni,email,telefonni_cislo,psc,ulice,mesto,id_role,jeZaregistrovany) values(:heslo,:jmeno,:prijmeni,:email,:telefonni_cislo,:psc,:ulice,:mesto,:id_role,0)");
+                
+        $udaje = explode(";",$_SESSION["udaje"]);
+
+        $stmt->execute([
+        ":heslo" => NULL,
+        ":jmeno" => htmlspecialchars($udaje[0]),
+        ":prijmeni" => htmlspecialchars($udaje[1]),
+        ":email" => htmlspecialchars($udaje[2]),
+        ":telefonni_cislo" => htmlspecialchars($udaje[3]),
+        ":mesto" => htmlspecialchars($udaje[4]),
+        ":ulice" => htmlspecialchars($udaje[5]),
+        ":psc" => htmlspecialchars($udaje[6]),
+        ":id_role" => 3
+        ]);
+
+        $idUzivatele = $db->lastInsertId();
+
+        $stmt = $db->prepare("INSERT INTO objednavka(id_uzivatele, jeObjednana, id_slevoveho_kodu) VALUES (:id,:jeObjednana,(SELECT id FROM slevovy_kod WHERE kod = :kod))");
+
+        $stmt->execute([":id" => $idUzivatele,":jeObjednana" => 1,":kod" => $_SESSION["kod"]]);
+
+        $_SESSION["id"] = $db->lastInsertId();
+
+        foreach ($_SESSION["kosik"] as $key => $value) {
+            # code...
+            $informace = explode(";",$value);
+            $stmt= $db->prepare("INSERT INTO produkty_v_objednavce(id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:id,:objednavka,(SELECT id FROM barva where nazev =:barva),(SELECT id FROM velikost where nazev =:velikost),:pocet)");
+
+            $stmt->execute([":id" => $informace[0],":objednavka" => $_SESSION["id"],":barva" => $informace[1],":velikost" => $informace[2],":pocet" => $informace[3]]);
+        }
+        header("Location: Objednavka.php");
+    }
+
+}
 
 $html = str_replace("[@timeout]",$timeout,$html);
 

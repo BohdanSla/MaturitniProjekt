@@ -44,8 +44,13 @@ main {
 form h2 {
     margin: 0;
 }
-.hlavni-obrazek img {
+.hlavni-obrazek {
+    display: flex;
+    align-items: center;
+}
+.hlavni-obrazek img:not(img[alt=sipka_ikona]) {
     width: 22rem;
+    margin: 0 1rem;
 }
 .obrazky-produktu {
     display: flex;
@@ -53,6 +58,9 @@ form h2 {
 .obrazky-produktu img {
     width: 1.5rem;
     margin: 0 1rem;
+}
+img[alt=sipka_ikona] {
+    height: 5rem;
 }
 img[alt=sipka_ikona]:last-of-type {
     transform: scaleX(-1)
@@ -213,6 +221,7 @@ label {
 }
 .info-pridat section {
     display: flex;
+    flex-wrap: wrap;
 }
 .info-pridat section > div {
     display: flex;
@@ -231,6 +240,7 @@ main form p  {
 main form .pridat > div {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 main form .info > b {
     color:#70707090;
@@ -240,6 +250,7 @@ main form .info > h2 {
 }
 .dekorace-cara {
     position: static;
+    width: 100%;
 }
 main .recenze form b {
     background-color: #C70000;
@@ -309,4 +320,18 @@ h5 {
 }
 .recenze > b {
     margin-top: 1rem;
+}
+
+@media only screen and (max-width: 550px) {
+    .galerie {
+        width: 100%;
+        justify-content: space-evenly;
+    }
+    .hlavni-obrazek img {
+        height: 4rem;
+    }
+    .hlavni-obrazek img:not(img[alt=sipka_ikona]) {
+        height: 13rem;
+        width: 13rem;
+    }
 }

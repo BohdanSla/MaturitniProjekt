@@ -34,7 +34,7 @@ main a {
 }
 main form input[type=submit],main a {
     font-size: medium;
-    background-color: red;
+    background-color: #C70000;
     color: white;
     padding: 0.2rem;
     outline: none;

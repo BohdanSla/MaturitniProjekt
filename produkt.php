@@ -26,7 +26,6 @@ if(isset($_SESSION["user"])) {
 }
 
 
-
 $html = file_get_contents("kod/html/produkt.html");
 $zprava = '';
 $timeout = '';
@@ -119,24 +118,24 @@ if(isset($_GET["id"])) {
         } else {
             $skladem = "Skladem";
         }
-
+        
         $velikosti .= '<option data-barva="' . $value["barva"] . '" data-velikost="' . $value["velikost"] . '" data-skladem="' . $skladem . '"></option>';
     }
     $html = str_replace("[@velikosti]",$velikosti,$html);
-
-
-
+    
+    
+    
     $stmt->nextRowset();
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    
     $recenze = '';
-    $mojeRecenze = null;
-
-
+    $mojeRecenze = [];
+    
+    
     if(count($arr) > 0) {
         $stmt->nextRowset();
         $mojeRecenze = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+    
         
         if(count($mojeRecenze) > 0) {
             foreach ($mojeRecenze as $key => $value) {
@@ -173,9 +172,9 @@ if(isset($_GET["id"])) {
                 # code...
                 $recenze .= '<div><div class="jmeno-hodnoceni"><h3>' . $value["jmeno"] . ' ' . $value["prijmeni"] .'</h3><div><b>' . $value["pocet_hvezd"] . '/5 </b><img src="obrazky/hvezda_ikona.svg"></div></div><p>' . $value["recenze"] .'</p></div>';
             }
-    } 
+    }
 
-    if($mojeRecenze == null && count($arr) < 0) {
+    if(count($mojeRecenze) < 1 && count($arr) < 1) {
         $recenze = "<b>Zatím tu nejsou žádné recenze</b>";
     }
 
@@ -210,53 +209,56 @@ if(isset($_GET["id"])) {
         $timeout = '<script defer src="kod/js/timeout.js"></script>';
 
         if(isset($_POST["odeslat"])) {
-            
-            $stmt = $db->prepare("SELECT pocet FROM produkty_v_objednavce WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)AND id_objednavky = (SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0)");
-            $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $uzivatel]);
 
-            $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $pocet = 0;
+            if($_POST["mnozstvi"] > 0 && $_POST["mnozstvi"] < 6) {
 
-            if(count($arr) > 0) {
-                $pocet = $arr[0]["pocet"];
-            }
-
-
-            //!zkontrolovat
-            $stmt = $db->prepare("SELECT pocet FROM mnozstvi WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
+                $stmt = $db->prepare("SELECT pocet FROM produkty_v_objednavce WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)AND id_objednavky = (SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0)");
+                $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $uzivatel]);
     
-            $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu]);
+                $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $pocet = 0;
     
-            $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $dostupnyPocet = $arr[0]["pocet"];
+                if(count($arr) > 0) {
+                    $pocet = $arr[0]["pocet"];
+                }
     
-            if($dostupnyPocet >= (intval($_POST["mnozstvi"]) + $pocet)) {
-                $stmt = $db->prepare("SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0");
     
-                $stmt->execute([":id" => $_SESSION["user"]]);
+                //!zkontrolovat
+                $stmt = $db->prepare("SELECT pocet FROM mnozstvi WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
+        
+                $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu]);
         
                 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                $dostupnyPocet = $arr[0]["pocet"];
         
-                if(count($arr) < 1) {
-                    $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES (:id,:jeObjednana)");
+                if($dostupnyPocet >= (intval($_POST["mnozstvi"]) + $pocet)) {
+                    $stmt = $db->prepare("SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0");
+        
+                    $stmt->execute([":id" => $_SESSION["user"]]);
             
-                    $stmt->execute([":id" => $_SESSION["user"],":jeObjednana" => 0]);
-                }
-
-                $values = [":mnozstvi" => (intval($_POST["mnozstvi"]) + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu];
-
-                if($pocet == 0) {
-                    $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0 LIMIT 1),(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1),:mnozstvi)");
-                    
-                } else {
-                    $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
-                    $values[":id"] = $_SESSION["user"];
-                }       
-                $stmt->execute($values);
-
-            } 
-            header("Location: produkt.php?id=" . $idProduktu);
+                    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+                    if(count($arr) < 1) {
+                        $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES (:id,:jeObjednana)");
+                
+                        $stmt->execute([":id" => $_SESSION["user"],":jeObjednana" => 0]);
+                    }
+    
+                    $values = [":mnozstvi" => (intval($_POST["mnozstvi"]) + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $_SESSION["user"]];
+    
+                    if($pocet == 0) {
+                        $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1),(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1),:mnozstvi)");
+                        
+                    } else {
+                        $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
+                    }       
+                    $stmt->execute($values);
+    
+                } 
+                header("Location: produkt.php?id=" . $idProduktu);
+            }
+            
         }
         
         if(isset($_POST["oblibene"])) {
@@ -298,13 +300,13 @@ if(isset($_GET["id"])) {
             
             header("Location: produkt.php?id=" . $idProduktu);
         }
-    
+        
         $stmt = $db->prepare("SELECT id_produktu,id_uzivatele FROM oblibene_produkty WHERE id_produktu = :idProduktu AND id_uzivatele = :id");
-    
+        
         $stmt->execute([":id" => $_SESSION["user"],":idProduktu" => $idProduktu]);
-    
+        
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+        
         
         if (count($arr) > 0) {
             # code...
@@ -313,13 +315,45 @@ if(isset($_GET["id"])) {
             $html = str_replace("[@oblibene]","obrazky/srdce_cervene_prazdne_ikona.svg",$html);
         }
     } else {
+        
+        if(isset($_POST["odeslat"])) {
+            if(!isset($_SESSION["kosik"])) {
+                $_SESSION["kosik"] = [];
+            }
+            
+            $jeVKosiku = false;
+            
+            $str = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"];
+            $strRegex = str_replace("/","\/",$str);
+            
+            foreach ($_SESSION["kosik"] as $key => $value) {
+                # code...
+                if(preg_match("/$strRegex;[1-5]/",$value)) {
+                    $informace = explode(";",$value);
+                    if(intval($informace[3]) + $_POST["mnozstvi"] < 6 && $_POST["mnozstvi"] > 0 && $_POST["mnozstvi"] < 6) {
+                        $_SESSION["kosik"][$key] = $strRegex . ";" . (intval($informace[3]) + $_POST["mnozstvi"]);
+                        $jeVKosiku = true;
+                        break;
+                    }
+                    if((intval($informace[3]) + $_POST["mnozstvi"]) > 5) {
+                        $jeVKosiku = true;
+                    }
+                }
+            }
+            if(!$jeVKosiku) {
+                $_SESSION["kosik"][] = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"] . ";". $_POST["mnozstvi"];
+            }
+            
+            header("Location: produkt.php?id=" . $idProduktu);
+        }
+
+        
         $html = str_replace("[@oblibene]","obrazky/srdce_cervene_prazdne_ikona.svg",$html);
     }
     
 } else {
     $html .= "Něco je blbě...";
 }
-
 
 $html = str_replace("[@zprava]",$zprava,$html);
 

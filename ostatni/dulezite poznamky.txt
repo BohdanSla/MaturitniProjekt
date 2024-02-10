@@ -9,15 +9,41 @@ heslo pro administratora: AdmnstrtrProSprotvce23$
 
 
 CO CHYBY
+// ! dodelat hlasky kdyz je nejaka chyba
 // ! opravit administraci - editace, A dodelat - vytvareni noveho produktu, kategorie, uzivatelu
-// ! doopravit slevove kody tak, aby se nemohla dat sleva 100kč na 50 kč produkt. HOTOVO
-// ! u produktu obrazku dat main jako prvni  obrazky mozna
 // ! dodelat objednani produktu pri neregistraci.
-// ! zkontrolovat prihlaseni (na porpve se to nevydari) a niv se nevypise ASI HOTOVO
-// !dodelat stranku kosiku HOTOVO
 // ! dodelat styly na mobily atd...
-// ! pridat snizeni zbozi v mnozstvi pri pridani
+// ! dodelat stranky na produkty !!!
+// ! pridat snizeni zbozi v mnozstvi pri pridani 
+// ! u udaju pri registraci, zda mail uz byl pouzit
+// ! dodelat aby se uzivatel nemohl dostat na udaje a objednavku kdyz nema z predeslich udaje
+// ! u produktu obrazku dat main jako prvni  obrazky MOZNA UDELAM
+// ! zkontrolovat prihlaseni (na porpve se to nevydari) a niv se nevypise ASI HOTOVO------------
+// ! doopravit slevove kody tak, aby se nemohla dat sleva 100kč na 50 kč produkt. HOTOVO
+// !dodelat stranku kosiku HOTOVO
 
 private String $dbDsn = "mysql:host=db.mp.spse-net.cz;dbname=slawisbo20_1;charset=utf8";
-    private String $dbName = "slawisbo20";
-    private String $dbPassword = "wupidewoziche"; 
+private String $dbName = "slawisbo20";
+private String $dbPassword = "wupidewoziche";
+
+DROP TABLE IF EXISTS barva;
+DROP TABLE IF EXISTS kategorie_produktu;
+DROP TABLE IF EXISTS material;
+DROP TABLE IF EXISTS materialy_produktu;
+DROP TABLE IF EXISTS mnozstvi;
+DROP TABLE IF EXISTS objednavka;
+DROP TABLE IF EXISTS oblibene_produkty;
+DROP TABLE IF EXISTS obrazek;
+DROP TABLE IF EXISTS obrazky_k_produktu;
+DROP TABLE IF EXISTS produkt;
+DROP TABLE IF EXISTS produkty_v_objednavce;
+DROP TABLE IF EXISTS recenze;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS slevovy_kod;
+DROP TABLE IF EXISTS slevovy_kod_sport;
+DROP TABLE IF EXISTS slevovy_kod_znacka;
+DROP TABLE IF EXISTS sport;
+DROP TABLE IF EXISTS uzivatel;
+DROP TABLE IF EXISTS velikost;
+DROP TABLE IF EXISTS zakoupene_produkty;
+DROP TABLE IF EXISTS znacka;

@@ -20,3 +20,6 @@
     color: white;
     padding: 0.5rem;
 }
+.objednavka > div > b {
+    margin-bottom: 1rem;
+}

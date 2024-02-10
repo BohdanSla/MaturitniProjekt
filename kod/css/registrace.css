@@ -9,14 +9,18 @@
 
 .registrace form {
     background-color: rgb(128, 128, 128, 0.093);
-    width: 40%;
     border-radius: 0.15rem;
     display: flex;
+    padding: 0.5rem;
     flex-direction: column;
     align-items: center;
     font-size: larger;
-    padding-bottom: 2%;
+    padding-bottom: 2rem;
     margin-bottom: 1rem;
+    width: 40rem;
+}
+.registrace form input:not(input[type="button"]) {
+    width: 15rem;
 }
 .registrace form input[type="button"] {
     background-color: #C70000;
@@ -32,26 +36,29 @@
 .registrace form input[type="button"]:hover {
     cursor: pointer;
 }
+
 .registrace form h2 {
     margin-bottom: 5%;
 }
 .registrace form h4 {
     margin:0 0 5% 0;
 }
-.registrace form input[type="button"]:hover {
-    cursor: pointer;
-}
 .jmeno-prijmeni {
     display: flex;
+    width: 100%;
+    justify-content: space-evenly;
 }
 .jmeno-prijmeni .udaj {
-    justify-content: space-around   ;
+    justify-content: space-around;
+    width: 15rem;
+}
+.jmeno-prijmeni input {
+    margin-left: 0.5rem;
 }
 .udaj input  {
-    padding:1% 2%;
+    padding:0.125rem 0.25rem;
     border: none;
     outline: none;
-    width: 60%;
     text-align: center;
 }
 .registrace form a {
@@ -59,22 +66,24 @@
     font-size:medium;
     color: blue;
 }
-.udaj {
-    margin-bottom: 5%;
-    display: flex;
-    width: 80%;
-    justify-content: space-between;
+.registrace form .udaj section input {
+    padding: 0.25rem;
 }
-.registrace form > ul {
+.udaj {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    width: 25rem;
+}
+.registrace form .udaj ul {
     margin: 0.1rem 0 1.5rem 0;
     font-size: small;
     padding: 0;
     font-weight: 700;
     color: red;
-    width: 40%;
     display: flex;
     flex-direction: column;
-    margin-left: 7rem;
+    margin-left: 1.5rem;
 }
 .registrace p {
     color: red;
@@ -85,3 +94,94 @@
 .udaj:nth-of-type(4),.udaj:nth-of-type(5){
     margin: 0;
 }
+@media only screen and (max-width: 800px) {
+    .registrace form {
+        width: 30rem;
+    }
+    .udaj {
+        width: 20rem;
+    }
+    .jmeno-prijmeni .udaj {
+        width: 12rem;
+    }   
+    .registrace form input:not(input[type="button"]) {
+        width: 8rem;
+    }
+    .registrace form .udaj ul {
+        margin: 0;
+    }
+    .registrace form .udaj section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .registrace form .udaj ul {
+        font-size: 0.75rem;
+    }
+    .registrace form > .udaj:nth-of-type(5) section ul li {
+        margin-right: 1.1rem;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .registrace form {
+        width: 100%;
+    } 
+    .udaj {
+        width: 17rem;
+        font-size: 1rem;
+    }
+    .jmeno-prijmeni .udaj {
+        width: 8rem;
+    } 
+    .registrace form input:not(input[type="button"]) {
+        width: 9rem;
+    }
+    .jmeno-prijmeni {
+        width: 100%;
+    }
+    .registrace form .udaj ul {
+        font-size: 0.58rem;
+    }
+    .registrace form > .udaj:nth-of-type(5) section ul li {
+        margin-right: 0.8rem;
+        color: red;
+    }
+
+}
+@media only screen and (max-width: 500px) {
+    .jmeno-prijmeni {
+        flex-direction: column;
+        align-items: center;
+    }
+    .jmeno-prijmeni .udaj {
+        width: 17rem;
+        justify-content: space-between;
+    }
+    .registrace form .udaj ul {
+        font-size: 0.7rem;
+        margin-right: 1.5rem;
+    }
+    .registrace form > .udaj:nth-of-type(5) section ul li {
+        color: red;
+        margin-right: 1.2rem;
+    }
+}
+@media only screen and (max-width: 300px) {
+    .udaj {
+        width: 15rem;
+    }
+    .jmeno-prijmeni .udaj {
+        width: 15rem;
+    }   
+    .registrace form input:not(input[type="button"]) {
+        width: 7rem;
+    }
+    .registrace form .udaj ul {
+        font-size: 0.6rem;
+        margin: 0;
+    }
+    .registrace form > .udaj:nth-of-type(5) section ul li {
+        margin-right: 0.8rem;
+    }
+}
+

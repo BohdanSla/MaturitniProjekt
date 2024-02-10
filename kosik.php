@@ -120,6 +120,67 @@ if (isset($_SESSION["user"])) {
 
         }
     }
+} else {
+    $produkty = "";
+    if(isset($_SESSION["kosik"]) && count($_SESSION["kosik"]) > 0) {
+        $id = [];
+        $idPlaceholdery = "";
+
+        foreach ($_SESSION["kosik"] as $key => $value) {
+            # code..
+            $idProduktu = explode(";",$value)[0];
+            if(!in_array($idProduktu,$id)) {
+                $idPlaceholdery .= ":id$key" . ",";
+                $id[":id$key"] = $idProduktu; 
+            }
+        }
+        $idPlaceholdery = rtrim($idPlaceholdery,",");
+
+        $stmt = $db->prepare("SELECT produkt.nazev,produkt.id, COALESCE(cena_ve_sleve,cena) AS cena, obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE '%main%' AND produkt.id IN ($idPlaceholdery) ORDER BY produkt.nazev;");
+
+        $stmt->execute($id);
+
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(count($arr) > 0) {
+            foreach ($arr as $key => $value) {
+                # code...
+                foreach($_SESSION["kosik"] as $key2 => $value2) {
+                    $informace = explode(";",$value2);
+                    if($value["id"] == $informace[0]) {
+
+                        $src = "obrazky/" . $value["src"];
+
+                        $produkty .= '<div><section><img src="' . $src . '"><h2>' . $value["nazev"] .'</h2></section><section><div><p>Barva: ' . $informace[1] . '</p><p>Velikost: ' . $informace[2] .'</p></div><b>' . $value["cena"] . ' Kč</b><form method="post">množství:<input type="number" form="pokracovat" name="mnozstvi' . $key .$key2 .'" id="mnozstvi" min="1" max="5" value="' . $informace[3] . '"><button name="odstranit' . $key . $key2 .'" type="submit"><img src="obrazky/krizek_ikona.svg"></button></form></section></div>';
+                        
+                        if(isset($_POST["odstranit" . $key . $key2])) {
+
+                            $index = array_search($value["id"] . ";" . $informace[1] .";". $informace[2] . ";". $informace[3],$_SESSION["kosik"]);
+
+                            unset($_SESSION["kosik"][$index]);
+                            
+                            header("Location: kosik.php");
+                        }
+                        if(isset($_POST["odeslat"])) {
+                            $informace = explode(";",$value2);
+                            $_SESSION["kosik"][$key2] = $informace[0] . ";" . $informace[1] . ";" . $informace[2] . ";" . $_POST["mnozstvi" . $key . $key2];
+                            
+                            header("Location: udaje.php");
+                        }
+                    }
+                }
+            }
+            $produkty .= '<form method="post" id="pokracovat"><input type="submit" value="Zrušit objednávku" name="zrusit"><input type="submit" value="Pokračovat k údajům" name="odeslat"></form>';
+        }
+    } else {
+        $produkty = "Zatím jste si nevybrali žádné zboží";
+    }
+    $html = str_replace("[@kosik]",$produkty,$html);
+    
+    if(isset($_POST["zrusit"])) {
+        unset($_SESSION["kosik"]);
+        header("Location: kosik.php");
+    }
 }
 
 $html = str_replace("[@timeout]",$timeout,$html);

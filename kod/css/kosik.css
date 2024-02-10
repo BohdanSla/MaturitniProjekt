@@ -26,8 +26,9 @@ main {
     align-items: center;
     justify-content: space-between;
 }
-.kosik > div section{
+.kosik > div section {
     display: flex;
+    align-items: center;
 }
 .kosik > div section > *{
     display: flex;
@@ -92,7 +93,7 @@ main .kosik > form input:hover {
     cursor: pointer;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 850px) {
     .kosik {
         width: 90%;
         padding: 5% 10%;
@@ -104,5 +105,21 @@ main .kosik > form input:hover {
         font-size: 1.5rem;
         width: 90%;
         text-align: center;
+    }
+    .kosik > div {
+        font-size: small;
+    }
+}
+@media only screen and (max-width: 620px) {
+    .kosik > div {
+        font-size: x-small;
+        flex-direction: column;
+    }
+    .kosik > div section:last-child {
+        width: 100%;
+        justify-content: space-evenly;
+    }
+    main .kosik > form input {
+        font-size: x-small;
     }
 }
