@@ -43,12 +43,14 @@ if (isset($_SESSION["user"])) {
 
     $html = str_replace("[@zprava]","<p>Vaše objednávka s č. $cisloObjednavky  je v systému!</p><a href='index.php'>Nakupovat dál</a>",$html);
 } else {
-    unset($_SESSION["kosik"]);
-    unset($_SESSION["udaje"]);
-    unset($_SESSION["kod"]);
-    session_regenerate_id();
-
-    $html = str_replace("[@zprava]","<p>Vaše objednávka s č. $cisloObjednavky  je v systému!</p><b>Nezapomeňte si číslo objednávky uložit!</b><a href='index.php'>Nakupovat dál</a>",$html);
+    if(isset($_SESSION["id"])) {
+        unset($_SESSION["kosik"]);
+        unset($_SESSION["udaje"]);
+        unset($_SESSION["kod"]);
+        session_regenerate_id();
+    
+        $html = str_replace("[@zprava]","<p>Vaše objednávka s č. $cisloObjednavky  je v systému!</p><b>Nezapomeňte si číslo objednávky uložit!</b><a href='index.php'>Nakupovat dál</a>",$html);
+    }
 }
 
 $html = str_replace("[@timeout]",$timeout,$html);

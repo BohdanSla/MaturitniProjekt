@@ -71,34 +71,38 @@ if(isset($_SESSION["user"])) {
         } 
     }
 } else {
-    $udaje = ["","","","","","",""];
-    if(isset($_SESSION["udaje"])) {
-        $udaje = explode(";",$_SESSION["udaje"]);
+    if(isset($_SESSION["kosik"])) {
+
+        $udaje = ["","","","","","",""];
+        if(isset($_SESSION["udaje"])) {
+            $udaje = explode(";",$_SESSION["udaje"]);
+        }
+        $html = str_replace("[@jmeno]",$udaje[0],$html);
+        $html = str_replace("[@prijmeni]",$udaje[1],$html);
+        $html = str_replace("[@email]",$udaje[2],$html);
+        $html = str_replace("[@telefonniCislo]",$udaje[3],$html);
+        $html = str_replace("[@mesto]",$udaje[4],$html);
+        $html = str_replace("[@ulice]",$udaje[5],$html);
+        $html = str_replace("[@psc]",$udaje[6],$html);
+    
+        if(isset($_POST["odeslat"])) {
+            $emailRegex = "/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/";
+            $telefonniCisloregex = "/(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/";
+            # code...
+            if(isset($_POST["jmeno"]) && isset($_POST["prijmeni"]) && isset($_POST["email"]) && isset($_POST["telefonniCislo"]) && isset($_POST["psc"]) && isset($_POST["ulice"]) && isset($_POST["mesto"])) {
+                            
+                if(preg_match($telefonniCisloregex,$_POST["telefonniCislo"]) && preg_match($emailRegex,$_POST["email"])) {
+    
+                    $_SESSION["udaje"] = $_POST["jmeno"] . ";" . $_POST["prijmeni"] . ";" . $_POST["email"] . ";" . $_POST["telefonniCislo"] . ";" . $_POST["mesto"] .  ";" . $_POST["ulice"] . ";" .  $_POST["psc"];
+    
+                    header("Location: shrnuti.php");
+                }
+            } 
+        }
+    } else {
+        
+        header("Location: kosik.php");
     }
-    $html = str_replace("[@jmeno]",$udaje[0],$html);
-    $html = str_replace("[@prijmeni]",$udaje[1],$html);
-    $html = str_replace("[@email]",$udaje[2],$html);
-    $html = str_replace("[@telefonniCislo]",$udaje[3],$html);
-    $html = str_replace("[@mesto]",$udaje[4],$html);
-    $html = str_replace("[@ulice]",$udaje[5],$html);
-    $html = str_replace("[@psc]",$udaje[6],$html);
-
-    if(isset($_POST["odeslat"])) {
-        $emailRegex = "/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/";
-        $telefonniCisloregex = "/(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/";
-        # code...
-        if(isset($_POST["jmeno"]) && isset($_POST["prijmeni"]) && isset($_POST["email"]) && isset($_POST["telefonniCislo"]) && isset($_POST["psc"]) && isset($_POST["ulice"]) && isset($_POST["mesto"])) {
-                        
-            if(preg_match($telefonniCisloregex,$_POST["telefonniCislo"]) && preg_match($emailRegex,$_POST["email"])) {
-
-                $_SESSION["udaje"] = $_POST["jmeno"] . ";" . $_POST["prijmeni"] . ";" . $_POST["email"] . ";" . $_POST["telefonniCislo"] . ";" . $_POST["mesto"] .  ";" . $_POST["ulice"] . ";" .  $_POST["psc"];
-
-                header("Location: shrnuti.php");
-            }
-        } 
-    }
-
-    var_dump($_SESSION["udaje"]);
 }
 
 

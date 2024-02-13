@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: row;
 }
-main form {
+main .vypis > form {
     width: 15%;
     min-height: 30rem;
     background-color: #f6f6f6;
@@ -19,7 +19,7 @@ main form {
     background-color: white;
     border-radius: 0.15rem;
     border: 1px solid rgba(0, 0, 0, 0.049);
-    padding: 1vw;
+    padding: 0.5rem;
     margin-top: 0.5rem;
 }
 .nazev-filtru {
@@ -47,7 +47,7 @@ input[type="number"] {
     padding:2%;
     text-align: center;
 }
-.nadpis-produkty a {
+.nadpis-produkty .produkty a {
     width: 17rem;
     display: flex;
     flex-direction: column;
@@ -58,7 +58,7 @@ input[type="number"] {
     background-color: white;
     border: 1px solid white;
 }
-.nadpis-produkty a:hover {
+.nadpis-produkty .produkty > a:hover {
     border: 1px solid rgb(129, 129, 255);
     cursor: pointer;
 }
@@ -70,14 +70,13 @@ input[type="number"] {
     flex-direction: column;
     width:90%;
 }
-.vypis {
-    display: flex;
-}
 .produkty {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     background-color: rgba(128, 128, 128, 0.093);
+    padding-top: 2rem;
+    margin-top: 1.5rem;
 }
 .parametry b {
     margin: 0.25rem 0;
@@ -105,9 +104,9 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
 }
-.vypis input[type=submit] {
+.vypis > form input[type=submit] {
     width: 100%;
-    background-color: red;
+    background-color: #C70000;
     color: white;
     border: none;
     border-radius: 0.25rem;
@@ -115,6 +114,47 @@ input[type="number"] {
 }
 .vypis input[type=submit]:hover {
     cursor: pointer;
+}
+.nadpis-produkty > form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f6f6f6;
+}
+.nadpis-produkty > form a {
+    background-color: red;
+    border-radius: 0.1rem;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    padding: 0.3rem;
+    text-decoration: none;
+}
+.nadpis-produkty > form a:last-of-type {
+    margin-right: 0.25rem;
+}
+.nadpis-produkty > form a:hover {
+    cursor: pointer;
+}
+.nadpis-produkty > form b{
+    text-align: center;
+    border: none;
+    text-align: center;
+    outline: none;
+    width: 1rem;
+    background-color: #f6f6f6;
+}
+.nadpis-produkty > form p {
+    text-align: center;
+}
+.nadpis-produkty > a {
+    padding: 0.5rem;
+    color: white;
+    background-color: #C70000;
+    border-radius: 0.2rem;
+    text-decoration: none;
 }
 
 @media only screen and (max-width: 1100px) {
@@ -126,7 +166,7 @@ input[type="number"] {
     .vypis {
         flex-direction: column;
     }
-    .vypis > form {
+    main .vypis > form {
         width: 100%;
         min-height: 0;
         display: flex;

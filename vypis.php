@@ -7,10 +7,15 @@ session_start();
 $html = file_get_contents("kod/html/vypis.html");
 
 
-
 spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.php");
 
 use Databaze as Db;
+
+if(empty($_GET)) {
+    header("Location: vypis.php?stranka=1");
+} else if (!isset($_GET["stranka"])){
+    header("Location: " . $_SERVER['REQUEST_URI'] . "&stranka=1");
+}
 
 $inactivity_time = 15 * 60;
 
@@ -34,7 +39,7 @@ SELECT nazev FROM znacka ORDER BY nazev ASC;
 SELECT nazev FROM sport ORDER BY nazev ASC;
 SELECT nazev FROM velikost ORDER BY nazev ASC;
 SELECT nazev FROM barva ORDER BY nazev ASC;
-SELECT podkategorie AS nazev FROM kategorie_produktu ORDER BY podkategorie ASC;';
+SELECT kategorie AS nazev FROM kategorie_produktu ORDER BY kategorie ASC;';
 
 $stmt = $db->prepare($sql);
 
@@ -53,16 +58,18 @@ vypisFiltry("barva",$arr,$stmt,$html);
 $stmt->nextRowSet();
 vypisFiltry("kategorie",$arr,$stmt,$html);
 
-
-
-
-
 $stmt = $db->prepare("SELECT MAX(COALESCE(produkt.cena_ve_sleve,produkt.cena)) AS nejvetsi_cena FROM produkt;");
 
 $stmt->execute();
 $nejvetsiCena = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $html = preg_replace("/\[@maximum\]/",strval($nejvetsiCena["nejvetsi_cena"]),$html);
+
+$offset = 0;
+if(isset($_GET["stranka"])) {
+    $offset = 12 * (intval($_GET["stranka"]) - 1);
+}
+
 
 $sql = 'SELECT DISTINCT obrazek.src,produkt.id, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, sport.nazev AS sport 
 FROM produkt 
@@ -73,15 +80,20 @@ JOIN sport ON sport.id = produkt.id_sportu
 JOIN mnozstvi ON mnozstvi.id_produktu = produkt.id
 JOIN velikost ON velikost.id = mnozstvi.id_velikosti
 JOIN barva ON barva.id = mnozstvi.id_barvy
-JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE "%main%"';
+JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+WHERE obrazek.src 
+LIKE "%main%"';
 
 $filtry = "";
 $nazvy = ["sport","znacka","velikost","barva"];
 $parametry = [];
 $nejmensiCena = "";
 $nejvetsiCena = "";
+$nazevHledanehoProduktu = "";
+
 
 if (isset($_GET["filtrovat"])) {
+    
     # code...
     if(isset($_GET["nejmensiCena"])) {
         if($_GET["nejmensiCena"] != "") {
@@ -97,25 +109,25 @@ if (isset($_GET["filtrovat"])) {
             $nejvetsiCena = $_GET["nejvetsiCena"];
         }
     }
-
+    
     
     if(isset($_GET["kategorie"])) {
-
+        
         $placeholdery = "";
         foreach ($_GET["kategorie"] as $key2 => $value2) {
             # code...
             $placeholdery .= ":kategorie$key2,";
             $parametry[":kategorie$key2"] = $value2;
-
+            
             $html = str_replace('filtr="[@' . $value2 . ']"',"checked",$html);
         }
         
         $placeholdery = rtrim($placeholdery,",");
-
-        $filtry .= " AND kategorie_produktu.podkategorie IN ($placeholdery)";
+        
+        $filtry .= " AND kategorie_produktu.kategorie IN ($placeholdery)";
 
     }
-
+    
     foreach ($nazvy as $key => $value) {
         # code...
         if (isset($_GET[$value])) {
@@ -125,42 +137,94 @@ if (isset($_GET["filtrovat"])) {
                 # code...
                 $placeholdery .= ":$value$key2,";
                 $parametry[":$value$key2"] = $value2;
-
+                
                 $html = str_replace('filtr="[@' . $value2 . ']"',"checked",$html);
             }
             
             $placeholdery = rtrim($placeholdery,",");
-
+            
             $filtry .= " AND $value.nazev IN ($placeholdery)";
         }
     }
-    $sql .= $filtry;
-    
+    $sql .= $filtry . " LIMIT 12 OFFSET :offset";
+
     $stmt = $db->prepare($sql);
-    $stmt->execute($parametry);
+
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    
+    foreach ($parametry as $key => $value) {
+        # code...
+        if(str_contains($key,"Cena")) { 
+            $stmt->bindValue($key, $value, PDO::PARAM_INT);
+        } else {
+            $stmt->bindValue($key, $value, PDO::PARAM_STR);
+        }
+    }
+
+
+    $stmt->execute();
 } else if(isset($_GET["odeslat"])) {
     if(trim($_GET["hledat"]) != "") {
-        $sql .= " AND produkt.nazev LIKE :nazev";
+        $nazevHledanehoProduktu = " AND produkt.nazev LIKE :nazev";
+        $sql .=  $nazevHledanehoProduktu . " LIMIT 12 OFFSET :offset";
         $stmt = $db->prepare($sql);
-        $stmt->execute([":nazev" => '%' . $_GET["hledat"] . '%']);
+        $parametry[":nazev"] = '%' . $_GET["hledat"] . '%';
+
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindValue(':nazev', '%' . $_GET["hledat"] . '%', PDO::PARAM_STR);
+
+        $stmt->execute();
     } else if (trim($_GET["odeslat"]) == "") {
+        $sql .= " LIMIT 12 OFFSET :offset";
         $stmt = $db->prepare($sql);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
     }
 } else {
+    $sql .= " LIMIT 12 OFFSET :offset";
     $stmt = $db->prepare($sql);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
-}
-
-if($nejmensiCena > $nejvetsiCena) {
-    $nejvetsiCena = $nejmensiCena;
 }
 
 $html = str_replace("[@nejmensiCena]",$nejmensiCena,$html);
 $html = str_replace("[@nejvetsiCena]",$nejvetsiCena,$html);
 
-
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = 'SELECT CEIL(count(DISTINCT produkt.id) / 12) AS "pocet" FROM produkt JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu JOIN znacka ON znacka.id = produkt.id_znacky JOIN sport ON sport.id = produkt.id_sportu JOIN mnozstvi ON mnozstvi.id_produktu = produkt.id JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN barva ON barva.id = mnozstvi.id_barvy WHERE 1 = 1' . $filtry . $nazevHledanehoProduktu;
+
+
+$stmt = $db->prepare($sql);
+$stmt->execute($parametry);
+
+$pocet = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$url = preg_replace("/[&?]stranka=\d+/","",$_SERVER['REQUEST_URI']);
+
+$nasledujici = "";
+$predchozi = "";
+$stranka = "";
+if($pocet[0]["pocet"] != 0) {
+    if( $_GET["stranka"] + 1 <= $pocet[0]["pocet"]) {
+        if(strcmp($url,"/vypis.php") == 0) {
+            $nasledujici = "<a href='" . $url . "?stranka=" . $_GET["stranka"] + 1 ."'>></a>";
+        } else {
+            $nasledujici = "<a href='" . $url . "&stranka=" . $_GET["stranka"] + 1 ."'>></a>";
+        }
+    } 
+    if($_GET["stranka"] - 1 > 0) {
+        if(strcmp($url,"/vypis.php") == 0) {
+            $predchozi = "<a href='" . $url . "?stranka=" . $_GET["stranka"] - 1 ."'><</a>";
+        } else {
+            $predchozi = "<a href='" . $url . "&stranka=" . $_GET["stranka"] - 1 ."'><</a>";
+        }
+    } 
+    $stranka = "<form>$predchozi<b>" . $_GET["stranka"] ."</b>$nasledujici<p> z " . $pocet[0]["pocet"] ." stránek</p></form>";
+}
+
+$html = str_replace("[@stranka]",$stranka,$html);
+
 
 $produkty = "";
 
@@ -184,8 +248,7 @@ if(count($arr) > 0) {
         $produkty = preg_replace("/\[@ma-cenu-ve-sleve\]/",$maCenuVeSleve,$produkty,1);
     }
 } else {
-    $nazevHledanehoProduktu = $_GET["hledat"];
-    $produkty = "<p>Bohužel nebyl nalezen produkt s názvem:<b> $nazevHledanehoProduktu </b></p>";
+    $produkty = "<p>Bohužel se nenašly žádné výsledky.</p>";
 }
 
 $timeout = '';
@@ -193,9 +256,15 @@ $timeout = '';
 if(isset($_SESSION["user"])) {
     $timeout = '<script defer src="kod/js/timeout.js"></script>';
 }
+$nazevHledanehoProduktu = "";
+if(isset($_GET["odeslat"])) {
+    $nazevHledanehoProduktu = trim($_GET["hledat"]) != "" ? "<h4>Výsledky obsahující: " . $_GET["hledat"] ."</h4><a href='vypis.php'>Zrušit Vyhledávání</a>" : "";
+}
+
+$html = str_replace("[@vysledek]",$nazevHledanehoProduktu,$html);
+
 
 $html = str_replace("[@timeout]",$timeout,$html);
-
 $html = str_replace("[@produkty]",$produkty,$html);
 
 function vypisFiltry(String $typFiltru,&$arr,&$stmt,&$html) {

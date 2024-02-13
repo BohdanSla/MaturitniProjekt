@@ -37,7 +37,7 @@ if(isset($_GET["id"])) {
     $idProduktu = $_GET["id"];
 
     $stmt = $db->prepare('SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,FORMAT(AVG(recenze.pocet_hvezd),1) AS hodnoceni_produktu,
-    znacka.nazev AS znacka,sport.nazev AS sport,kategorie_produktu.podkategorie
+    znacka.nazev AS znacka,sport.nazev AS sport,kategorie_produktu.kategorie
     FROM produkt
     JOIN znacka ON znacka.id = produkt.id_znacky
     JOIN sport ON sport.id = produkt.id_sportu
@@ -75,7 +75,7 @@ if(isset($_GET["id"])) {
         $html = str_replace("[@cena]",$cena,$html);
         $html = str_replace("[@hodnoceni-produktu]",$hodnoceniProduktu,$html);
         $html = str_replace("[@popis]",$arr[0]["popis"],$html);
-        $html = str_replace("[@kategorie]",$arr[0]["podkategorie"],$html);
+        $html = str_replace("[@kategorie]",$arr[0]["kategorie"],$html);
         $html = str_replace("[@znacka]",$arr[0]["znacka"],$html);
         $html = str_replace("[@sport]",$arr[0]["sport"],$html);
     } else {

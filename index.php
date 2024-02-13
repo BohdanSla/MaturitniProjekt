@@ -53,7 +53,8 @@ JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id
 WHERE znacka.id = produkt.id_znacky 
 AND produkt.id = obrazky_k_produktu.id_produktu 
 AND produkt.cena_ve_sleve IS NOT NULL
-AND obrazek.src LIKE '%main%';");
+AND obrazek.src LIKE '%main%'
+ORDER BY ABS(produkt.cena - produkt.cena_ve_sleve) DESC LIMIT 4");
 
 $stmt->execute();
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
