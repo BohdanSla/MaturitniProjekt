@@ -9,21 +9,22 @@ heslo pro administratora: AdmnstrtrProSprotvce23$
 
 
 CO CHYBY
-// ! dodelat hlasky kdyz je nejaka chyba
-// ! opravit administraci - editace, A dodelat - vytvareni noveho produktu, kategorie, uzivatelu
-// ! dodelat styly na mobily atd...
-// ! dodat tam produkty (tak 70 produktu)
-// ! u produktu obrazku zkontrolovat proc prvni obrazek nema cerny ramacek
-// ! pridat snizeni zbozi v mnozstvi pri pridani 
-// ! dodelat stranky na produkty !!! ASI HOTOVO
-// ! zkontrolvat v db tabulku na kategorie ASI HOTOVO
-// ! dodat stranky (1,2,3...) u prohlizeni produktu ASI HOTOVO (zkontrolovat bugs ale zadne pravdepodobne nejsou)
-// ! u udaju pri registraci, zda mail uz byl pouzit HOTOVO
-// ! dodelat aby se uzivatel nemohl dostat na udaje a objednavku kdyz nema z predeslich udaje HOTOVO
-// ! dodelat objednani produktu pri neregistraci. HOTOVO ASi
-// ! zkontrolovat prihlaseni (na porpve se to nevydari) a niv se nevypise ASI HOTOVO------------
-// ! doopravit slevove kody tak, aby se nemohla dat sleva 100kč na 50 kč produkt. HOTOVO
-// !dodelat stranku kosiku HOTOVO
+ dodelat hlasky kdyz je nejaka chyba
+ opravit administraci - editace, A dodelat - vytvareni noveho produktu, kategorie, uzivatelu
+ dodelat styly na mobily atd...
+ dodat tam produkty (tak 70 produktu)  - 25 hotovo
+ pridat snizeni zbozi v mnozstvi pri pridani 
+ u hokejek dát levá strana a pravá
+ dodelat stranky na produkty !!! ASI HOTOVO
+ zkontrolvat v db tabulku na kategorie ASI HOTOVO
+ dodat stranky (1,2,3...) u prohlizeni produktu ASI HOTOVO (zkontrolovat bugs ale zadne pravdepodobne nejsou)
+ u produktu obrazku zkontrolovat proc prvni obrazek nema cerny ramacek HOTOVO
+ u udaju pri registraci, zda mail uz byl pouzit HOTOVO
+ dodelat aby se uzivatel nemohl dostat na udaje a objednavku kdyz nema z predeslich udaje HOTOVO
+ dodelat objednani produktu pri neregistraci. HOTOVO ASi
+ zkontrolovat prihlaseni (na porpve se to nevydari) a niv se nevypise ASI HOTOVO------------
+ doopravit slevove kody tak, aby se nemohla dat sleva 100kč na 50 kč produkt. HOTOVO
+ dodelat stranku kosiku HOTOVO
 
 private String $dbDsn = "mysql:host=db.mp.spse-net.cz;dbname=slawisbo20_1;charset=utf8";
 private String $dbName = "slawisbo20";

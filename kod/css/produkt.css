@@ -167,7 +167,7 @@ img[alt=sipka_ikona]:hover {
     padding: 1.5rem 0.5rem;
 }
 .parametry tr {
-    background-color: rgb(222, 222, 222);
+    background-color: #f1f1f1;
 }
 .parametry tr:nth-child(2n) {
     background-color: white;

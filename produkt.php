@@ -61,7 +61,7 @@ if(isset($_GET["id"])) {
 
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if (count($arr) > 0) {
+    if ($arr[0]["nazev"] != NULL) {
         # code...
         $cena = "<h2>" . zformulujCenu(strval($arr[0]["cena"])) . "</h2>";
         $hodnoceniProduktu = $arr[0]["hodnoceni_produktu"] ?? "nehodnocen";
@@ -79,7 +79,7 @@ if(isset($_GET["id"])) {
         $html = str_replace("[@znacka]",$arr[0]["znacka"],$html);
         $html = str_replace("[@sport]",$arr[0]["sport"],$html);
     } else {
-        $html .= "hledaný produkt nebyl nalezen...";
+        $html = "hledaný produkt nebyl nalezen...";
     }
 
 

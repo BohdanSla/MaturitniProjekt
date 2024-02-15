@@ -116,7 +116,18 @@ let ostatniObrazky= document.querySelectorAll("img[alt=ostatni]")
 
 function vypisObrazky() {
     let obrazkyBarvyProduktu = document.querySelectorAll(".obrazky-produktu option[data-barva=\"" + barva.value + "\"]")
-    
+
+    obrazkyBarvyProduktu = Array.from(obrazkyBarvyProduktu).sort((a, b) => {
+        
+        if (a.getAttribute("value").includes("main") && !b.getAttribute("value").includes("main")) {
+            return -1; 
+        } else if (!a.getAttribute("value").includes("main") && b.getAttribute("value").includes("main")) {
+            return 1; 
+        } else {
+            return 0; 
+        }
+    });
+
     let obrazky = document.querySelector(".obrazky-produktu div")
     obrazky.replaceChildren("")
     
@@ -124,12 +135,10 @@ function vypisObrazky() {
         let img = document.createElement("img")
         img.src = el.value
         img.alt = "ostatni"
-        
-        if (document.querySelector(".hlavni-obrazek img").getAttribute("src") == el.value) {
+        if (document.querySelector(".hlavni-obrazek img:nth-child(2)").getAttribute("src") == el.value) {
             img.style.border = "1px solid #111111BB"
             indexHlavnihoObrazku = index
         }
-        
         
         obrazky.appendChild(img);
     })
@@ -184,7 +193,7 @@ vypisSkladem()
 
 sipky[0].addEventListener("click",function() {
     
-    ostatniObrazky[indexHlavnihoObrazku].style.border = "unset"
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid white"
     if (indexHlavnihoObrazku > 0) {
         indexHlavnihoObrazku--;
     } else {
@@ -196,7 +205,7 @@ sipky[0].addEventListener("click",function() {
 })
 
 sipky[1].addEventListener("click",function(){
-    ostatniObrazky[indexHlavnihoObrazku].style.border = "unset"
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid white"
     if (indexHlavnihoObrazku + 1 < ostatniObrazky.length) {
         indexHlavnihoObrazku++;
     } else {

@@ -81,14 +81,7 @@ vstupyCen.forEach(e => {
     })
 })
 
-zmenFiltry();
-
-function zmenFiltry() {
-    if(this.innerWidth < 650) {
-        for (let index = 0; index < ikonyStrisky.length; index++) {
-            ikonyStrisky[index].click()
-            
-        }
-    }
+for (let index = 0; index < ikonyStrisky.length; index++) {
+    ikonyStrisky[index].click()
+    
 }
-
