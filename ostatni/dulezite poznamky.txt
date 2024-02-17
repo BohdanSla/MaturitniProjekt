@@ -12,9 +12,9 @@ CO CHYBY
  dodelat hlasky kdyz je nejaka chyba
  opravit administraci - editace, A dodelat - vytvareni noveho produktu, kategorie, uzivatelu
  dodelat styly na mobily atd...
- dodat tam produkty (tak 70 produktu)  - 25 hotovo
+ dodat tam produkty (tak 70 produktu)  - 36 hotovo
  pridat snizeni zbozi v mnozstvi pri pridani 
- u hokejek dát levá strana a pravá
+ u hokejek dát levá strana a pravá HOTOVO
  dodelat stranky na produkty !!! ASI HOTOVO
  zkontrolvat v db tabulku na kategorie ASI HOTOVO
  dodat stranky (1,2,3...) u prohlizeni produktu ASI HOTOVO (zkontrolovat bugs ale zadne pravdepodobne nejsou)

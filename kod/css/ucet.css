@@ -9,6 +9,7 @@ main menu {
     background-color: #ececec;
     margin: 0;
     padding: 1rem;
+    flex-wrap: wrap;
 }
 main menu a {
     text-decoration: none;
@@ -151,4 +152,30 @@ main .objednavky tr:last-child td b{
     color: red;
     display: flex;
     justify-content: flex-end;
+}
+
+@media only screen and (max-width: 600px) {
+    main menu a {
+        position: relative;
+    }
+    .oblibene {
+        margin: 0;
+        width: 100%;
+    }
+    .oblibene > div {
+        width: unset;
+    }
+
+}
+@media only screen and (max-width: 400px) {
+    main menu ul {
+        flex-direction: column;
+    }
+    main menu {
+        flex-direction: column;
+    }
+    main li {
+        margin-bottom: 0.5rem;
+        margin-right: 0;
+    }
 }

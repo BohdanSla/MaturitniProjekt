@@ -317,34 +317,37 @@ if(isset($_GET["id"])) {
     } else {
         
         if(isset($_POST["odeslat"])) {
-            if(!isset($_SESSION["kosik"])) {
-                $_SESSION["kosik"] = [];
-            }
-            
-            $jeVKosiku = false;
-            
-            $str = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"];
-            $strRegex = str_replace("/","\/",$str);
-            
-            foreach ($_SESSION["kosik"] as $key => $value) {
-                # code...
-                if(preg_match("/$strRegex;[1-5]/",$value)) {
-                    $informace = explode(";",$value);
-                    if(intval($informace[3]) + $_POST["mnozstvi"] < 6 && $_POST["mnozstvi"] > 0 && $_POST["mnozstvi"] < 6) {
-                        $_SESSION["kosik"][$key] = $strRegex . ";" . (intval($informace[3]) + $_POST["mnozstvi"]);
-                        $jeVKosiku = true;
-                        break;
-                    }
-                    if((intval($informace[3]) + $_POST["mnozstvi"]) > 5) {
-                        $jeVKosiku = true;
+            if(isset($_POST["barva"]) && isset($_POST["velikost"]) && $_POST["mnozstvi"] != "") {
+
+                if(!isset($_SESSION["kosik"])) {
+                    $_SESSION["kosik"] = [];
+                }
+                
+                $jeVKosiku = false;
+                
+                $str = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"];
+                $strRegex = str_replace("/","\/",$str);
+                
+                foreach ($_SESSION["kosik"] as $key => $value) {
+                    # code...
+                    if(preg_match("/$strRegex;[1-5]/",$value)) {
+                        $informace = explode(";",$value);
+                        if(intval($informace[3]) + $_POST["mnozstvi"] < 6 && $_POST["mnozstvi"] > 0 && $_POST["mnozstvi"] < 6) {
+                            $_SESSION["kosik"][$key] = $strRegex . ";" . (intval($informace[3]) + $_POST["mnozstvi"]);
+                            $jeVKosiku = true;
+                            break;
+                        }
+                        if((intval($informace[3]) + $_POST["mnozstvi"]) > 5) {
+                            $jeVKosiku = true;
+                        }
                     }
                 }
-            }
-            if(!$jeVKosiku) {
-                $_SESSION["kosik"][] = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"] . ";". $_POST["mnozstvi"];
+                if(!$jeVKosiku) {
+                    $_SESSION["kosik"][] = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"] . ";". $_POST["mnozstvi"];
+                }
+                header("Location: produkt.php?id=" . $idProduktu);
             }
             
-            header("Location: produkt.php?id=" . $idProduktu);
         }
 
         

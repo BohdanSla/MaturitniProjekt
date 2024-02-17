@@ -167,21 +167,18 @@ input[type="number"] {
         flex-direction: column;
     }
     main .vypis > form {
-        width: 100%;
+        width: 90%;
         min-height: 0;
         display: flex;
         align-items: center;
         flex-direction: column;
+        padding: 0 5%;
     }
-    .filtr {
-        width: 70%;
+    .vypis > form > * {
+        width: 90%;
     }
-    .nadpis-produkty {
-        width: 100%;
-    }
-    .vypis input[type=submit] {
-        width: 72%;
-        margin-top: 0.5rem;
+    .vypis > form input[type=submit] {
+        margin: 0.5rem 0;
         height: 2rem;
     }
     input[type="number"] {
