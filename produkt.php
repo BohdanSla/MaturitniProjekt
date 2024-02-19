@@ -45,7 +45,7 @@ if(isset($_GET["id"])) {
     LEFT JOIN recenze ON recenze.id_produktu = produkt.id
     WHERE produkt.id = :idProduktu;
     SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.id = :idProduktu ORDER BY barva.nazev;
-    SELECT barva.nazev AS barva, velikost.nazev AS velikost, mnozstvi.pocet FROM mnozstvi JOIN barva ON barva.id = mnozstvi.id_barvy JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN produkt ON produkt.id = mnozstvi.id_produktu WHERE mnozstvi.id_produktu = :idProduktu ORDER BY velikost.nazev;
+    SELECT barva.nazev AS barva, velikost.nazev AS velikost FROM varianty JOIN barva ON barva.id = varianty.id_barvy JOIN velikost ON velikost.id = varianty.id_velikosti JOIN produkt ON produkt.id = varianty.id_produktu WHERE varianty.id_produktu = :idProduktu ORDER BY velikost.nazev;
     SELECT * FROM zakoupene_produkty WHERE id_produktu = :idProduktu AND id_uzivatele = :id;
     SELECT uzivatel.jmeno AS jmeno,uzivatel.prijmeni, recenze.recenze, recenze.pocet_hvezd FROM recenze JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele WHERE recenze.id_produktu = :idProduktu AND recenze.id_uzivatele = :id;
     SELECT uzivatel.jmeno AS jmeno,uzivatel.prijmeni, recenze.recenze, recenze.pocet_hvezd FROM recenze JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele WHERE recenze.id_produktu = :idProduktu AND recenze.id_uzivatele != :id;
@@ -108,18 +108,8 @@ if(isset($_GET["id"])) {
 
     foreach ($arr as $key => $value) {
         # code...
-        $pocet = intval($value["pocet"]);
-        $skladem = "";
-
-        if($pocet == 0) {
-            $skladem = "Není skladem";
-        } else if($pocet < 5) {
-            $skladem = "Skladem $pocet ks";
-        } else {
-            $skladem = "Skladem";
-        }
         
-        $velikosti .= '<option data-barva="' . $value["barva"] . '" data-velikost="' . $value["velikost"] . '" data-skladem="' . $skladem . '"></option>';
+        $velikosti .= '<option data-barva="' . $value["barva"] . '" data-velikost="' . $value["velikost"] . '"></option>';
     }
     $html = str_replace("[@velikosti]",$velikosti,$html);
     
@@ -224,42 +214,33 @@ if(isset($_GET["id"])) {
     
     
                 //!zkontrolovat
-                $stmt = $db->prepare("SELECT pocet FROM mnozstvi WHERE id_produktu = :idProduktu AND id_barvy =(SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
-        
-                $stmt->execute([":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu]);
+
+                $stmt = $db->prepare("SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0");
+    
+                $stmt->execute([":id" => $_SESSION["user"]]);
         
                 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-                $dostupnyPocet = $arr[0]["pocet"];
         
-                if($dostupnyPocet >= (intval($_POST["mnozstvi"]) + $pocet)) {
-                    $stmt = $db->prepare("SELECT id FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0");
-        
-                    $stmt->execute([":id" => $_SESSION["user"]]);
+                if(count($arr) < 1) {
+                    $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES (:id,:jeObjednana)");
             
-                    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-                    if(count($arr) < 1) {
-                        $stmt = $db->prepare("INSERT INTO objednavka (id_uzivatele,jeObjednana) VALUES (:id,:jeObjednana)");
-                
-                        $stmt->execute([":id" => $_SESSION["user"],":jeObjednana" => 0]);
-                    }
-    
-                    $values = [":mnozstvi" => (intval($_POST["mnozstvi"]) + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $_SESSION["user"]];
-    
-                    if($pocet == 0) {
-                        $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1),(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1),:mnozstvi)");
-                        
-                    } else {
-                        $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
-                    }       
-                    $stmt->execute($values);
-    
-                } 
-                header("Location: produkt.php?id=" . $idProduktu);
-            }
-            
+                    $stmt->execute([":id" => $_SESSION["user"],":jeObjednana" => 0]);
+                }
+
+                $values = [":mnozstvi" => (intval($_POST["mnozstvi"]) + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $_SESSION["user"]];
+
+                if($pocet == 0) {
+                    $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1),(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1),:mnozstvi)");
+                    
+                } else {
+                    $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
+                }       
+                $stmt->execute($values);
+
+            } 
+            header("Location: produkt.php?id=" . $idProduktu);
         }
+            
         
         if(isset($_POST["oblibene"])) {
             $stmt = $db->prepare("SELECT id_produktu,id_uzivatele FROM oblibene_produkty WHERE id_produktu = :idProduktu AND id_uzivatele = :id");

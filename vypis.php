@@ -77,9 +77,9 @@ JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu
 JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
 JOIN znacka ON znacka.id = produkt.id_znacky
 JOIN sport ON sport.id = produkt.id_sportu
-JOIN mnozstvi ON mnozstvi.id_produktu = produkt.id
-JOIN velikost ON velikost.id = mnozstvi.id_velikosti
-JOIN barva ON barva.id = mnozstvi.id_barvy
+JOIN varianty ON varianty.id_produktu = produkt.id
+JOIN velikost ON velikost.id = varianty.id_velikosti
+JOIN barva ON barva.id = varianty.id_barvy
 JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
 WHERE obrazek.src 
 LIKE "%main%"';
@@ -192,7 +192,7 @@ $html = str_replace("[@nejvetsiCena]",$nejvetsiCena,$html);
 
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = 'SELECT CEIL(count(DISTINCT produkt.id) / 12) AS "pocet" FROM produkt JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu JOIN znacka ON znacka.id = produkt.id_znacky JOIN sport ON sport.id = produkt.id_sportu JOIN mnozstvi ON mnozstvi.id_produktu = produkt.id JOIN velikost ON velikost.id = mnozstvi.id_velikosti JOIN barva ON barva.id = mnozstvi.id_barvy WHERE 1 = 1' . $filtry . $nazevHledanehoProduktu;
+$sql = 'SELECT CEIL(count(DISTINCT produkt.id) / 12) AS "pocet" FROM produkt JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu JOIN znacka ON znacka.id = produkt.id_znacky JOIN sport ON sport.id = produkt.id_sportu JOIN varianty ON varianty.id_produktu = produkt.id JOIN velikost ON velikost.id = varianty.id_velikosti JOIN barva ON barva.id = varianty.id_barvy WHERE 1 = 1' . $filtry . $nazevHledanehoProduktu;
 
 
 $stmt = $db->prepare($sql);

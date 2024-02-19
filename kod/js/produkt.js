@@ -89,11 +89,11 @@ let barva = document.querySelector("form select[name=barva]")
 barva.addEventListener("change",vypisVelikosti)
 barva.addEventListener("change",zmenHlavniObrazek)
 barva.addEventListener("change",vypisObrazky)
-barva.addEventListener("change",vypisSkladem)
+// barva.addEventListener("change",vypisSkladem)
 
 
-let velikost = document.querySelector("form select[name=velikost]");
-velikost.addEventListener("change",vypisSkladem)
+// let velikost = document.querySelector("form select[name=velikost]");
+// velikost.addEventListener("change",vypisSkladem)
 
 
 
@@ -161,19 +161,19 @@ function zmenHlavniObrazek() {
     });
 }
 
-function vypisSkladem() {
-    let skladem = document.querySelector("form datalist option[data-barva=\"" + barva.value +"\"][data-velikost=\"" + velikost.value + "\"]")
+// function vypisSkladem() {
+//     let skladem = document.querySelector("form datalist option[data-barva=\"" + barva.value +"\"][data-velikost=\"" + velikost.value + "\"]")
 
-    let p = document.querySelector("main form p")
+//     let p = document.querySelector("main form p")
 
-    if(skladem.getAttribute("data-skladem").toLowerCase().includes("není")) {
-        p.style.color = "red"
-    } else {
-        p.style.color = "green"
-    }
+//     if(skladem.getAttribute("data-skladem").toLowerCase().includes("není")) {
+//         p.style.color = "red"
+//     } else {
+//         p.style.color = "green"
+//     }
 
-    p.innerHTML = skladem.getAttribute("data-skladem");
-}
+//     p.innerHTML = skladem.getAttribute("data-skladem");
+// }
 
 let sipky = document.querySelectorAll('img[alt=sipka_ikona]')
 let indexHlavnihoObrazku = 0;
@@ -187,7 +187,7 @@ for (let index = 0; index < ostatniObrazky.length; index++) {
 
 vypisVelikosti()
 vypisObrazky()
-vypisSkladem()
+// vypisSkladem()
 
 
 

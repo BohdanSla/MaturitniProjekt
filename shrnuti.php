@@ -129,12 +129,6 @@ if(isset($_SESSION["user"])) {
     
 
     if(isset($_POST["odeslat"])) {
-        foreach ($produkty as $key => $value) {
-            # code...
-            $stmt = $db->prepare("UPDATE mnozstvi SET pocet = pocet - :mnozstvi WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
-
-            $stmt->execute([":mnozstvi" => $value["pocet"],":velikost" => $value["velikost"],":barva" => $value["barva"],":nazev" => $value["nazev"]]);
-        }
         
         $nazvyProduktu = explode(",",$nazvyProduktu);
         $placeholdery = '';
@@ -180,19 +174,20 @@ if(isset($_SESSION["user"])) {
                     }
                 }
                 $idPlaceholdery = rtrim($idPlaceholdery,",");
-        
+
+                
                 $stmt = $db->prepare("SELECT produkt.nazev,produkt.id, COALESCE(cena_ve_sleve,cena) AS cena, obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE '%main%' AND produkt.id IN ($idPlaceholdery) ORDER BY produkt.nazev;");
-        
+                
                 $stmt->execute($id);
-        
+                
                 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+                
                 if(count($arr) > 0) {
                     $zpravaSleva = '<p>Není použit žádný slevový kód</p>';
                     $nazvyProduktu = '';
+                    $objednavka = '';
+                    $celkovaCena = 0;
                     foreach ($arr as $key => $value) {
-                        $objednavka = '';
-                        $celkovaCena = 0;
                         $value["src"] = "obrazky/" . $value["src"];
                         # code...
                         foreach($_SESSION["kosik"] as $key2 => $value2) {
@@ -207,23 +202,23 @@ if(isset($_SESSION["user"])) {
                                 $nazvyProduktu = $nazvyProduktu . $value["nazev"] .  ",";
                             }
                         }
-                        if(isset($_SESSION["kod"])) {
-                            $stmt = $db->prepare("SELECT slevovy_kod.sleva FROM slevovy_kod WHERE slevovy_kod.kod = :kod;");
-                            $stmt->execute([":kod" => $_SESSION["kod"]]);
-        
-                            $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-                            $celkovaCena -= $arr[0]["sleva"];
-                            $zpravaSleva = '<p style="color:green;">Sleva uplatněna!</p>';
-                            $objednavka .= "<tr><td colspan='4'><b style='display:flex;justify-content:flex-end;color:green'>Slevový kód: -". $arr[0]["sleva"] ." Kč</b></td></tr>";
-                        }
-                        $nazvyProduktu = rtrim($nazvyProduktu,",");
-                        $objednavka .= "<tr><td colspan='4'><b> Celková cena: " . zformulujCenu(strval($celkovaCena)) . "</b></td></tr>";
                     }
+                    if(isset($_SESSION["kod"])) {
+                        $stmt = $db->prepare("SELECT slevovy_kod.sleva FROM slevovy_kod WHERE slevovy_kod.kod = :kod;");
+                        $stmt->execute([":kod" => $_SESSION["kod"]]);
+    
+                        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+                        $celkovaCena -= $arr[0]["sleva"];
+                        $zpravaSleva = '<p style="color:green;">Sleva uplatněna!</p>';
+                        $objednavka .= "<tr><td colspan='4'><b style='display:flex;justify-content:flex-end;color:green'>Slevový kód: -". $arr[0]["sleva"] ." Kč</b></td></tr>";
+                    }
+                    $nazvyProduktu = rtrim($nazvyProduktu,",");
+                    $objednavka .= "<tr><td colspan='4'><b> Celková cena: " . zformulujCenu(strval($celkovaCena)) . "</b></td></tr>";
+                    $html = str_replace("[@zbozi]",$objednavka,$html);
+                    $html = str_replace("[@sleva]",$zpravaSleva,$html);
                 }
             }
-            $html = str_replace("[@zbozi]",$objednavka,$html);
-            $html = str_replace("[@sleva]",$zpravaSleva,$html);
             if(isset($_SESSION["udaje"])) {
                 $udaje = explode(";",$_SESSION["udaje"]);
                 $objednavka = "<tr><td>" . $udaje[0] . " " . $udaje[1] . "</td></tr><tr><td>" . $udaje[2] . ", " . $udaje[3] . "</td></tr><tr><td>" . $udaje[4] .", " . $udaje[5] . ", " . $udaje[6] . " </td></tr>";

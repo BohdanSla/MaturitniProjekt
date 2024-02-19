@@ -100,15 +100,9 @@ if (isset($_SESSION["user"])) {
     if(isset($_POST["odeslat"])) {
         foreach ($arr as $key => $value) {
             # code...
-            $stmt = $db->prepare("SELECT pocet from mnozstvi WHERE id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
 
-            $stmt->execute([":nazev" => $value["nazev"],":barva" => $value["barva"],":velikost" => $value["velikost"]]);
-
-            $mnozstvi = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if($mnozstvi[0]["pocet"] >= $_POST["mnozstvi" . $key]) {
+            if($_POST["mnozstvi" . $key] < 6 && $_POST["mnozstvi" . $key] > 0) {
                 $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :pocet WHERE id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
-    
     
     
                 $stmt->execute([":id" => $_SESSION["user"],":nazev" => $value["nazev"],":barva" => $value["barva"],":velikost" => $value["velikost"],":pocet" => $_POST["mnozstvi" . $key]]);
