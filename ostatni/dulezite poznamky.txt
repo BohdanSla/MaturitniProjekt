@@ -9,11 +9,10 @@ heslo pro administratora: AdmnstrtrProSprotvce23$
 
 
 CO CHYBY
- dodelat hlasky kdyz je nejaka chyba
- opravit administraci - editace, A dodelat - vytvareni noveho produktu, kategorie, uzivatelu
- dodelat styly na mobily atd...
- dodat tam produkty (tak 70 produktu)  - 36 hotovo
- pridat snizeni zbozi v mnozstvi pri pridani 
+ dodělat hlášky když je nějaká chyba
+ opravit administraci - editace,vytváření nového produktu, kategorie, uživatele, slevové kódy
+ dodělat styly na mobily
+ dodat tam produkty (tak 70-80 produktu) - 50 hotovo
  u hokejek dát levá strana a pravá HOTOVO
  dodelat stranky na produkty !!! ASI HOTOVO
  zkontrolvat v db tabulku na kategorie ASI HOTOVO

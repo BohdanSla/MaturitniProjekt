@@ -185,4 +185,12 @@ input[type="number"] {
         padding: 0.25rem;
         width: 7.5rem;
     }
+    .nadpis-produkty {
+        width: unset;
+        padding: unset;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
 }
