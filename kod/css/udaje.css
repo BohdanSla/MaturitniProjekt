@@ -1,6 +1,7 @@
 main > div:nth-child(2) {
     display: flex;
     justify-content: center;
+    min-height: 75vh;
 }
 main form {
     padding: 0 1rem 1rem 1rem;

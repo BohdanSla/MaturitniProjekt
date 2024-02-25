@@ -10,7 +10,7 @@ main .vypis > form {
 }
 .nadpis-produkty {
     width: 75%;
-    min-height: 30rem;
+    min-height: 100vh;
     padding: 1% 7% 0 3%;
 }
 .filtr {

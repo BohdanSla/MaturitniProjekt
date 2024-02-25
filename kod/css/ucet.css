@@ -52,6 +52,7 @@ main form {
     align-items: center;
     font-size: larger;
     padding-bottom: 2%;
+    justify-content: center;
 }
 main form input {
     outline: none;
@@ -84,9 +85,10 @@ main form input[type=submit]:hover {
     width: 15rem;
 }
 
-main > div {
+main > div:nth-of-type(2) {
     display: flex;
     justify-content: center;
+    min-height: 66vh;
 }
 
 .oblibene,.objednavky {
@@ -164,6 +166,15 @@ main .objednavky tr:last-child td b{
     }
     .oblibene > div {
         width: unset;
+        flex-direction: column;
+    }
+    main .objednavky {
+        width: 100%;
+        margin: 0;
+    }
+    tr {
+        display: flex;
+        flex-direction: column;
     }
 
 }
