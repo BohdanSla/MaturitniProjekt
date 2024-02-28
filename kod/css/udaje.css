@@ -45,3 +45,34 @@ main form input[type=submit],main a {
 main form input[type=submit]:hover,main a:hover {
     cursor: pointer;
 }
+@media only screen and (max-width: 650px) {
+    main form {
+        width: 100%;
+    }
+    .udaj {
+        font-size: 4vw;
+        width: 100%;
+        display: flex;
+    }
+    main form section {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 450px) {
+    main form input[type=submit], main a {
+        font-size: 4vw;
+    }
+    h4 {
+        font-size: 6vw;
+    }
+    .udaj {
+        font-size: 6vw;
+        flex-direction: column;
+        align-items: center;
+    }
+    .udaj > *:first-child {
+        font-size: 5vw;
+        margin: 0;
+        width: 100%;
+    }
+}

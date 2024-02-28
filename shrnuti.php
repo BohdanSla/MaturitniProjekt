@@ -186,14 +186,14 @@ if(isset($_SESSION["user"])) {
                     $zpravaSleva = '<p>Není použit žádný slevový kód</p>';
                     $nazvyProduktu = '';
                     $objednavka = '';
-                    $celkovaCena = 0;
+                    var_dump($_SESSION);
                     foreach ($arr as $key => $value) {
+                        $celkovaCena = 0;
                         $value["src"] = "obrazky/" . $value["src"];
                         # code...
                         foreach($_SESSION["kosik"] as $key2 => $value2) {
                             $informace = explode(";",$value2);
                             if($value["id"] == $informace[0]) {
-        
                                 $value["cena"] = $value["cena"] * intval($informace[3]);
                                 $celkovaCena += $value["cena"];
         

@@ -23,3 +23,11 @@
 .objednavka > div > b {
     margin-bottom: 1rem;
 }
+@media only screen and (max-width:600px) {
+    .objednavka > div {
+        width: 100%;
+    }
+    body {
+        font-size: 3vw;
+    }
+}

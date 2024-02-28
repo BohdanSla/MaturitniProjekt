@@ -11,8 +11,9 @@ heslo pro administratora: AdmnstrtrProSprotvce23$
 CO CHYBY
  dodělat hlášky když je nějaká chyba
  opravit administraci - editace,vytváření nového produktu, kategorie, uživatele, slevové kódy
- dodělat styly na mobily
- dodat tam produkty (tak 70-80 produktu) - 50 hotovo
+ Opravit cenu u shrnuti u stejnych produktu jinaci barvy (je to dojebany)
+ dodělat styly na mobily HOTOVO
+ dodat tam produkty (tak 70-80 produktu) - 75 HOTOVO
  u hokejek dát levá strana a pravá HOTOVO
  dodelat stranky na produkty !!! ASI HOTOVO
  zkontrolvat v db tabulku na kategorie ASI HOTOVO
@@ -33,7 +34,7 @@ DROP TABLE IF EXISTS barva;
 DROP TABLE IF EXISTS kategorie_produktu;
 DROP TABLE IF EXISTS material;
 DROP TABLE IF EXISTS materialy_produktu;
-DROP TABLE IF EXISTS mnozstvi;
+DROP TABLE IF EXISTS varianty;
 DROP TABLE IF EXISTS objednavka;
 DROP TABLE IF EXISTS oblibene_produkty;
 DROP TABLE IF EXISTS obrazek;
