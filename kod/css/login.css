@@ -49,6 +49,8 @@
     margin-top: 2%;
     font-size:medium;
     color: blue;
+    text-decoration: none;
+    font-weight: bold;
 }
 .udaj {
     margin-bottom: 5%;

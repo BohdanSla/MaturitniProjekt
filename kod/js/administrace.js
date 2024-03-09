@@ -1,3 +1,16 @@
+let vstupyCen = document.querySelectorAll("input[type=\"number\"]")
+
+vstupyCen.forEach(e => {
+    e.addEventListener("keydown",function(event){
+        //key vrací zmáčknutou klávesu
+        if(event.key == "-" || event.key == "." || event.key == "," ) {
+            event.preventDefault();
+        }
+
+    })
+})
+
+
 let ikonaMenu = document.querySelector("header nav img:first-child");
 ikonaMenu.addEventListener("click",otevriPostraniMenu);
 
@@ -52,3 +65,11 @@ function otevriPostraniMenu() {
         }
     }
 }
+
+
+let expirace = document.querySelector("input[type=date]")
+
+let datum = new Date();
+datum.setDate(datum.getDate() + 1)
+
+expirace.setAttribute("min",datum.toISOString().split("T")[0]);

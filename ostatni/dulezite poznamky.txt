@@ -12,7 +12,7 @@ CO CHYBY
  opravit administraci - editace,vytváření nového produktu, kategorie, uživatele, slevové kódy
  dodělat hlášky když je nějaká chyba
  Změnit u objednavek slevu misto kodu (protoze slevovy kod muze byt smazan)
- Opravit cenu u shrnuti u stejnych produktu jinaci barvy (je to dojebany)
+ Opravit cenu u shrnuti u stejnych produktu jinaci barvy (je to dojebany) HOTOVO
  dodělat styly na mobily HOTOVO
  dodat tam produkty (tak 70-80 produktu) - 75 HOTOVO
  u hokejek dát levá strana a pravá HOTOVO

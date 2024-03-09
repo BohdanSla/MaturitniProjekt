@@ -27,6 +27,7 @@ if(isset($_SESSION["user"])) {
 $db = new Db();
 
 $timeout = '';
+$admin = '';
 
 $html = file_get_contents("kod/html/kosik.html");
 
@@ -34,6 +35,16 @@ $html = file_get_contents("kod/html/kosik.html");
 if (isset($_SESSION["user"])) {
 
     $timeout = '<script defer src="kod/js/timeout.js"></script>';
+
+    $stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
+    $stmt->execute([":id" => $_SESSION["user"]]);
+
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($arr[0]["id_role"] == 1) {
+        $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';
+    }
+    
     # code...
     $stmt = $db->prepare('SELECT produkt.nazev,
     barva.nazev AS barva,
@@ -178,6 +189,6 @@ if (isset($_SESSION["user"])) {
 }
 
 $html = str_replace("[@timeout]",$timeout,$html);
-
+$html = str_replace("[@admin]",$admin,$html);
 
 echo $html;

@@ -27,6 +27,7 @@ use Databaze as Db;
 $db = new Db();
 
 $zprava = '';
+$admin = '';
 
 if(isset($_SESSION["user"])) {
 
@@ -36,7 +37,7 @@ if(isset($_SESSION["user"])) {
     
     $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc FROM uzivatel WHERE id = :id;
     SELECT produkt.nazev,produkt.id,obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN oblibene_produkty ON oblibene_produkty.id_produktu = produkt.id JOIN uzivatel ON uzivatel.id = oblibene_produkty.id_uzivatele WHERE obrazek.src LIKE "%main%" AND id_uzivatele = :id GROUP BY oblibene_produkty.id_produktu;
-    SELECT produkty_v_objednavce.id_objednavky, produkt.nazev,barva.nazev AS barva, velikost.nazev AS velikost, COALESCE(cena_ve_sleve,cena) AS cena, pocet AS mnozstvi, obrazek.src,slevovy_kod.sleva FROM produkty_v_objednavce JOIN produkt ON produkt.id = produkty_v_objednavce.id_produktu JOIN barva ON barva.id = produkty_v_objednavce.id_barvy JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN objednavka ON objednavka.id = produkty_v_objednavce.id_objednavky LEFT JOIN slevovy_kod ON slevovy_kod.id = objednavka.id_slevoveho_kodu WHERE id_objednavky IN (SELECT id FROM objednavka WHERE jeObjednana = 1 AND id_uzivatele = :id) AND obrazek.src LIKE "%main%" ORDER BY produkty_v_objednavce.id_objednavky;');
+    SELECT produkty_v_objednavce.id_objednavky, produkt.nazev,barva.nazev AS barva, velikost.nazev AS velikost, COALESCE(cena_ve_sleve,cena) AS cena, pocet AS mnozstvi, obrazek.src,objednavka.sleva FROM produkty_v_objednavce JOIN produkt ON produkt.id = produkty_v_objednavce.id_produktu JOIN barva ON barva.id = produkty_v_objednavce.id_barvy JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN objednavka ON objednavka.id = produkty_v_objednavce.id_objednavky WHERE id_objednavky IN (SELECT id FROM objednavka WHERE jeObjednana = 1 AND id_uzivatele = :id) AND obrazek.src LIKE "%main%" ORDER BY produkty_v_objednavce.id_objednavky;');
 
     $stmt->execute([":id" => $_SESSION["user"]]);
 
@@ -126,21 +127,33 @@ if(isset($_SESSION["user"])) {
         
     }
     $html = str_replace("[@timeout]",'<script defer src="kod/js/timeout.js"></script>',$html);
+
+    $stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
+    $stmt->execute([":id" => $_SESSION["user"]]);
+    
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $admin = '';
+    
+    if($arr[0]["id_role"] == 1) {
+        $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';
+    }
+    
     
 } else {
     $html = file_get_contents("kod/html/login.html");
-
+    
     if(isset($_GET["zprava"])) {
         $zprava = '<p style="color:red;">Byli jste odhlášeni kvůli neaktivitě po dobu minut 30</p>';
     }
-
+    
     if(isset($_POST["odeslat"])) {
         $stmt = $db->prepare("SELECT id,email,heslo FROM uzivatel WHERE email = :email");
 
         $stmt->execute([":email" => $_POST["email"]]);
-
+        
         $uzivatel = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        
         if ($uzivatel) {
             # code...
             if (password_verify($_POST["heslo"],$uzivatel["heslo"])) {
@@ -157,6 +170,7 @@ if(isset($_SESSION["user"])) {
 }
 
 $html = str_replace("[@zprava]",$zprava,$html);
+$html = str_replace("[@admin]",$admin,$html);
 
 echo $html;
 
@@ -168,7 +182,7 @@ function aktualizovatUdaje(&$db,&$zprava) {
         
         
         if(preg_match($telefonniCisloregex,$_POST["telefonniCislo"]) && preg_match($emailRegex,$_POST["email"])) {
-
+            
             
             $stmt = $db->prepare("UPDATE uzivatel SET jmeno= :jmeno,prijmeni= :prijmeni,email= :email,telefonni_cislo= :telefonniCislo,psc= :psc,ulice= :ulice,mesto= :mesto WHERE id = :id");
     

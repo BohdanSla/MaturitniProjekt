@@ -29,6 +29,7 @@ if(isset($_SESSION["user"])) {
 $html = file_get_contents("kod/html/produkt.html");
 $zprava = '';
 $timeout = '';
+$admin = '';
 
 $db = new Db();
 
@@ -197,6 +198,14 @@ if(isset($_GET["id"])) {
     if(isset($_SESSION["user"])) {
 
         $timeout = '<script defer src="kod/js/timeout.js"></script>';
+        $stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
+        $stmt->execute([":id" => $_SESSION["user"]]);
+        
+        $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($arr[0]["id_role"] == 1) {
+            $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';
+        }
 
         if(isset($_POST["odeslat"])) {
 
@@ -340,7 +349,7 @@ if(isset($_GET["id"])) {
 }
 
 $html = str_replace("[@zprava]",$zprava,$html);
-
+$html = str_replace("[@admin]",$admin,$html);
 $html = str_replace("[@timeout]",$timeout,$html);
 
 echo $html;

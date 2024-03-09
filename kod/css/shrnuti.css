@@ -33,7 +33,7 @@
     text-align: center;
     background-color: #f7f7f7dc;
 }
-.shrnuti table tr td:last-child {
+.shrnuti table:nth-of-type(2) tr td:last-child {
     text-align: left;
 }
 .shrnuti table:first-of-type tr:last-child td b {
@@ -41,12 +41,6 @@
     display: flex;
     justify-content: flex-end;
     font-size: x-large;
-}
-.shrnuti table:first-of-type tr:nth-last-child(2) td {
-    padding-right: 1.25rem;
-}
-.shrnuti table:first-of-type tr:last-child td {
-    padding-right: 1.25rem;
 }
 .shrnuti img {
     width: 4rem;
