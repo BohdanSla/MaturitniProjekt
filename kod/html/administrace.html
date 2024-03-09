@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="cz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="kod/css/index.css" rel="stylesheet" type="text/css">
+    <link href="kod/css/administrace.css" rel="stylesheet" type="text/css">
+    <script defer src="kod/js/administrace.js"></script>
+    [@timeout]
+    <title>Pro sportovce</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="obrazky/menu_ikona.svg" alt="menu_ikona">
+            <a href="index.php">
+                <h1>PRO SPORTOVCE</h1>
+                <img src="obrazky/logo_ikona.svg" alt="logo_ikona">
+            </a>
+        </nav>
+        <nav>
+            <form method="get" enctype="text/plain" action="vypis.php">
+                <input type="search" name="hledat" placeholder="Vyhledat vybavení">
+                <button type="submit" name="odeslat">
+                    <img src="obrazky/lupa_ikona_cerna.svg" alt="lupa_ikona">
+                </button>
+            </form>
+        </nav>
+    </header>
+    <aside>
+        <nav>
+            <ul>
+                [@admin]
+                <a href="kosik.php">
+                    <li>
+                        <img src="obrazky/kosik_ikona.svg" alt="kosik_ikona">
+                        Košík
+                    </li>
+                </a>
+                <a href="ucet.php">
+                    <li>
+                        <img src="obrazky/ucet_ikona.svg" alt="ucet_ikona">                        
+                        Účet
+                    </li>
+                </a>
+                <a href="vypis.php">
+                    <li>Všechny produkty</li>
+                </a>
+                <a href="vypis.php?kategorie%5B%5D=obuv&filtrovat=Vyfiltrovat">
+                    <li>Boty</li>
+                </a>
+                <a href="vypis.php?kategorie%5B%5D=tričko&filtrovat=Vyfiltrovat">
+                    <li>Trička</li>
+                </a>
+                <a href="vypis.php?kategorie%5B%5D=míč&filtrovat=Vyfiltrovat">
+                    <li>Míče</li>
+                </a>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <div class="vypln">
+        </div>
+        <form method="get">
+            <input type="search" name="hledat" placeholder="Vyhledat produkt">
+            <input type="submit" name="odeslat" value="Vyhledat">
+        </form>
+        <section>
+            [@produkty]
+        </section>
+        <form method="post" enctype="multipart/form-data">
+            <h1>Editace Produktu</h1>
+            <table>
+                <tr>
+                    <td>
+                        Název produktu
+                    </td>
+                    <td>
+                        <input type="text" name="nazevProduktu" value="[@nazevProduktu]">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Popis produktu
+                    </td>
+                    <td>
+                        <textarea name="popisProduktu">[@popisProduktu]</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        cena produktu
+                    </td>
+                    <td>
+                        <input type="nubmer" name="cenaProduktu" value="[@cenaProduktu]">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        cena produktu ve slevě
+                    </td>
+                    <td>
+                        <input type="nubmer" name="slevaProduktu" value="[@slevaProduktu]">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        kategorie
+                    </td>
+                    <td>
+                        <input type="text" name="kategorieProduktu" value="[@kategorieProduktu]" list="kategorie">
+                        <datalist id="kategorie">
+                            [@kategorie]
+                        </datalist>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        znacka
+                    </td>
+                    <td>
+                        <input type="text" name="znackaProduktu" value="[@znackaProduktu]" list="znacky">
+                        <datalist id="znacky">
+                            [@znacky]
+                        </datalist>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        sport
+                    </td>
+                    <td>
+                        <input type="text" name="sportProduktu" value="[@sportProduktu]" list="sporty">
+                        <datalist id="sporty">
+                            [@sporty]
+                        </datalist>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        hlavní obrázek
+                    </td>
+                    <td>
+                        <img src="[@hlavniObrazekProduktu]" alt="hlavni_obrazek">
+                        <input type="file" name="hlavniObrazekProduktu" accept="img/*">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form method="post">
+            <h1>Vlastnosti produktů</h1>
+            <table>
+                <tr>
+                    <td>kategorie</td>
+                    <td>
+                        <input list="vlastnostiKategorie">
+                        <datalist id="vlastnostiKategorie">
+                            [@vlastnostiKategorie]
+                        </datalist>
+                        <input type="submit" name="odstranitKategorii" value="odstranit kategorii">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Značky</td>
+                    <td>
+                        <input list="vlastnostiZnacky">
+                        <datalist id="vlastnostiZnacky">
+                            [@vlastnostiZnacky]
+                        </datalist>
+                        <input type="submit" name="odstranitZnacku" value="odstranit značku">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sporty</td>
+                    <td>
+                        <input list="vlastnostiSporty">
+                        <datalist id="vlastnostiSporty">
+                            [@vlastnostiSporty]
+                        </datalist>
+                        <input type="submit" name="odstranitSport" value="odstranit sport">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Velikosti</td>
+                    <td>
+                        <input list="vlastnostiVelikosti">
+                        <datalist id="vlastnostiVelikosti">
+                            [@vlastnostiVelikosti]
+                        </datalist>
+                        <input type="submit" name="odstranitVelikost" value="odstranit velikost">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Barvy</td>
+                    <td>
+                        <input list="vlastnostiBarvy">
+                        <datalist id="vlastnostiBarvy">
+                            [@vlastnostiBarvy]
+                        </datalist>
+                        <input type="submit" name="odstranitBarvu" value="odstranit barvu">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Materialy</td>
+                    <td>
+                        <input list="vlastnostiMaterialy">
+                        <datalist id="vlastnostiMaterialy">
+                            [@vlastnostiMaterialy]
+                        </datalist>
+                        <input type="submit" name="odstranitMaterial" value="odstranit materiál">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form>
+            <h1>Slevové kódy</h1>
+            <table>
+                <tr>
+                    <td>
+                        Text slevového kódu
+                    </td>
+                    <td>
+                        <input type="text" name="slevovyKod">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Sleva (v Kč)
+                    </td>
+                    <td>
+                        <input type="number" name="sleva">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        expirace
+                    </td>
+                    <td>
+                        <input type="date" name="expirace">
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" name="vytvoritSlevovyKod">
+        </form>
+        <form>
+            <h1>Uživatelé</h1>
+            <table>
+                <thead>
+                    <td>id</td>
+                    <td>jméno</td>
+                    <td>příjmení</td>
+                    <td>email</td>
+                    <td>telefonní číslo</td>
+                    <td>město</td>
+                    <td>ulice</td>
+                    <td>psč</td>
+                    <td>role</td>
+                </thead>
+                [@uzivatele]
+            </table>
+        </form>
+    </main>
+    <footer>
+        Tento eshop je Maturitní projekt<br>
+        práva na obrázky produktů patří sportisimu a značek about you.
+    </footer>
+</body>
+</html>

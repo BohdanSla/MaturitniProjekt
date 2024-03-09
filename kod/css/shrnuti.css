@@ -33,6 +33,7 @@
     text-align: center;
     background-color: #f7f7f7dc;
 }
+<<<<<<< HEAD
 main form > div input {
     padding: 0.125rem;
     width: 5rem;
@@ -42,6 +43,9 @@ main form div input[type=submit] {
     margin-left: 0.5rem;
 }
 .shrnuti table tr td:last-child {
+=======
+.shrnuti table:nth-of-type(2) tr td:last-child {
+>>>>>>> 3db5f44ff579130ad9e9ee2c2da0aa266d511f01
     text-align: left;
 }
 .shrnuti table:first-of-type tr:last-child td b {
@@ -50,6 +54,7 @@ main form div input[type=submit] {
     justify-content: flex-end;
     font-size: x-large;
 }
+<<<<<<< HEAD
 .shrnuti table:first-of-type tr:last-child td {
     padding-right: 1.25rem;
 }
@@ -58,6 +63,8 @@ main form > div section {
     align-items: center;
 }
 
+=======
+>>>>>>> 3db5f44ff579130ad9e9ee2c2da0aa266d511f01
 .shrnuti img {
     width: 4rem;
 }

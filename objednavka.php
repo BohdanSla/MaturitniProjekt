@@ -34,13 +34,20 @@ $html = file_get_contents("kod/html/objednavka.html");
 $cisloObjednavky = $_SESSION["id"];
 
 $timeout = '';
+$admin = '';
 
 if (isset($_SESSION["user"])) {
     # code...
     $timeout = '<script defer src="kod/js/timeout.js"></script>';
-    
-    $html = str_replace("[@timeout]",$timeout,$html);
+    $stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
+    $stmt->execute([":id" => $_SESSION["user"]]);
 
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($arr[0]["id_role"] == 1) {
+        $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';
+    }
+    
     $html = str_replace("[@zprava]","<p>Vaše objednávka s č. $cisloObjednavky  je v systému!</p><a href='index.php'>Nakupovat dál</a>",$html);
 } else {
     if(isset($_SESSION["id"])) {
@@ -53,6 +60,7 @@ if (isset($_SESSION["user"])) {
     }
 }
 
+$html = str_replace("[@admin]",$admin,$html);
 $html = str_replace("[@timeout]",$timeout,$html);
 
 echo $html;

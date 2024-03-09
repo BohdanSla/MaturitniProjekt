@@ -65,6 +65,8 @@
     margin-top: 2%;
     font-size:medium;
     color: blue;
+    text-decoration: none;
+    font-weight: bold;
 }
 .registrace form .udaj section input {
     padding: 0.25rem;

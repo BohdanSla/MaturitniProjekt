@@ -255,7 +255,19 @@ $timeout = '';
 
 if(isset($_SESSION["user"])) {
     $timeout = '<script defer src="kod/js/timeout.js"></script>';
+    $stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
+    $stmt->execute([":id" => $_SESSION["user"]]);
+
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($arr[0]["id_role"] == 1) {
+        $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';
+    }
+
 }
+$html = str_replace("[@admin]",$admin,$html);
+$html = str_replace("[@timeout]",$timeout,$html);
+
 $nazevHledanehoProduktu = "";
 if(isset($_GET["odeslat"])) {
     $nazevHledanehoProduktu = trim($_GET["hledat"]) != "" ? "<h4>Výsledky obsahující: " . $_GET["hledat"] ."</h4><a href='vypis.php'>Zrušit Vyhledávání</a>" : "";
@@ -264,7 +276,6 @@ if(isset($_GET["odeslat"])) {
 $html = str_replace("[@vysledek]",$nazevHledanehoProduktu,$html);
 
 
-$html = str_replace("[@timeout]",$timeout,$html);
 $html = str_replace("[@produkty]",$produkty,$html);
 
 function vypisFiltry(String $typFiltru,&$arr,&$stmt,&$html) {
