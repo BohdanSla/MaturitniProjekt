@@ -11,7 +11,7 @@ main {
     padding: 2%;
     border-radius: 0.15rem;
     font-size: 1rem;
-    min-height: 30rem;
+    min-height: 50vh;
     display: flex;
     flex-direction: column;
     width: 50rem;
@@ -89,6 +89,9 @@ main .kosik > form input {
     border: none;
     border-radius: 0.15rem;
 }
+main .kosik > form input:first-child {
+    background-color: #393939;
+}
 main .kosik > form input:hover {
     cursor: pointer;
 }
@@ -111,8 +114,10 @@ main .kosik > form input:hover {
     }
 }
 @media only screen and (max-width: 620px) {
+    .kosik {
+        font-size: 4vw;
+    }
     .kosik > div {
-        font-size: x-small;
         flex-direction: column;
     }
     .kosik > div section:last-child {
@@ -121,5 +126,33 @@ main .kosik > form input:hover {
     }
     main .kosik > form input {
         font-size: x-small;
+    }
+    .kosik > div section > *:last-child {
+        margin-left: 1rem;
+    }
+    .kosik > div section:last-child {
+        flex-direction: column;
+        font-size: 4vw;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .kosik > div img {
+        height: 40vw;
+    }
+    .kosik > div section {
+        flex-direction: column;
+        font-size: 5vw;
+    }
+    .kosik > div section:last-child {
+        font-size: 5vw;
+    }
+    .kosik > form {
+        flex-direction: column;
+    }
+    main .kosik > form input {
+        width: 100%;
+    }
+    main .kosik > form input:last-of-type {
+        margin-top: 5vw;
     }
 }
