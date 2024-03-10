@@ -17,7 +17,6 @@ if(isset($_SESSION["user"])) {
         header("Location: odhlasit.php");
       }else{
         // Regenerate new session id and delete old one to prevent session fixation attack
-        session_regenerate_id(true);
     
         // Update the last timestamp
         $_SESSION['last_timestamp'] = time();

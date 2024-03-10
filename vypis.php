@@ -252,6 +252,7 @@ if(count($arr) > 0) {
 }
 
 $timeout = '';
+$admin = '';
 
 if(isset($_SESSION["user"])) {
     $timeout = '<script defer src="kod/js/timeout.js"></script>';

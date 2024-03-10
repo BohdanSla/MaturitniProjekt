@@ -44,8 +44,6 @@ if(isset($_SESSION["user"])) {
     if($arr[0]["id_role"] == 1) {
         $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';
     }
-
-    $html = str_replace("[@admin]",$admin,$html);
     
 
     $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc FROM uzivatel WHERE id = :id;
@@ -119,5 +117,6 @@ if(isset($_SESSION["user"])) {
 
 
 $html = str_replace("[@timeout]",$timeout,$html);
+$html = str_replace("[@admin]",$admin,$html);
 
 echo $html;

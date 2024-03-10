@@ -228,9 +228,16 @@ label {
     flex-direction: column;
     margin-right: 1rem;
 }
-main form p  {
+main .galerie-info p  {
     font-weight: 600;
     margin-top: 0;
+    color: white;
+    position: fixed;
+    bottom: 1;
+    border-radius: 0.5rem;
+    padding: 0.45rem;
+    transition: opacity 1.5s ease;
+    opacity: 1;
 }
 .info {
     display: flex;

@@ -211,6 +211,29 @@
                     </td>
                 </tr>
             </table>
+            <table>
+                <tr>
+                    <td>
+                        Přidat novou položku k vlastnosti:
+                    </td>
+                    <td>
+                        <select name="vlastnost">
+                            <option value="kategorie">Kategorie</option>
+                            <option value="znacka">Značka</option>
+                            <option value="sport">Sport</option>
+                            <option value="velikost">Velikost</option>
+                            <option value="barva">Barva</option>
+                            <option value="material">Materiál</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input name="nazevVlastnosti">
+                    </td>
+                    <td>
+                        <input type="submit" name="novaVlastnost" value="Přidat novou vlastnost">
+                    </td>
+                </rt>
+            </table>
         </form>
         <form>
             <h1>Slevové kódy</h1>
@@ -241,8 +264,30 @@
                 </tr>
             </table>
             <input type="submit" name="vytvoritSlevovyKod">
+            <table>
+                <thead>
+                    <tr>
+                        <td>
+                            Kód
+                        </td>
+                        <td>
+                            Sleva
+                        </td>
+                        <td>
+                            Datum expirace
+                        </td>
+                        <td>
+                            značka/sport
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </thead>
+                [@slevoveKody]
+            </table>
         </form>
-        <form>
+        <form method="post">
             <h1>Uživatelé</h1>
             <table>
                 <thead>
@@ -255,6 +300,7 @@
                     <td>ulice</td>
                     <td>psč</td>
                     <td>role</td>
+                    <td></td>
                 </thead>
                 [@uzivatele]
             </table>
