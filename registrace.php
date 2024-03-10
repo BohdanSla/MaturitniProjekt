@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ":id_role" => 3
                 ]);
         
+                $_SESSION["user"] = $_POST["prijmeni"];
+
                 header("Location: ucet.php");
             }
         } 

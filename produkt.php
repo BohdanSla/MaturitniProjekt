@@ -27,9 +27,9 @@ if(isset($_SESSION["user"])) {
 
 
 $html = file_get_contents("kod/html/produkt.html");
-$zprava = '';
 $timeout = '';
 $admin = '';
+$_SESSION["zprava"] = '';
 
 $db = new Db();
 
@@ -143,7 +143,7 @@ if(isset($_GET["id"])) {
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if(isset($_SESSION["user"])) {
-            $recenze = '<h5>Abyste mohli napsat recenzi, musíte si nejdřív zakoupit</h5>';
+            $recenze = '<h5>Abyste mohli napsat recenzi, musíte si nejdřív produkt zakoupit</h5>';
         } else {
             $recenze = '<h5>Abyste mohli napsat recenzi, musíte se přihlásit a koupit produkt</h5>';
         }
@@ -236,18 +236,26 @@ if(isset($_GET["id"])) {
                     $stmt->execute([":id" => $_SESSION["user"],":jeObjednana" => 0]);
                 }
 
-                $values = [":mnozstvi" => (intval($_POST["mnozstvi"]) + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $_SESSION["user"]];
-
-                if($pocet == 0) {
-                    $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1),(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1),:mnozstvi)");
+                if(intval($_POST["mnozstvi"]) + $pocet < 6) {
+                    $values = [":mnozstvi" => (intval($_POST["mnozstvi"]) + $pocet),":velikost" => $_POST["velikost"],":barva" => $_POST["barva"],":idProduktu" => $idProduktu,":id" => $_SESSION["user"]];
+    
+                    if($pocet == 0) {
+                        $stmt = $db->prepare("INSERT INTO produkty_v_objednavce (id_produktu, id_objednavky, id_barvy, id_velikosti, pocet) VALUES (:idProduktu,(SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1),(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1),:mnozstvi)");
+                        
+                    } else  {
+                        $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
+                    }       
+                    $stmt->execute($values);
                     
+                    $_SESSION["zprava"] = "<p style='background-color:green'>Zboží přidáno do košíku!</p>";                
                 } else {
-                    $stmt = $db->prepare("UPDATE produkty_v_objednavce SET pocet = :mnozstvi WHERE id_produktu = :idProduktu AND id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
-                }       
-                $stmt->execute($values);
+                    
+                    $_SESSION["zprava"] = "<p style='background-color:red'>Max 5 produktů s konkrétními parametry!</p>";                
+                }
+                
+                header("Location: produkt.php?id=" . $_GET["id"]);
 
             } 
-            header("Location: produkt.php?id=" . $idProduktu);
         }
             
         
@@ -309,35 +317,48 @@ if(isset($_GET["id"])) {
         if(isset($_POST["odeslat"])) {
             if(isset($_POST["barva"]) && isset($_POST["velikost"]) && $_POST["mnozstvi"] != "") {
 
-                if(!isset($_SESSION["kosik"])) {
-                    $_SESSION["kosik"] = [];
-                }
-                
-                $jeVKosiku = false;
-                
-                $str = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"];
-                $strRegex = str_replace("/","\/",$str);
-                
-                foreach ($_SESSION["kosik"] as $key => $value) {
-                    # code...
-                    if(preg_match("/$strRegex;[1-5]/",$value)) {
-                        $informace = explode(";",$value);
-                        if(intval($informace[3]) + $_POST["mnozstvi"] < 6 && $_POST["mnozstvi"] > 0 && $_POST["mnozstvi"] < 6) {
-                            $_SESSION["kosik"][$key] = $strRegex . ";" . (intval($informace[3]) + $_POST["mnozstvi"]);
-                            $jeVKosiku = true;
-                            break;
-                        }
-                        if((intval($informace[3]) + $_POST["mnozstvi"]) > 5) {
-                            $jeVKosiku = true;
+                $stmt = $db->prepare("SELECT COUNT(*) AS pocet FROM varianty WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
+                $stmt->execute([":id" => $_GET["id"],":barva" => $_POST["barva"],":velikost" => $_POST["velikost"]]);
+
+                $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if($arr[0]["pocet"] == 1) {
+
+                    if(!isset($_SESSION["kosik"])) {
+                        $_SESSION["kosik"] = [];
+                    }
+                    
+                    $jeVKosiku = false;
+                    
+                    $str = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"];
+                    $strRegex = str_replace("/","\/",$str);
+                    
+                    foreach ($_SESSION["kosik"] as $key => $value) {
+                        # code...
+                        if(preg_match("/$strRegex;[1-5]/",$value)) {
+                            $informace = explode(";",$value);
+                            if(intval($informace[3]) + $_POST["mnozstvi"] < 6 && $_POST["mnozstvi"] > 0 && $_POST["mnozstvi"] < 6) {
+                                $_SESSION["kosik"][$key] = $str . ";" . (intval($informace[3]) + $_POST["mnozstvi"]);
+                                $jeVKosiku = true;
+                                $_SESSION["zprava"] = "<p style='background-color:green'>Zboží přidáno do košíku!</p>";        
+                                break;
+                            }
+                            if((intval($informace[3]) + $_POST["mnozstvi"]) > 5) {
+                                $jeVKosiku = true;
+                                $_SESSION["zprava"] = "<p style='background-color:red'>Max 5 produktů s konkrétními parametry!</p>";  
+                            }
                         }
                     }
+                    if(!$jeVKosiku) {
+                        $_SESSION["kosik"][] = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"] . ";". $_POST["mnozstvi"];
+
+                        $_SESSION["zprava"] = "<p style='background-color:green'>Zboží přidáno do košíku!</p>";        
+                    }
+    
+                    header("Location: produkt.php?id=" . $_GET["id"]);
                 }
-                if(!$jeVKosiku) {
-                    $_SESSION["kosik"][] = "$idProduktu;" . $_POST["barva"] .";". $_POST["velikost"] . ";". $_POST["mnozstvi"];
-                }
-                header("Location: produkt.php?id=" . $idProduktu);
+
             }
-            
         }
 
         
@@ -348,11 +369,20 @@ if(isset($_GET["id"])) {
     $html .= "Něco je blbě...";
 }
 
-$html = str_replace("[@zprava]",$zprava,$html);
+if(isset($_SESSION["zprava"])) {
+
+    $html = str_replace("[@zprava]",$_SESSION["zprava"],$html);
+    unset($_SESSION["zprava"]);
+} else {
+    $html = str_replace("[@zprava]","",$html);
+}
+
+
 $html = str_replace("[@admin]",$admin,$html);
 $html = str_replace("[@timeout]",$timeout,$html);
 
 echo $html;
+
 
 function zformulujCenu(string $cena): string {
     

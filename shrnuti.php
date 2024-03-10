@@ -34,11 +34,21 @@ $db = new Db();
 $html = file_get_contents("kod/html/shrnuti.html");
 
 $timeout = '';
+$admin = '';
 
 
 if(isset($_SESSION["user"])) {
 
     $timeout = '<script defer src="kod/js/timeout.js"></script>';
+
+    $stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
+    $stmt->execute([":id" => $_SESSION["user"]]);
+
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if($arr[0]["id_role"] == 1) {
+        $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';
+    }
 
 
     $stmt = $db->prepare("SELECT sleva FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0;
@@ -323,6 +333,7 @@ if(isset($_SESSION["user"])) {
 }
 
 $html = str_replace("[@timeout]",$timeout,$html);
+$html = str_replace("[@admin]",$admin,$html);
 
 function zformulujCenu(string $cena): string {
     

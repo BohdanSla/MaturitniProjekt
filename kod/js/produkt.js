@@ -112,7 +112,7 @@ function vypisVelikosti() {
     })
 }
 
-let ostatniObrazky= document.querySelectorAll("img[alt=ostatni]")
+let ostatniObrazky = document.querySelectorAll("img[alt=ostatni]")
 
 function vypisObrazky() {
     let obrazkyBarvyProduktu = document.querySelectorAll(".obrazky-produktu option[data-barva=\"" + barva.value + "\"]")
@@ -144,6 +144,12 @@ function vypisObrazky() {
     })
 
     ostatniObrazky = document.querySelectorAll("img[alt=ostatni]")
+
+    if(ostatniObrazky.length == 1) {
+        sipky.forEach(element => {
+            element.style.display = "none"
+        });
+    }
 }
 
 
@@ -161,19 +167,20 @@ function zmenHlavniObrazek() {
     });
 }
 
-// function vypisSkladem() {
-//     let skladem = document.querySelector("form datalist option[data-barva=\"" + barva.value +"\"][data-velikost=\"" + velikost.value + "\"]")
+let zprava = document.querySelector("main .galerie-info p")
 
-//     let p = document.querySelector("main form p")
+function odstranZpravu() {
+    zprava.style.opacity = 0
 
-//     if(skladem.getAttribute("data-skladem").toLowerCase().includes("není")) {
-//         p.style.color = "red"
-//     } else {
-//         p.style.color = "green"
-//     }
+    setTimeout(()=> {
+        zprava.parentNode.removeChild(zprava)
+    },1500)
+}
 
-//     p.innerHTML = skladem.getAttribute("data-skladem");
-// }
+if(zprava != null) {
+    setTimeout(odstranZpravu,1500)
+}
+
 
 let sipky = document.querySelectorAll('img[alt=sipka_ikona]')
 let indexHlavnihoObrazku = 0;
@@ -187,7 +194,6 @@ for (let index = 0; index < ostatniObrazky.length; index++) {
 
 vypisVelikosti()
 vypisObrazky()
-// vypisSkladem()
 
 
 

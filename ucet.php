@@ -133,8 +133,6 @@ if(isset($_SESSION["user"])) {
     $stmt->execute([":id" => $_SESSION["user"]]);
     
     $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $admin = '';
     
     if($arr[0]["id_role"] == 1) {
         $admin = '<a href="administrace.php"><li><img src="obrazky/naradi_ikona.svg" alt="naradi_ikona">Administrace</li></a>';

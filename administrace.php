@@ -74,13 +74,13 @@ if(isset($_SESSION["user"])) {
         $html = str_replace("[@produkty]",$vyhledaneProdukty,$html);
 
 
-        $stmt = $db->prepare("SELECT nazev FROM znacka;
+        $stmt = $db->prepare('SELECT nazev FROM znacka;
             SELECT nazev FROM sport;
             SELECT kategorie FROM kategorie_produktu;
             SELECT nazev FROM material;
             SELECT nazev FROM barva;
             SELECT nazev FROM velikost;
-        ");
+            SELECT slevovy_kod.kod, slevovy_kod.sleva,slevovy_kod.expirace, COALESCE(znacka.nazev,sport.nazev) AS "znacka/sport" FROM slevovy_kod LEFT JOIN slevovy_kod_znacka ON slevovy_kod_znacka.id_slevoveho_kodu = slevovy_kod.id LEFT JOIN znacka ON znacka.id = slevovy_kod_znacka.id_znacky LEFT JOIN slevovy_kod_sport ON slevovy_kod_sport.id_slevoveho_kodu = slevovy_kod.id LEFT JOIN sport ON sport.id = slevovy_kod_sport.id_sportu;');
         $stmt->execute();
 
         $znacky = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -151,6 +151,28 @@ if(isset($_SESSION["user"])) {
         }
         $html = str_replace("[@vlastnostiVelikosti]",$nazvyVelikosti,$html);
 
+
+        //! slevové kódy
+
+        $stmt->nextRowSet();
+
+        $kodyArr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $kody = "";
+        foreach ($kodyArr as $key => $value) {
+            # code...
+            $datum = new DateTime($value["expirace"]);
+            $kody .= '<tr><td>' . $value["kod"] .'</td><td>' . $value["sleva"] . ' Kč</td><td>' . $datum->format("j. n. Y") . '</td><td>' . $value["znacka/sport"] .'</td><td><input type="submit" name="slevovyKod' . $key.'" value="Odebrat kód"></td></tr>';
+
+            if(isset($_POST[""])) {
+
+            }
+        }
+        $html = str_replace("[@slevoveKody]",$kody,$html);
+
+
+
+        // ! Uživatelé
+
         $stmt = $db->prepare("SELECT uzivatel.id, `jmeno`, `prijmeni`, `email`, `telefonni_cislo`, `psc`, `ulice`, `mesto`, role.nazev AS role FROM uzivatel JOIN role ON role.id = uzivatel.id_role WHERE jeZaregistrovany = 1 AND role.id != 1;");
 
         $stmt->execute();
@@ -160,7 +182,36 @@ if(isset($_SESSION["user"])) {
 
         foreach ($arr as $key => $value) {
             # code...
-            $uzivatele .= '<tr><td>' . $value["id"]. '</td><td>' . $value["jmeno"]. '</td><td>' . $value["prijmeni"]. '</td><td>' . $value["email"]. '</td><td>' . $value["telefonni_cislo"]. '</td><td>' . $value["mesto"]. '</td><td>' . $value["ulice"]. '</td><td>' . $value["psc"]. '</td><td>' . $value["role"]. '</td></tr>';
+            $uzivatele .= '<tr><td>' . $value["id"]. '</td><td>' . $value["jmeno"]. '</td><td>' . $value["prijmeni"]. '</td><td>' . $value["email"]. '</td><td>' . $value["telefonni_cislo"]. '</td><td>' . $value["mesto"]. '</td><td>' . $value["ulice"]. '</td><td>' . $value["psc"]. '</td><td>' . $value["role"]. '</td><td><input type="submit" value="smazat účet" name="smazatUcet' . $key .'"></td></tr>';
+
+            if(isset($_POST["smazatUcet" . $key])) {
+                $stmt = $db->prepare("SELECT id FROM objednavka WHERE id_uzivatele = :id");
+                $stmt->execute([":id" => $value["id"]]);
+                $idObjednavek = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+                $placeholdery = "";
+                $parametry = [":id" => $value["id"]];
+                foreach ($idObjednavek as $key2 => $value2) {
+                    # code...
+                    $placeholdery .= ":objednavka$key2,";
+                    $parametry[":objednavka$key2"] = $value2["id"];
+                    
+                }
+                $placeholdery = rtrim($placeholdery,",");
+
+                $sql = "DELETE FROM uzivatel WHERE id = :id;
+                DELETE FROM objednavka WHERE id_uzivatele = :id;
+                DELETE FROM oblibene_produkty WHERE id_uzivatele = :id;
+                DELETE FROM zakoupene_produkty WHERE id_uzivatele = :id;
+                DELETE FROM recenze WHERE id_uzivatele = :id;
+                DELETE FROM produkty_v_objednavce WHERE id_objednavky IN ($placeholdery)";
+                $stmt = $db->prepare($sql);
+                $stmt->execute($parametry);
+
+                header("Location: administrace.php");
+
+            }
         }
         $html = str_replace("[@uzivatele]",$uzivatele,$html);
 

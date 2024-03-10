@@ -121,12 +121,13 @@ main .kosik > form input:hover {
         flex-direction: column;
     }
     .kosik > div section:last-child {
-        width: 100%;
+        width: 80%;
         justify-content: space-evenly;
     }
     main .kosik > form input {
         font-size: x-small;
     }
+<<<<<<< HEAD
     .kosik > div section > *:last-child {
         margin-left: 1rem;
     }
@@ -155,4 +156,11 @@ main .kosik > form input:hover {
     main .kosik > form input:last-of-type {
         margin-top: 5vw;
     }
+=======
+    .kosik > div section {
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        width: 100%;
+    }
+>>>>>>> c362742d79b04e40cc0dc2db4246d04b638a8620
 }
