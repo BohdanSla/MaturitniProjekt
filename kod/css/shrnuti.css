@@ -33,7 +33,19 @@
     text-align: center;
     background-color: #f7f7f7dc;
 }
+<<<<<<< HEAD
+main form > div input {
+    padding: 0.125rem;
+    width: 5rem;
+}
+main form div input[type=submit] {
+    width: unset;
+    margin-left: 0.5rem;
+}
+.shrnuti table tr td:last-child {
+=======
 .shrnuti table:nth-of-type(2) tr td:last-child {
+>>>>>>> 3db5f44ff579130ad9e9ee2c2da0aa266d511f01
     text-align: left;
 }
 .shrnuti table:first-of-type tr:last-child td b {
@@ -42,6 +54,17 @@
     justify-content: flex-end;
     font-size: x-large;
 }
+<<<<<<< HEAD
+.shrnuti table:first-of-type tr:last-child td {
+    padding-right: 1.25rem;
+}
+main form > div section {
+    display: flex;
+    align-items: center;
+}
+
+=======
+>>>>>>> 3db5f44ff579130ad9e9ee2c2da0aa266d511f01
 .shrnuti img {
     width: 4rem;
 }
@@ -53,9 +76,6 @@
     justify-content: center;
     flex-direction: column;
     width: 38rem;
-}
-.shrnuti form input {
-    outline:none;
 }
 .shrnuti input[type=submit]:hover {
     cursor: pointer;
@@ -72,9 +92,6 @@
     padding: 1rem;
     font-size: larger;
 }
-.shrnuti form input[type=submit] {
-    margin-left: 0.75rem;
-}
 .shrnuti form > p {
     font-size: smaller;
     color: #7c7c7c;
@@ -82,4 +99,52 @@
 }
 .shrnuti > input[type=submit]:last-of-type {
     margin-bottom: 1rem;
+}
+main form > div {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+@media only screen and (max-width:650px) {
+    .shrnuti table {
+        width: 90vw;
+    }
+    .shrnuti img {
+        width: 20vw;
+    }
+    .shrnuti form {
+        width: 86vw;
+        margin-top: 1rem;
+        padding: 2vw;
+        font-size: 3vw;
+    }
+    .shrnuti input[type=submit] {
+        padding: 2vw;
+        font-size: 2vw;
+    }
+    .shrnuti table:first-of-type td {
+        font-size: 3vw;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        padding: 2vw;
+    }
+    .shrnuti table:first-of-type tr:not(.shrnuti table:first-of-type tr:first-of-type) {
+        border-top: 1px solid rgb(191, 191, 191);
+    }
+    .shrnuti > input[type=submit]:last-of-type {
+        width: 90vw;
+        margin: 1rem 5vw;
+    }
+    .shrnuti table:first-of-type tr:last-child td b {
+        font-size: 4vw;
+    }
+    .shrnuti table:last-of-type {
+        font-size: 3vw;
+    }
+    main form > div input[type=text] {
+        padding: 0.15vw;
+        width: 15vw;
+    }
 }

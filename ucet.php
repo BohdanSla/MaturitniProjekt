@@ -99,7 +99,7 @@ if(isset($_SESSION["user"])) {
                 $celkovaCena += $value["cena"] * $value["mnozstvi"];
                 if(count($produkty) - $y == 1 && $value["sleva"] != NULL) {
                     $celkovaCena =  $celkovaCena - $value["sleva"];
-                    $objednavky .= '<tr><td colspan=4><b style=color:green;display:flex;justify-content:flex-end;margin-right:1rem;>Sleva: -' . $value["sleva"] .' Kč</b></td></tr>';
+                    $objednavky .= '<tr><td colspan=4><b style=color:green;display:flex;justify-content:flex-end;>Sleva: -' . $value["sleva"] .' Kč</b></td></tr>';
                 }
                 $y++;
             // ! dopsat slevový kód a celkovou cenu
@@ -124,7 +124,8 @@ if(isset($_SESSION["user"])) {
         } else {
             $zprava = "<b>Zadaný email už existuje</b>";
         }
-        
+
+        header("Location: ucet.php");
     }
     $html = str_replace("[@timeout]",'<script defer src="kod/js/timeout.js"></script>',$html);
 

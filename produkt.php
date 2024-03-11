@@ -29,7 +29,6 @@ if(isset($_SESSION["user"])) {
 $html = file_get_contents("kod/html/produkt.html");
 $timeout = '';
 $admin = '';
-$_SESSION["zprava"] = '';
 
 $db = new Db();
 
@@ -38,11 +37,11 @@ if(isset($_GET["id"])) {
     $idProduktu = $_GET["id"];
 
     $stmt = $db->prepare('SELECT produkt.nazev,produkt.popis,produkt.cena,produkt.cena_ve_sleve,FORMAT(AVG(recenze.pocet_hvezd),1) AS hodnoceni_produktu,
-    znacka.nazev AS znacka,sport.nazev AS sport,kategorie_produktu.kategorie
+    znacka.nazev AS znacka,sport.nazev AS sport,kategorie.nazev AS kategorie
     FROM produkt
     JOIN znacka ON znacka.id = produkt.id_znacky
     JOIN sport ON sport.id = produkt.id_sportu
-    JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu
+    JOIN kategorie ON kategorie.id = produkt.id_kategorie
     LEFT JOIN recenze ON recenze.id_produktu = produkt.id
     WHERE produkt.id = :idProduktu;
     SELECT barva.nazev,obrazek.src FROM obrazek JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN produkt ON produkt.id = obrazky_k_produktu.id_produktu JOIN barva ON barva.id = obrazky_k_produktu.id_barvy WHERE produkt.id = :idProduktu ORDER BY barva.nazev;
@@ -369,11 +368,17 @@ if(isset($_GET["id"])) {
     $html .= "Něco je blbě...";
 }
 
-if(isset($_SESSION["zprava"])) {
 
-    $html = str_replace("[@zprava]",$_SESSION["zprava"],$html);
-    unset($_SESSION["zprava"]);
-} else {
+if(isset($_SESSION["zprava"])) {
+    if(!preg_match("/1/",$_SESSION["zprava"])) {
+        $_SESSION["zprava"] .= "1";
+    } else if(preg_match("/1/",$_SESSION["zprava"])) {
+        $_SESSION["zprava"] = preg_replace("/1$/","",$_SESSION["zprava"]);
+        $html = str_replace("[@zprava]",$_SESSION["zprava"],$html);
+        unset($_SESSION["zprava"]);
+    } 
+
+} else  {
     $html = str_replace("[@zprava]","",$html);
 }
 

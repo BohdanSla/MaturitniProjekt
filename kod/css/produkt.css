@@ -341,4 +341,15 @@ h5 {
         height: 13rem;
         width: 13rem;
     }
+    main .recenze form {
+        flex-wrap: wrap;
+    }
+    main .recenze form > *,main .recenze form input[type=submit] {
+        margin-top: 3vw;
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
+        font-size: 3vw;
+        padding: 1vw;
+    }
 }
