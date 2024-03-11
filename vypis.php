@@ -39,7 +39,7 @@ SELECT nazev FROM znacka ORDER BY nazev ASC;
 SELECT nazev FROM sport ORDER BY nazev ASC;
 SELECT nazev FROM velikost ORDER BY nazev ASC;
 SELECT nazev FROM barva ORDER BY nazev ASC;
-SELECT kategorie AS nazev FROM kategorie_produktu ORDER BY kategorie ASC;';
+SELECT nazev FROM kategorie ORDER BY nazev ASC;';
 
 $stmt = $db->prepare($sql);
 
@@ -73,7 +73,7 @@ if(isset($_GET["stranka"])) {
 
 $sql = 'SELECT DISTINCT obrazek.src,produkt.id, produkt.nazev, produkt.cena, produkt.cena_ve_sleve, sport.nazev AS sport 
 FROM produkt 
-JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu 
+JOIN kategorie ON kategorie.id = produkt.id_kategorie
 JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
 JOIN znacka ON znacka.id = produkt.id_znacky
 JOIN sport ON sport.id = produkt.id_sportu
@@ -85,7 +85,7 @@ WHERE obrazek.src
 LIKE "%main%"';
 
 $filtry = "";
-$nazvy = ["sport","znacka","velikost","barva"];
+$nazvy = ["sport","znacka","velikost","barva","kategorie"];
 $parametry = [];
 $nejmensiCena = "";
 $nejvetsiCena = "";
@@ -111,22 +111,22 @@ if (isset($_GET["filtrovat"])) {
     }
     
     
-    if(isset($_GET["kategorie"])) {
+    // if(isset($_GET["kategorie"])) {
         
-        $placeholdery = "";
-        foreach ($_GET["kategorie"] as $key2 => $value2) {
-            # code...
-            $placeholdery .= ":kategorie$key2,";
-            $parametry[":kategorie$key2"] = $value2;
+    //     $placeholdery = "";
+    //     foreach ($_GET["kategorie"] as $key2 => $value2) {
+    //         # code...
+    //         $placeholdery .= ":kategorie$key2,";
+    //         $parametry[":kategorie$key2"] = $value2;
             
-            $html = str_replace('filtr="[@' . $value2 . ']"',"checked",$html);
-        }
+    //         $html = str_replace('filtr="[@' . $value2 . ']"',"checked",$html);
+    //     }
         
-        $placeholdery = rtrim($placeholdery,",");
+    //     $placeholdery = rtrim($placeholdery,",");
         
-        $filtry .= " AND kategorie_produktu.kategorie IN ($placeholdery)";
+    //     $filtry .= " AND kategorie_produktu.kategorie IN ($placeholdery)";
 
-    }
+    // }
     
     foreach ($nazvy as $key => $value) {
         # code...
@@ -192,7 +192,15 @@ $html = str_replace("[@nejvetsiCena]",$nejvetsiCena,$html);
 
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = 'SELECT CEIL(count(DISTINCT produkt.id) / 12) AS "pocet" FROM produkt JOIN kategorie_produktu ON kategorie_produktu.id = produkt.id_kategorie_produktu JOIN znacka ON znacka.id = produkt.id_znacky JOIN sport ON sport.id = produkt.id_sportu JOIN varianty ON varianty.id_produktu = produkt.id JOIN velikost ON velikost.id = varianty.id_velikosti JOIN barva ON barva.id = varianty.id_barvy WHERE 1 = 1' . $filtry . $nazevHledanehoProduktu;
+$sql = 'SELECT CEIL(count(DISTINCT produkt.id) / 12) AS "pocet" 
+FROM produkt 
+JOIN kategorie ON kategorie.id = produkt.id_kategorie 
+JOIN znacka ON znacka.id = produkt.id_znacky 
+JOIN sport ON sport.id = produkt.id_sportu 
+JOIN varianty ON varianty.id_produktu = produkt.id 
+JOIN velikost ON velikost.id = varianty.id_velikosti 
+JOIN barva ON barva.id = varianty.id_barvy 
+WHERE 1 = 1' . $filtry . $nazevHledanehoProduktu;
 
 
 $stmt = $db->prepare($sql);

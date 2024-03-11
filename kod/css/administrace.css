@@ -35,3 +35,24 @@ main > form:nth-of-type(2) table td:last-of-type {
 main > form:nth-of-type(2) img {
     width: 4rem;
 }
+body main > div {
+    background-color: #d6d6d6;
+}
+body main > div ul {
+    display: flex;
+    list-style-type: none;
+    justify-content: space-evenly;
+    padding: 1rem;
+    margin-top: 0;
+    flex-wrap: wrap;
+}
+body main > div ul li {
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 0.1rem;
+    margin: 0.5rem;
+}
+body main > div ul li a {
+    text-decoration: none;
+    color: black;
+}

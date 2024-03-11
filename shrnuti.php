@@ -213,23 +213,16 @@ if(isset($_SESSION["user"])) {
                     $zpravaSleva = '<p>Není použit žádný slevový kód</p>';
                     $nazvyProduktu = '';
                     $objednavka = '';
-                    var_dump($_SESSION);
+                    $celkovaCena = 0;
                     foreach ($arr as $key => $value) {
-                        $celkovaCena = 0;
                         $value["src"] = "obrazky/" . $value["src"];
                         # code...
                         foreach($_SESSION["kosik"] as $key2 => $value2) {
                             $informace = explode(";",$value2);
                             if($value["id"] == $informace[0]) {
-<<<<<<< HEAD
-                                $value["cena"] = $value["cena"] * intval($informace[3]);
-                                $celkovaCena += $value["cena"];
-        
-=======
         
                                 $cena = $value["cena"] * intval($informace[3]);
                                 $celkovaCena += $cena;
->>>>>>> 3db5f44ff579130ad9e9ee2c2da0aa266d511f01
                                 
                                 $objednavka .= '<tr><td><div><img src="' . $value["src"] . '"></div></td><td><b>' . $value["nazev"] . "</b></td><td>" . $informace[1] . " | " . $informace[2] . " | " . $informace[3] . " ks</td><td><b>" . zformulujCenu(strval($cena)) ."</b></td></tr>";
                                 $nazvyProduktu = $nazvyProduktu . $value["nazev"] .  ",";
