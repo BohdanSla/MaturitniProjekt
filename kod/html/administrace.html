@@ -90,6 +90,7 @@
                 </li>
             </ul>
         </div>
+        [@stranka]
         <form method="get">
             <input type="search" name="hledat" placeholder="Vyhledat produkt">
             <input type="submit" name="odeslat" value="Vyhledat">
@@ -165,210 +166,85 @@
                         </datalist>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        hlavní obrázek
-                    </td>
-                    <td>
-                        <img src="[@hlavniObrazekProduktu]" alt="hlavni_obrazek">
-                        <input type="file" name="hlavniObrazekProduktu" accept="img/*">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Materiály
-                        + procento materiálu
-                    </td>
-                    <td>
-                        [@materialy]
-                    </td>
-                </tr>
             </table>
-            <input type="submit" name="odstranitProdukt" value="Odstranit produkt">
-        </form>
-        <form method="post">
-            <h1>Vlastnosti produktů</h1>
-            <table>
-                <tr>
-                    <td>kategorie</td>
-                    <td>
-                        <input list="vlastnostiKategorie" name="kategorieVlastnost">
-                        <datalist id="vlastnostiKategorie">
-                            [@vlastnostiKategorie]
-                        </datalist>
-                        <input type="submit" name="kategorieOdstranit" value="odstranit kategorii">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Značky</td>
-                    <td>
-                        <input list="vlastnostiZnacky"  name="znackaVlastnost">
-                        <datalist id="vlastnostiZnacky">
-                            [@vlastnostiZnacky]
-                        </datalist>
-                        <input type="submit" name="znackaOdstranit" value="odstranit značku">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Sporty</td>
-                    <td>
-                        <input list="vlastnostiSporty"  name="sportVlastnost">
-                        <datalist id="vlastnostiSporty">
-                            [@vlastnostiSporty]
-                        </datalist>
-                        <input type="submit" name="sportOdstranit" value="odstranit sport">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Velikosti</td>
-                    <td>
-                        <input list="vlastnostiVelikosti"  name="velikostVlastnost">
-                        <datalist id="vlastnostiVelikosti">
-                            [@vlastnostiVelikosti]
-                        </datalist>
-                        <input type="submit" name="velikostOdstranit" value="odstranit velikost">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Barvy</td>
-                    <td>
-                        <input list="vlastnostiBarvy"  name="barvaVelikost">
-                        <datalist id="vlastnostiBarvy">
-                            [@vlastnostiBarvy]
-                        </datalist>
-                        <input type="submit" name="barvaOdstranit" value="odstranit barvu">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Materiály</td>
-                    <td>
-                        <input list="vlastnostiMaterialy"  name="materialVlastnost">
-                        <datalist id="vlastnostiMaterialy">
-                            [@vlastnostiMaterialy]
-                        </datalist>
-                        <input type="submit" name="materialOdstranit" value="odstranit materiál">
-                    </td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <td>
-                        Přidat novou položku k vlastnosti:
-                    </td>
-                    <td>
-                        <select name="vlastnost">
-                            <option value="kategorie">Kategorie</option>
-                            <option value="znacka">Značka</option>
-                            <option value="sport">Sport</option>
-                            <option value="velikost">Velikost</option>
-                            <option value="barva">Barva</option>
-                            <option value="material">Materiál</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input name="nazevVlastnosti">
-                    </td>
-                    <td>
-                        <input type="submit" name="novaVlastnost" value="Přidat novou vlastnost">
-                    </td>
-                </rt>
-            </table>
-        </form>
-        <form method="post">
-            <h1>Slevové kódy</h1>
-            <table>
-                <tr>
-                    <td>
-                        Text slevového kódu
-                    </td>
-                    <td>
-                        <input type="text" name="slevovyKod">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Sleva (v Kč)
-                    </td>
-                    <td>
-                        <input type="number" name="sleva">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        expirace
-                    </td>
-                    <td>
-                        <input type="date" name="expirace">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div>
-                            <input type="radio" name="moznost" value="sport" id="sport">
-                            <label for="sport">Sport</label>
-                            <input list="slevovyKodSporty">
-                            <datalist id="slevovyKodSporty">
-                                [@vlastnostiSporty]
-                            </datalist>
-                        </div>
-                        <div>
-                            <input type="radio" name="moznost" value="znacka" id="znacka">
-                            <label for="znacka">Značka</label>
-                            <input list="slevovyKodZnacky">
-                            <datalist id="slevovyKodZnacky">
-                                [@vlastnostiZnacky]
-                            </datalist>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" name="vytvoritSlevovyKod">
+            <input type="submit" name="aktualizovatZakladaniUdaje" value="Aktualizovat základní údaje">
+            <h1>Materiály produktu</h1>
             <table>
                 <thead>
                     <tr>
-                        <td>
-                            id
-                        </td>
-                        <td>
-                            Kód
-                        </td>
-                        <td>
-                            Sleva
-                        </td>
-                        <td>
-                            Datum expirace
-                        </td>
-                        <td>
-                            značka/sport
-                        </td>
-                        <td>
-                            použitý
-                        </td>
-                        <td>
+                        <th>
+                            Materiál
+                        </th>
+                        <th>
+                            Procento materiálu
+                        </th>
+                        <th>
 
-                        </td>
+                        </th>
+                        <th>
+
+                        </th>
                     </tr>
                 </thead>
-                [@slevoveKody]
+                <tbody>
+                    [@materialy]
+                </tbody>
             </table>
-        </form>
-        <form method="post">
-            <h1>Uživatelé</h1>
+            <h1>Přidat materiál</h1>
+            <table>
+                <tr>
+                    <td>
+                        název materiálu
+                    </td>
+                    <td>
+                        <select name="novyMaterial">
+                            [@zbyvajiciMaterialy]
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        procento materiálu
+                    </td>
+                    <td>
+                        <input type="number" name="procentoNovehoMaterialiu">
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" name="pridatMaterial" value="Přidat materiál">
+            <h1>Barvy produktu</h1>
             <table>
                 <thead>
-                    <td>id</td>
-                    <td>jméno</td>
-                    <td>příjmení</td>
-                    <td>email</td>
-                    <td>telefonní číslo</td>
-                    <td>město</td>
-                    <td>ulice</td>
-                    <td>psč</td>
-                    <td>role</td>
-                    <td></td>
+                    <tr>
+                        <th>
+                            Barva
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                            
+                        </th>
+                    </tr>
                 </thead>
-                [@uzivatele]
+                <tbody>
+                    [@barvyProduktu]
+                </tbody>
             </table>
+            <h1>Přidat Barvu</h1>
+            <table>
+                <tr>
+                    <td>
+                        barva
+                    </td>
+                    <td>
+                        <select name="novyMaterial">
+                            [@zbyvajiciBarvy]
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" name="pridatBarvu" value="Přidat barvu">
+            <input type="submit" name="odstranitProdukt" value="Odstranit produkt">
         </form>
     </main>
     <footer>

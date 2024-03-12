@@ -5,6 +5,9 @@ main > form {
     padding: 1rem;
     flex-direction: column;
 }
+td {
+    width: 100%;
+}
 main > section {
     padding: 1rem;
 }
@@ -14,26 +17,6 @@ main > section > div {
 }
 main >section >div a {
     margin-right: 1rem;
-}
-
-main > form:nth-of-type(2) {
-    display: flex;
-    flex-direction: column;
-}
-main > form:nth-of-type(2) table tr {
-    display: flex;
-    justify-content: space-between;
-}
-main > form:nth-of-type(2) table td{
-    padding: 0.2rem;
-}
-main > form:nth-of-type(2) table td:last-of-type {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-main > form:nth-of-type(2) img {
-    width: 4rem;
 }
 body main > div {
     background-color: #d6d6d6;
@@ -55,4 +38,34 @@ body main > div ul li {
 body main > div ul li a {
     text-decoration: none;
     color: black;
+}
+main form table td {
+    text-align: center;
+}
+main form table td,main form table th,main form table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+main form input[type=submit] {
+    background-color: red;
+    color: white;
+    padding: 0.3rem;
+    border: none;
+    border-radius: 0.1rem;
+}
+main form input[type=submit]:hover {
+    cursor: pointer;
+}
+main form > input[type=submit] {
+    margin-top: 1rem;
+}
+main form[method=get] {
+    flex-direction: row;
+    align-items: center;
+}
+main form[method=get] input[type="submit"] {
+    margin:0;
+}
+td > input[type=submit] {
+    width: 100%;
 }

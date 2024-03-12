@@ -1,0 +1,82 @@
+<form method="post">
+    <h1>Nový slevový kód</h1>
+    <table>
+        <tr>
+            <td>
+                Text slevového kódu
+            </td>
+            <td>
+                <input type="text" name="slevovyKod">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Sleva (v Kč)
+            </td>
+            <td>
+                <input type="number" name="slevaKodu">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                expirace
+            </td>
+            <td>
+                <input type="date" name="expiraceKodu">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Sport/značka
+            </td>
+            <td>
+                <div>
+                    <input type="radio" name="moznost" value="sport" id="sport">
+                    <label for="sport">Sport</label>
+                    <input list="slevovyKodSporty" name="slevovyKodSport">
+                    <datalist id="slevovyKodSporty">
+                        [@vlastnostiSporty]
+                    </datalist>
+                </div>
+                <div>
+                    <input type="radio" name="moznost" value="znacka" id="znacka">
+                    <label for="znacka">Značka</label>
+                    <input list="slevovyKodZnacky" name="slevovyKodZnacka">
+                    <datalist id="slevovyKodZnacky">
+                        [@vlastnostiZnacky]
+                    </datalist>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" name="vytvoritSlevovyKod" value="Vytvořit slevový kód">
+    <h1>Slevové kódy v databázi</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    id
+                </th>
+                <th>
+                    Kód
+                </th>
+                <th>
+                    Sleva
+                </th>
+                <th>
+                    Datum expirace
+                </th>
+                <th>
+                    značka/sport
+                </th>
+                <th>
+                    použitý
+                </th>
+                <th>
+
+                </td>
+            </tr>
+        </thead>
+        [@slevoveKody]
+    </table>
+</form>

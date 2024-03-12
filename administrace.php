@@ -48,15 +48,21 @@ if(isset($_SESSION["user"])) {
 
 
 
-        $stranky = ["novyProdukt" => 1,"editaceProduktu" => 2,"vlastnostiProduktu" => 3,"slevoveKody" => 4,"uzivatele" => 5];
+        $stranky = ["novyProdukt" => "1","editaceProduktu" => "2","vlastnostiProduktu" =>file_get_contents("kod/html/vlastnosti.html"),"slevoveKody" =>file_get_contents("kod/html/kody.html"),"uzivatele" => file_get_contents("kod/html/uzivatele.html")];
 
         if(isset($_GET["stranka"])) {
             foreach ($stranky as $key => $value) {
                 if($key == $_GET["stranka"]) {
+                    $html = str_replace("[@stranka]",$value,$html);
+                    break;
                 }
             }
         } else {
-            header("Location: administrace.php?stranka=novyProdukt");
+            if(empty($_SERVER["QUERY_STRING"])) {
+                header("Location: administrace.php?stranka=novyProdukt" . $_SERVER["QUERY_STRING"]);
+            } else {
+                header("Location: administrace.php?stranka=novyProdukt&" . $_SERVER["QUERY_STRING"]);
+            }
         }
 
         $vyhledaneProdukty = '';
@@ -139,7 +145,7 @@ if(isset($_SESSION["user"])) {
             # code...
             $nazvyMaterialu .= '<option value="' . $value["nazev"] . '">' . $value["nazev"] .'</option>';
         }
-        $html = str_replace("[@vlastnostiMaterialy]",$nazvyKategorii,$html);
+        $html = str_replace("[@vlastnostiMaterialy]",$nazvyMaterialu,$html);
 
 
 
@@ -175,91 +181,105 @@ if(isset($_SESSION["user"])) {
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if(count($arr) == 0) {
-                $stmt = $db->prepare("DELETE FROM kategorie WHERE nazev = :nazev LIMIT 1)");
+                $stmt = $db->prepare("DELETE FROM kategorie WHERE nazev = :nazev LIMIT 1");
                 $stmt->execute([":nazev" => $_POST["kategorieVlastnost"]]);
             }
+
+            header("Location: administrace.php?stranka=vlastnostiProduktu");
         }
-
-         // ? sport
-
-         if(isset($_POST["sportOdstranit"])) {
+        
+        // ? sport
+        
+        if(isset($_POST["sportOdstranit"])) {
             $stmt = $db->prepare("SELECT id FROM produkt WHERE id_sportu = (SELECT id FROM sport WHERE nazev = :nazev LIMIT 1)");
             $stmt->execute([":nazev" => $_POST["sportVlastnost"]]);
-
+            
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+            
             if(count($arr) == 0) {
-                $stmt = $db->prepare("DELETE FROM sport WHERE nazev = :nazev LIMIT 1)");
+                $stmt = $db->prepare("DELETE FROM sport WHERE nazev = :nazev LIMIT 1");
                 $stmt->execute([":nazev" => $_POST["sportVlastnost"]]);
             }
+            header("Location: administrace.php?stranka=vlastnostiProduktu");
         }
-
-         // ? znacka
-
-         if(isset($_POST["znackaOdstranit"])) {
+        
+        // ? znacka
+        
+        if(isset($_POST["znackaOdstranit"])) {
             $stmt = $db->prepare("SELECT id FROM produkt WHERE id_znacky = (SELECT id FROM znacka WHERE nazev = :nazev LIMIT 1)");
             $stmt->execute([":nazev" => $_POST["znackaVlastnost"]]);
 
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+            
             if(count($arr) == 0) {
-                $stmt = $db->prepare("DELETE FROM znacka WHERE nazev = :nazev LIMIT 1)");
+                $stmt = $db->prepare("DELETE FROM znacka WHERE nazev = :nazev LIMIT 1");
                 $stmt->execute([":nazev" => $_POST["znackaVlastnost"]]);
             }
+            header("Location: administrace.php?stranka=vlastnostiProduktu");
         }
-
-         // ? material
-
-         if(isset($_POST["materialOdstranit"])) {
+        
+        // ? material
+        
+        if(isset($_POST["materialOdstranit"])) {
             $stmt = $db->prepare("SELECT id FROM materialy_produktu WHERE id_materialu = (SELECT id FROM material WHERE nazev = :nazev LIMIT 1)");
             $stmt->execute([":nazev" => $_POST["materialVlastnost"]]);
-
+            
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+            
             if(count($arr) == 0) {
-                $stmt = $db->prepare("DELETE FROM material WHERE nazev = :nazev LIMIT 1)");
+                $stmt = $db->prepare("DELETE FROM material WHERE nazev = :nazev LIMIT 1");
                 $stmt->execute([":nazev" => $_POST["materialVlastnost"]]);
             }
+            header("Location: administrace.php?stranka=vlastnostiProduktu");
         }
-
-         // ? velikost
-
-         if(isset($_POST["velikostOdstranit"])) {
+        
+        // ? velikost
+        
+        if(isset($_POST["velikostOdstranit"])) {
             $stmt = $db->prepare("SELECT id FROM varianty WHERE id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
             $stmt->execute([":nazev" => $_POST["velikostVlastnost"]]);
-
+            
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+            
             if(count($arr) == 0) {
-                $stmt = $db->prepare("DELETE FROM velikost WHERE nazev = :nazev LIMIT 1)");
+                $stmt = $db->prepare("DELETE FROM velikost WHERE nazev = :nazev LIMIT 1");
                 $stmt->execute([":nazev" => $_POST["velikostVlastnost"]]);
             }
+            header("Location: administrace.php?stranka=vlastnostiProduktu");
         }
-
-         // ? barva
-
-         if(isset($_POST["barvaOdstranit"])) {
+        
+        // ? barva
+        
+        if(isset($_POST["barvaOdstranit"])) {
             $stmt = $db->prepare("SELECT id FROM varianty WHERE id_barvy = (SELECT id FROM barva WHERE nazev = :nazev LIMIT 1);
             SELECT id FROM obrazky_k_produktu WHERE id_barvy = (SELECT id FROM barva WHERE nazev = :nazev LIMIT 1");
             $stmt->execute([":nazev" => $_POST["barvaVlastnost"]]);
 
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+            
             $stmt->nextRowSet();
-
+            
             $obrazky = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+            
             if(count($arr) == 0) {
                 if(count($obrazky) == 0) {
                     $stmt = $db->prepare("DELETE FROM barva WHERE nazev = :nazev LIMIT 1)");
                     $stmt->execute([":nazev" => $_POST["barvaVlastnost"]]);
                 } 
             }
+            header("Location: administrace.php?stranka=vlastnostiProduktu");
         }
+        
+        if(isset($_POST["novaVlastnost"])) {
+            $stmt = $db->prepare("INSERT IGNORE INTO :vlastnost (nazev) VALUES (:novaVlastost)");
+            $stmt->execute([":vlastnost" => htmlspecialchars($_POST["vlastnost"]),":nazevVlastnosti" => htmlspecialchars($_POST["nazevVlastnosti"])]);
 
-
+            header("Location: administrace.php?stranka=vlastnostiProduktu");
+        }
+        
+        
         //! slevové kódy
-
+        
         $stmt->nextRowSet();
 
         $kodyArr = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -270,40 +290,90 @@ if(isset($_SESSION["user"])) {
 
             $datum = new DateTime($value["expirace"]);
             $kody .= '<tr><td>' . $value["id"] .'</td><td>' . $value["kod"] .'</td><td>' . $value["sleva"] . ' Kč</td><td>' . $datum->format("j. n. Y") . '</td><td>' . $value["znacka/sport"] .'</td><td>' . $bylPouzit .'</td><td><input type="submit" name="slevovyKod' . $key.'" value="Odebrat kód"></td></tr>';
-
+            
             if(isset($_POST["slevovyKod" . $key])) {
                 $stmt = $db->prepare("DELETE FROM slevovy_kod WHERE id = :id;
                 DELETE FROM slevovy_kod_znacka WHERE id_slevoveho_kodu = :id;
                 DELETE FROM slevovy_kod_sport WHERE id_slevoveho_kodu = :id;");
-
+                
                 $stmt->execute([":id" => $value["id"]]);
-
-                header("Location: administrace.php");
+                
+                header("Location: administrace.php?stranka=slevovyKod");
             }
         }
         $html = str_replace("[@slevoveKody]",$kody,$html);
+        
+        if(isset($_POST["vytvoritSlevovyKod"])) {
+            $sql = "INSERT INTO slevovy_kod (kod,sleva,expirace,bylPouzit) VALUES (:slevovyKod,:sleva,:expirace,:bylPouzit);";
+            
+            $stmt = $db->prepare($sql);
+            $stmt->execute([":slevovyKod" => htmlspecialchars($_POST["slevovyKod"]),":sleva" => htmlspecialchars($_POST["slevaKodu"]),":expirace" => htmlspecialchars($_POST["expiraceKodu"]),":bylPouzit" => 0]);
+            
+            $moznost = '';
+            
+            if($_POST["moznost"] == "sport") {
+                $sql = "INSERT INTO slevovy_kod_sport (id_slevoveho_kodu,id_sportu) VALUES (:idKodu,(SELECT id FROM sport WHERE nazev = :nazev LIMIT 1));";
+                $moznost = $_POST["slevovyKodSport"];
+            } else {
+                $sql = "INSERT INTO slevovy_kod_znacka (id_slevoveho_kodu,id_znacka) VALUES (:idKodu,(SELECT id FROM znacka WHERE nazev = :nazev LIMIT 1));";
+                $moznost = $_POST["slevovyKodZnacka"];
+            }
 
+            $stmt = $db->prepare($sql);
+            $stmt->execute([":idKodu" => $db->lastInsertId(),":id" => htmlspecialchars($moznost)]);
 
-
+            header("Location: administrace.php?stranka=slevoveKody");
+        }
+        
         // ! Uživatelé
-
-        $stmt = $db->prepare("SELECT uzivatel.id, `jmeno`, `prijmeni`, `email`, `telefonni_cislo`, `psc`, `ulice`, `mesto`, role.nazev AS role FROM uzivatel JOIN role ON role.id = uzivatel.id_role WHERE jeZaregistrovany = 1 AND role.id != 1;");
-
+        
+        $stmt = $db->prepare("SELECT uzivatel.id, `jmeno`, `prijmeni`, `email`, `telefonni_cislo`, `psc`, `ulice`, `mesto`, role.nazev AS role FROM uzivatel JOIN role ON role.id = uzivatel.id_role WHERE jeZaregistrovany = 1 AND role.id != 1 ORDER BY uzivatel.id;
+        SELECT recenze.id,recenze.recenze,recenze.pocet_hvezd,recenze.id_uzivatele,produkt.nazev FROM recenze JOIN produkt ON produkt.id = recenze.id_produktu JOIN uzivatel ON uzivatel.id = recenze.id_uzivatele ORDER BY uzivatel.id;");
+        
         $stmt->execute();
-
+        
         $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->nextRowSet();
+        $recenze = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
         $uzivatele = '';
-
+        
         foreach ($arr as $key => $value) {
+            
+            $recenzeUzivatele = array_filter($recenze,function($value2) use ($value) {
+                return $value2["id_uzivatele"] == $value["id"];
+            });
+            
             # code...
             $uzivatele .= '<tr><td>' . $value["id"]. '</td><td>' . $value["jmeno"]. '</td><td>' . $value["prijmeni"]. '</td><td>' . $value["email"]. '</td><td>' . $value["telefonni_cislo"]. '</td><td>' . $value["mesto"]. '</td><td>' . $value["ulice"]. '</td><td>' . $value["psc"]. '</td><td>' . $value["role"]. '</td><td><input type="submit" value="smazat účet" name="smazatUcet' . $key .'"></td></tr>';
+            
+            if(count($recenzeUzivatele) != 0) {
 
+                $uzivatele .= "<tr><td colspan='10'><b>Recenze uživatele:</b></td></tr>";
+                
+                foreach ($recenzeUzivatele as $key2 => $value2) {
+                    # code...
+                    $uzivatele .= "<tr><td></td><td>" . $value2["nazev"]. "</td><td><div><img src='obrazky/hvezda_ikona.svg'>" . $value2["pocet_hvezd"] . "</div</td><td colspan='6'>" . $value2["recenze"] . "</td><td><input type='submit' name='odstranitRecenzi" . $key2 . "' value='Odstranit recezni'></td></tr>";
+                    
+                    if(isset($_POST["odstranitRecenzi" . $key2])) {
+                        $stmt = $db->prepare("DELETE FROM recenze WHERE id = :id");
+                        $stmt->execute([":id" => $value["id"]]);
+                        
+                        
+                        header("Location: administrace.php?stranka=uzivatele");
+                    }
+                }
+            }
+            
+            
+            // ! smazani uzivatele
+            
             if(isset($_POST["smazatUcet" . $key])) {
                 $stmt = $db->prepare("SELECT id FROM objednavka WHERE id_uzivatele = :id");
                 $stmt->execute([":id" => $value["id"]]);
                 $idObjednavek = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
+                
+                
                 $placeholdery = "";
                 $parametry = [":id" => $value["id"]];
                 foreach ($idObjednavek as $key2 => $value2) {
@@ -313,7 +383,7 @@ if(isset($_SESSION["user"])) {
                     
                 }
                 $placeholdery = rtrim($placeholdery,",");
-
+                
                 $sql = "DELETE FROM uzivatel WHERE id = :id;
                 DELETE FROM objednavka WHERE id_uzivatele = :id;
                 DELETE FROM oblibene_produkty WHERE id_uzivatele = :id;
@@ -322,28 +392,24 @@ if(isset($_SESSION["user"])) {
                 DELETE FROM produkty_v_objednavce WHERE id_objednavky IN ($placeholdery)";
                 $stmt = $db->prepare($sql);
                 $stmt->execute($parametry);
-
-                header("Location: administrace.php");
-
+                
+                header("Location: administrace.phpstranka=uzivatele");
+                
             }
         }
         $html = str_replace("[@uzivatele]",$uzivatele,$html);
-
+        
         // ! produkt
-
+        
         // ? smazání produktu
-
-        if(isset($_POST["smazatProdukt"])) {
-
-        }
-
-
+        
+        
         if(isset($_GET["produkt"])) {
 
             $html = str_replace("[@znacky]",$nazvyZnacek,$html);
             $html = str_replace("[@kategorie]",$nazvyKategorii,$html);
             $html = str_replace("[@sporty]",$nazvySportu,$html);
-
+            
             $stmt = $db->prepare("
             SELECT produkt.id, produkt.nazev, produkt.popis, produkt.cena, produkt.cena_ve_sleve, znacka.nazev AS znacka, sport.nazev AS sport, kategorie.nazev AS kategorie, obrazek.src
             FROM produkt 
@@ -353,19 +419,37 @@ if(isset($_SESSION["user"])) {
             JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
             JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
             WHERE produkt.id = :id
-            AND obrazek.src LIKE '%main%';");
+            AND obrazek.src LIKE '%main%';
+            SELECT material.nazev,materialy_produktu.procento_materialu 
+            FROM material 
+            JOIN materialy_produktu ON materialy_produktu.id_materialu = material.id 
+            JOIN produkt ON produkt.id = materialy_produktu.id_produktu 
+            WHERE produkt.id = :id;
+            SELECT DISTINCT barva.nazev 
+            FROM barva 
+            JOIN varianty ON varianty.id_barvy = barva.id 
+            JOIN produkt ON produkt.id = varianty.id_produktu 
+            WHERE produkt.id = :id;");
 
             $stmt->execute([":id" => $_GET["produkt"]]);
 
-
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            $stmt->nextRowSet();
+            
+            $materialyProduktu = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $stmt->nextRowSet();
+            
+            $barvyProduktu = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            
             $html = str_replace("[@nazevProduktu]",$arr[0]["nazev"],$html);
             $html = str_replace("[@popisProduktu]",$arr[0]["popis"],$html);
             $html = str_replace("[@cenaProduktu]",strval($arr[0]["cena"]),$html);
-
+            
             $sleva = '';
-
+            
             if(isset($arr[0]["sleva"])) {
                 $sleva = strval($arr[0]["sleva"]);
             }
@@ -373,10 +457,185 @@ if(isset($_SESSION["user"])) {
             $html = str_replace("[@znackaProduktu]",$arr[0]["znacka"],$html);
             $html = str_replace("[@sportProduktu]",$arr[0]["sport"],$html);
             $html = str_replace("[@kategorieProduktu]",$arr[0]["kategorie"],$html);
-            $html = str_replace("[@hlavniObrazekProduktu]","obrazky/" . $arr[0]["src"],$html);
+            
+            
+            
+            
+            $vsechnyMaterialy = '';
+            foreach ($materialyProduktu as $key => $value) {
+                # code...
+                $vsechnyMaterialy .= "<tr><td>".$value["nazev"]."</td><td><input type='number' name='procento". $key."' value='" . $value["procento_materialu"] ."' min='1' max='100'></td><td><input type='submit' name='odstranitMaterial" . $key. "' value='Odstranit materiál'></td><td><input type='submit' name='aktualizovatProcento" . $key ."' value='Aktualizovat procento materiálu'></td></tr>";
+
+                // ! odstraneni materialu produktu
+
+                if(isset($_POST["odstranitMaterial" . $key])) {
+                    $stmt = $db->prepare("DELETE FROM materialy_produktu WHERE id_produktu = :idProduktu AND id_materialu = (SELECT id FROM material WHERE nazev = :nazev LIMIT 1)");
+
+                    $stmt->execute([":idProduktu" => $arr[0]["id"],
+                        ":nazev" => $value["nazev"]
+                    ]);
+
+                    header("Location: administrace.php?stranka=editaceProduktu");
+                }
+
+                // ! aktualizace materialu
+
+                if(isset($_POST["aktualizovatProcento" . $key])) {
+                    $stmt = $db->prepare("UPDATE materialy_produktu SET procento_materialu = :procento WHERE id_produktu = :idProduktu AND id_materialu = (SELECT id FROM material WHERE nazev = :nazev LIMIT 1)");
+
+                    $stmt->execute([":idProduktu" => $arr[0]["id"],
+                        ":nazev" => $value["nazev"],
+                        ":procento" => htmlspecialchars($_POST["procento" . $key])
+                    ]);
+
+                    header("Location: administrace.php?stranka=editaceProduktu");
+                }
+            }
+            $html = str_replace("[@materialy]",$vsechnyMaterialy,$html);
+            
+            $zbyvajiciMaterialy = [];
+            
+            $materialyProduktu = array_map(function($value) {
+                return $value["nazev"];
+            },$materialyProduktu);
+            
+            for ($i=0; $i < count($materialy); $i++) { 
+                # code...
+                if(!in_array($materialy[$i]["nazev"],$materialyProduktu)) {
+                    $zbyvajiciMaterialy[] =$materialy[$i]["nazev"];
+                }
+            }
+            
+            $nazvyMaterialu = "";
+            foreach ($zbyvajiciMaterialy as $key => $value) {
+                # code...
+                $nazvyMaterialu .= '<option value="' . $value . '">' . $value .'</option>';
+            }
+            $html = str_replace("[@zbyvajiciMaterialy]",$nazvyMaterialu,$html);
+            
+            
+            
+            $nazvyBarvy = '';
+            foreach($barvyProduktu as $key => $value) {
+                $nazvyBarvy .= '<tr><td>' . $value["nazev"] . '</td><td><input type="submit" value="odstranit barvu" name="odstranitBarvuProduktu' . $key. '"></td><td><input type="button" value="Zobrazit velikosti barvy"></td><td><input type="button" value="Zobrazit obrázky barvy"></td></tr>';
+
+                if(isset($_POST["odstranitBarvuProduktu" . $key])) {
+                    $stmt = $db->prepare("SELECT id_obrazku FROM varianty WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev)");
+                    
+                    $stmt->execute([":id" => $arr[0]["id"],
+                        ":nazev" => $value["nazev"]
+                    ]);
+
+                    $obrazky = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $placeholdery = "";
+                    $parametry = [":id" => $arr[0]["id"],
+                        ":nazev" => $value["nazev"]
+                    ];
+                    foreach ($obrazky as $key2 => $value2) {
+                        # code...
+                        $placeholdery .= ":obrazekId$key2,";
+                        $parametry[":obrazekId$key2"] = $value2["id_obrazku"];
+                        
+                    }
+                    $placeholdery = rtrim($placeholdery,",");
+
+
+
+                    $sql = "DELETE FROM varianty 
+                    WHERE id_produktu = :id 
+                    AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev);
+                    DELETE FROM obrazky_k_produktu
+                    WHERE id_produktu = :id 
+                    AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev);
+                    DELETE FROM obrazek WHERE id IN ($placeholdery)";
+
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute($parametry);
+
+                    header("Location: administrace.php?stranka=editaceProduktu");
+                }
+            }
+            $html = str_replace("[@barvyProduktu]",$nazvyBarvy,$html);
+
+            $zbyvajiciBarvy = [];
+            
+            $barvyProduktu = array_map(function($value) {
+                return $value["nazev"];
+            },$barvyProduktu);
+            
+            for ($i=0; $i < count($barvy); $i++) { 
+                # code...
+                if(!in_array($barvy[$i]["nazev"],$barvyProduktu)) {
+                    $zbyvajiciBarvy[] =$barvy[$i]["nazev"];
+                }
+            }
+
+            $nazvyBarvy = "";
+            foreach ($zbyvajiciBarvy as $key => $value) {
+                # code...
+                $nazvyBarvy .= '<option value="' . $value . '">' . $value .'</option>';
+            }
+            $html = str_replace("[@zbyvajiciBarvy]",$nazvyBarvy,$html);
+
+            // ! aktualizace zakladnich udaju
+
+            if(isset($_POST["aktualizovatZakladniUdaje"])) {
+                $stmt = $db->prepare("UPDATE produkt SET nazev = :nazev, popis = :popis, cena = :cena, cena_ve_sleve = :sleva, id_znacky = (SELECT id FROM znacka WHERE nazev = :znacka LIMIT 1), id_sportu = (SELECT id FROM sport WHERE nazev = :sport LIMIT 1),id_kategorie = (SELECT id FROM kategorie WHERE nazev = :kategorie) WHERE id_produktu = :id");
+
+                $stmt->execute([
+                    ":id" => $arr[0]["id"],
+                    ":nazev" => htmlspecialchars($_POST["nazevProduktu"]),
+                    ":popis" => htmlspecialchars($_POST["popisProduktu"]),
+                    ":cena" => htmlspecialchars($_POST["cenaProduktu"]),
+                    ":sleva" => htmlspecialchars($_POST["slevaProduktu"]),
+                    ":kategorie" => htmlspecialchars($_POST["kategorieProduktu"]),
+                    ":sport" => htmlspecialchars($_POST["sportProduktu"]),
+                    ":znacka" => htmlspecialchars($_POST["znackaProduktu"]),
+                ]);
+                
+                header("Location: administrace.php?stranka=editaceProduktu");
+            }
+            
+            // ! pridani noveho materialu
+
+            if(isset($_POST["pridatMaterial"])) {
+                $stmt = $db->prepare("INSERT INTO materialy_produktu (id_produktu,id_materialu,procento_materialu) VALUES (:id,(SELECT id FROM material WHERE nazev = :nazev LIMIT 1),:procento)");
+
+                $stmt->execute([
+                    ":id" => $arr[0]["id"],
+                    ":nazev" => htmlspecialchars($_POST["novyMaterial"]),
+                    ":procento" => htmlspecialchars($_POST["procentoNovehoMaterialu"])
+                ]);
+
+                header("Location: administrace.php?stranka=editaceProduktu");
+            }
+
+            // ! pridani nove barvy
+
+            if(isset($_POST["pridatBarvu"])) {
+                // ? dodelat to tak, ze do db varianty se da idproduktu,idbarvy,0
+            }
+
+            
+            // ! odstranění produktu
+            
+            if(isset($_POST["odstranitProdukt"])) {
+                $stmt = $db->prepare("DELETE FROM produkt WHERE id = :id;
+                DELETE FROM varianty WHERE id_produktu = :id;
+                DELETE FROM obrazky_k_produktu WHERE id_produktu = :id;
+                DELETE FROM materialy_produktu WHERE id_produktu = :id;
+                DELETE FROM recezne WHERE id_produktu = :id;
+                DELETE FROM oblibene_produkty WHERE id_produktu = :id;
+                DELETE FROM zakoupene_produkty WHERE id_produktu = :id;
+                DELETE FROM produkty_v_objednavce WHRE id_produktu = :id");
+                $stmt->execute([":id" => $arr[0]["id"]]);
+                
+                header("Location: administrace.php?stranka=editaceProduktu");
+            }
         }
 
-
+        
         echo $html;
     } else {
         header("Location: index.php");
