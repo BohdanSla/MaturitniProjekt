@@ -1,0 +1,135 @@
+<form method="post">
+    <h1>Základní údaje nového produktu</h1>
+    <table>
+        <tr>
+            <td>
+                Název nového produktu
+            </td>
+            <td>
+                <input type="text" name="nazevNovehoProduktu">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Popis nového produktu
+            </td>
+            <td>
+                <textarea name="popisNovehoProduktu">
+
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                cena nového produktu
+            </td>
+            <td>
+                <input type="nubmer" name="cenaNovehoProduktu" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                cena nového produktu ve slevě
+            </td>
+            <td>
+                <input type="nubmer" name="slevaNovehoProduktu" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+                kategorie nového produktu
+            </td>
+            <td>
+                <input type="text" name="kategorieNovehoProduktu" list="kategorie">
+                <datalist id="kategorie">
+                    [@kategorie]
+                </datalist>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                značka nového produktu
+            </td>
+            <td>
+                <input type="text" name="znackaNovehoProduktu" list="znacky">
+                <datalist id="znacky">
+                    [@znacky]
+                </datalist>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                sport nového produktu
+            </td>
+            <td>
+                <input type="text" name="sportNovehoProduktu" list="sporty">
+                <datalist id="sporty">
+                    [@sporty]
+                </datalist>
+            </td>
+        </tr>
+    </table>
+    <h1>Materiály</h1>
+    <b>Celkové procento všech materiálů musí dat 100% !</b>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Materiál
+                </th>
+                <th>
+                    Procento
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <input type="button" value="Přidat materiál" id="pridatMaterial">
+                    <datalist id="materialy">
+                        [@vlastnostiMaterialy]
+                    </datalist>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h1>Barvy</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Barva
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    <input type="button" value="Přidat barvu" id="pridatBarvu">
+                    <datalist id="barvy">
+                        [@vlastnostiBarvy]
+                    </datalist>
+                    <datalist id="velikosti">
+                        [@vlastnostiVelikosti]
+                    </datalist>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <input type="submit" name="pridatNovyProdukt" value="Vytvořit produkt">
+</form>

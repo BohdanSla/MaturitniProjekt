@@ -61,6 +61,11 @@
     <main>
         <div class="vypln">
         </div>
+        <div class="modal">
+            <div>
+              <span>Zruřit</span>
+            </div>
+          </div>
         <div>
             <ul>
                 <li>
@@ -91,161 +96,6 @@
             </ul>
         </div>
         [@stranka]
-        <form method="get">
-            <input type="search" name="hledat" placeholder="Vyhledat produkt">
-            <input type="submit" name="odeslat" value="Vyhledat">
-        </form>
-        <section>
-            [@produkty]
-        </section>
-        <form method="post" enctype="multipart/form-data">
-            <h1>Editace Produktu</h1>
-            <table>
-                <tr>
-                    <td>
-                        Název produktu
-                    </td>
-                    <td>
-                        <input type="text" name="nazevProduktu" value="[@nazevProduktu]">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Popis produktu
-                    </td>
-                    <td>
-                        <textarea name="popisProduktu">[@popisProduktu]</textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        cena produktu
-                    </td>
-                    <td>
-                        <input type="nubmer" name="cenaProduktu" value="[@cenaProduktu]">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        cena produktu ve slevě
-                    </td>
-                    <td>
-                        <input type="nubmer" name="slevaProduktu" value="[@slevaProduktu]">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        kategorie
-                    </td>
-                    <td>
-                        <input type="text" name="kategorieProduktu" value="[@kategorieProduktu]" list="kategorie">
-                        <datalist id="kategorie">
-                            [@kategorie]
-                        </datalist>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        znacka
-                    </td>
-                    <td>
-                        <input type="text" name="znackaProduktu" value="[@znackaProduktu]" list="znacky">
-                        <datalist id="znacky">
-                            [@znacky]
-                        </datalist>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        sport
-                    </td>
-                    <td>
-                        <input type="text" name="sportProduktu" value="[@sportProduktu]" list="sporty">
-                        <datalist id="sporty">
-                            [@sporty]
-                        </datalist>
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" name="aktualizovatZakladaniUdaje" value="Aktualizovat základní údaje">
-            <h1>Materiály produktu</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Materiál
-                        </th>
-                        <th>
-                            Procento materiálu
-                        </th>
-                        <th>
-
-                        </th>
-                        <th>
-
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [@materialy]
-                </tbody>
-            </table>
-            <h1>Přidat materiál</h1>
-            <table>
-                <tr>
-                    <td>
-                        název materiálu
-                    </td>
-                    <td>
-                        <select name="novyMaterial">
-                            [@zbyvajiciMaterialy]
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        procento materiálu
-                    </td>
-                    <td>
-                        <input type="number" name="procentoNovehoMaterialiu">
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" name="pridatMaterial" value="Přidat materiál">
-            <h1>Barvy produktu</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Barva
-                        </th>
-                        <th>
-                        </th>
-                        <th>
-                            
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [@barvyProduktu]
-                </tbody>
-            </table>
-            <h1>Přidat Barvu</h1>
-            <table>
-                <tr>
-                    <td>
-                        barva
-                    </td>
-                    <td>
-                        <select name="novyMaterial">
-                            [@zbyvajiciBarvy]
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" name="pridatBarvu" value="Přidat barvu">
-            <input type="submit" name="odstranitProdukt" value="Odstranit produkt">
-        </form>
     </main>
     <footer>
         Tento eshop je Maturitní projekt<br>

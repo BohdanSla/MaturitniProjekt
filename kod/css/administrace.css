@@ -10,6 +10,7 @@ td {
 }
 main > section {
     padding: 1rem;
+    display: flex;
 }
 main > section > div {
     display: flex;
@@ -17,6 +18,11 @@ main > section > div {
 }
 main >section >div a {
     margin-right: 1rem;
+}
+body main > nav {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 body main > div {
     background-color: #d6d6d6;
@@ -46,7 +52,7 @@ main form table td,main form table th,main form table {
     border: 1px solid black;
     border-collapse: collapse;
 }
-main form input[type=submit] {
+main form input[type=submit],main > a {
     background-color: red;
     color: white;
     padding: 0.3rem;
@@ -68,4 +74,56 @@ main form[method=get] input[type="submit"] {
 }
 td > input[type=submit] {
     width: 100%;
+}
+td img {
+    width: 5rem;
+}
+main > h1 {
+    margin-left: 1rem;
+}
+main > a {
+    text-decoration: none;
+    margin-left: 1rem;
+    border-radius: 0.15rem;
+}
+main form > section {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 10;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 3rem; /* Location of the box */
+}
+
+.modal > div {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 1rem;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 20rem;
+    display: flex;
+    flex-direction: column;
+}
+span {
+    color: white;
+    background-color: red;
+    padding: 0.2rem;
+    border-radius: 0.1rem;
+    text-align: center;
+}
+span:hover {
+    cursor: pointer;
+}
+form b {
+    color: red;
 }
