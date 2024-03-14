@@ -124,6 +124,15 @@ span {
 span:hover {
     cursor: pointer;
 }
-form b {
+form > b {
     color: red;
+}
+td >div {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    justify-content: space-around;
+}
+td >div img {
+    width: 2rem;
 }

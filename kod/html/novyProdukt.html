@@ -1,4 +1,4 @@
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <h1>Základní údaje nového produktu</h1>
     <table>
         <tr>
@@ -42,7 +42,7 @@
             <td>
                 <input type="text" name="kategorieNovehoProduktu" list="kategorie">
                 <datalist id="kategorie">
-                    [@kategorie]
+                    [@vlastnostiKategorie]
                 </datalist>
             </td>
         </tr>
@@ -53,7 +53,7 @@
             <td>
                 <input type="text" name="znackaNovehoProduktu" list="znacky">
                 <datalist id="znacky">
-                    [@znacky]
+                    [@vlastnostiZnacky]
                 </datalist>
             </td>
         </tr>
@@ -64,7 +64,7 @@
             <td>
                 <input type="text" name="sportNovehoProduktu" list="sporty">
                 <datalist id="sporty">
-                    [@sporty]
+                    [@vlastnostiSporty]
                 </datalist>
             </td>
         </tr>

@@ -113,29 +113,30 @@ if(isset($_SESSION["user"])) {
                 $obrazky .= '<tr><td><img src="obrazky/' . $value['src'].  '"></td><td><input type="submit" name="odstranitObrazek' . $key.'" value="odstranit obrázek"></td><tr>';
 
                 if(isset($_POST["odstranitObrazek" . $key])) {
-                    $stmt = $db->prepare("SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :idProduktu AND id_barvy = (SELECT id FROM barv WHERE nazev = :barva LIMIT 1)");
+                    // $stmt = $db->prepare("SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :idProduktu AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1)");
 
-                    $stmt->execute([":idProduktu" => $_GET["produkt"],
-                        [":barva"] => $_GET["barva"]
-                    ]);
-                    $idObrazku = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    // $stmt->execute([":idProduktu" => $_GET["produkt"],
+                    //     ":barva" => $_GET["barva"]]
+                    // );
+                    // $idObrazku = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    $placeholdery = "";
-                    $parametry = [
-                        [":obrazek"] => $value["src"]
-                    ];
-                    foreach ($idObrazku as $key2 => $value2) {
-                        # code...
-                        $placeholdery .= ":obrazek$key2,";
-                        $parametry[":obrazek$key2"] = $value2["id_obrazku"];
+                    // $placeholdery = "";
+                    // $parametry = [
+                    //     ":obrazek" => $value["src"]
+                    // ];
+                    // foreach ($idObrazku as $key2 => $value2) {
+                    //     # code...
+                    //     $placeholdery .= ":obrazek$key2,";
+                    //     $parametry[":obrazek$key2"] = $value2["id_obrazku"];
                         
-                    }
-                    $placeholdery = rtrim($placeholdery,",");
+                    // }
+                    // $placeholdery = rtrim($placeholdery,",");
 
-                    $stmt = $db->prepare("DELETE FROM obrazky_k_produktu WHERE id_obrazku = (SELECT id FROM obrazek WHERE src = :obrazek LIMIT 1);
-                    DELETE FROM obrazek WHERE id IN ($placeholdery)");
+                    //DELETE FROM obrazek WHERE id IN ($placeholdery)
 
-                    $stmt->execute($parametry);
+                    $stmt = $db->prepare("DELETE FROM obrazky_k_produktu WHERE id_obrazku = (SELECT id FROM obrazek WHERE src = :obrazek LIMIT 1);");
+
+                    $stmt->execute([":obrazek" => $value["src"]]);
 
                     header("Location: " . $_SERVER["REQUEST_URI"]);
                 }
@@ -155,7 +156,7 @@ if(isset($_SESSION["user"])) {
             $html = str_replace("[@zbyvajiciVelikosti]",$zbyvajiciVelikosti,$html);
 
             if(isset($_POST["pridatVelikost"])) {
-                $stmt = $db->prepare("INSERT INTO velikost(id_produktu,id_barvy,id_velikosti) values (:idProduktu,(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost))");
+                $stmt = $db->prepare("INSERT INTO varianty (id_produktu,id_barvy,id_velikosti) values (:idProduktu,(SELECT id FROM barva WHERE nazev = :barva LIMIT 1),(SELECT id FROM velikost WHERE nazev = :velikost))");
 
                 $stmt->execute([":idProduktu" => $_GET["produkt"],
                     ":barva" => $_GET["barva"],
@@ -171,7 +172,7 @@ if(isset($_SESSION["user"])) {
                 if(getimagesize($_FILES["novyObrazek"]["tmp_name"])) {
                     if (!file_exists($target_file)) {
                         // ! vyřešit main obrazek!!!
-                        move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+                        move_uploaded_file($_FILES["novyObrazek"]["tmp_name"], $target_file);
 
                         $stmt = $db->prepare("INSERT INTO obrazek (src) VALUES (:src)");
                         $stmt->execute([":src" => $_FILES["novyObrazek"]["name"]]);
@@ -413,8 +414,9 @@ if(isset($_SESSION["user"])) {
         }
         
         if(isset($_POST["novaVlastnost"])) {
-            $stmt = $db->prepare("INSERT IGNORE INTO :vlastnost (nazev) VALUES (:novaVlastost)");
-            $stmt->execute([":vlastnost" => htmlspecialchars($_POST["vlastnost"]),":nazevVlastnosti" => htmlspecialchars($_POST["nazevVlastnosti"])]);
+            $sql = "INSERT IGNORE INTO ". htmlspecialchars($_POST["vlastnost"]) ." (nazev) VALUES (:novaVlastnost)";
+            $stmt = $db->prepare($sql);
+            $stmt->execute([":novaVlastnost" => htmlspecialchars($_POST["nazevVlastnosti"])]);
 
             header("Location: administrace.php?stranka=vlastnostiProduktu");
         }
@@ -440,7 +442,7 @@ if(isset($_SESSION["user"])) {
                 
                 $stmt->execute([":id" => $value["id"]]);
                 
-                header("Location: administrace.php?stranka=slevovyKod");
+                header("Location: administrace.php?stranka=slevoveKody");
             }
         }
         $html = str_replace("[@slevoveKody]",$kody,$html);
@@ -457,12 +459,12 @@ if(isset($_SESSION["user"])) {
                 $sql = "INSERT INTO slevovy_kod_sport (id_slevoveho_kodu,id_sportu) VALUES (:idKodu,(SELECT id FROM sport WHERE nazev = :nazev LIMIT 1));";
                 $moznost = $_POST["slevovyKodSport"];
             } else {
-                $sql = "INSERT INTO slevovy_kod_znacka (id_slevoveho_kodu,id_znacka) VALUES (:idKodu,(SELECT id FROM znacka WHERE nazev = :nazev LIMIT 1));";
+                $sql = "INSERT INTO slevovy_kod_znacka (id_slevoveho_kodu,id_znacky) VALUES (:idKodu,(SELECT id FROM znacka WHERE nazev = :nazev LIMIT 1));";
                 $moznost = $_POST["slevovyKodZnacka"];
             }
 
             $stmt = $db->prepare($sql);
-            $stmt->execute([":idKodu" => $db->lastInsertId(),":id" => htmlspecialchars($moznost)]);
+            $stmt->execute([":idKodu" => $db->lastInsertId(),":nazev" => htmlspecialchars($moznost)]);
 
             header("Location: administrace.php?stranka=slevoveKody");
         }
@@ -499,7 +501,7 @@ if(isset($_SESSION["user"])) {
                     
                     if(isset($_POST["odstranitRecenzi" . $key2])) {
                         $stmt = $db->prepare("DELETE FROM recenze WHERE id = :id");
-                        $stmt->execute([":id" => $value["id"]]);
+                        $stmt->execute([":id" => $value2["id"]]);
                         
                         
                         header("Location: administrace.php?stranka=uzivatele");
@@ -535,7 +537,7 @@ if(isset($_SESSION["user"])) {
                 $stmt = $db->prepare($sql);
                 $stmt->execute($parametry);
                 
-                header("Location: administrace.phpstranka=uzivatele");
+                header("Location: administrace.php?stranka=uzivatele");
                 
             }
         }
@@ -553,15 +555,12 @@ if(isset($_SESSION["user"])) {
             $html = str_replace("[@sporty]",$nazvySportu,$html);
             
             $stmt = $db->prepare("
-            SELECT produkt.id, produkt.nazev, produkt.popis, produkt.cena, produkt.cena_ve_sleve, znacka.nazev AS znacka, sport.nazev AS sport, kategorie.nazev AS kategorie, obrazek.src
+            SELECT produkt.id, produkt.nazev, produkt.popis, produkt.cena, produkt.cena_ve_sleve, znacka.nazev AS znacka, sport.nazev AS sport, kategorie.nazev AS kategorie
             FROM produkt 
             JOIN kategorie ON kategorie.id = produkt.id_kategorie 
             JOIN sport ON sport.id = produkt.id_sportu 
             JOIN znacka ON znacka.id = produkt.id_znacky
-            JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
-            JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
-            WHERE produkt.id = :id
-            AND obrazek.src LIKE '%main%';
+            WHERE produkt.id = :id;
             SELECT material.nazev,materialy_produktu.procento_materialu 
             FROM material 
             JOIN materialy_produktu ON materialy_produktu.id_materialu = material.id 
@@ -662,7 +661,7 @@ if(isset($_SESSION["user"])) {
                 $nazvyBarvy .= '<tr><td>' . $value["nazev"] . '</td><td><input type="submit" value="odstranit barvu" name="odstranitBarvuProduktu' . $key. '"></td><td><a href="administrace.php?'. $_SERVER["QUERY_STRING"].'&barva=' . $value["nazev"] .'">Zobrazit obrázky a velikosti</a></td></tr>';
 
                 if(isset($_POST["odstranitBarvuProduktu" . $key])) {
-                    $stmt = $db->prepare("SELECT id_obrazku FROM varianty WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev)");
+                    $stmt = $db->prepare("SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev)");
                     
                     $stmt->execute([":id" => $arr[0]["id"],
                         ":nazev" => $value["nazev"]
@@ -722,15 +721,17 @@ if(isset($_SESSION["user"])) {
 
             // ! aktualizace zakladnich udaju
 
-            if(isset($_POST["aktualizovatZakladniUdaje"])) {
-                $stmt = $db->prepare("UPDATE produkt SET nazev = :nazev, popis = :popis, cena = :cena, cena_ve_sleve = :sleva, id_znacky = (SELECT id FROM znacka WHERE nazev = :znacka LIMIT 1), id_sportu = (SELECT id FROM sport WHERE nazev = :sport LIMIT 1),id_kategorie = (SELECT id FROM kategorie WHERE nazev = :kategorie) WHERE id_produktu = :id");
+            if(isset($_POST["aktualizovatZakladaniUdaje"])) {
+                $stmt = $db->prepare("UPDATE produkt SET nazev = :nazev, popis = :popis, cena = :cena, cena_ve_sleve = :sleva, id_znacky = (SELECT id FROM znacka WHERE nazev = :znacka LIMIT 1), id_sportu = (SELECT id FROM sport WHERE nazev = :sport LIMIT 1),id_kategorie = (SELECT id FROM kategorie WHERE nazev = :kategorie) WHERE id = :id");
+
+                $cenaVeSleve = htmlspecialchars($_POST["slevaProduktu"]) != '' ? htmlspecialchars($_POST["slevaProduktu"]) : null;
 
                 $stmt->execute([
                     ":id" => $arr[0]["id"],
                     ":nazev" => htmlspecialchars($_POST["nazevProduktu"]),
                     ":popis" => htmlspecialchars($_POST["popisProduktu"]),
                     ":cena" => htmlspecialchars($_POST["cenaProduktu"]),
-                    ":sleva" => htmlspecialchars($_POST["slevaProduktu"]),
+                    ":sleva" => $cenaVeSleve,
                     ":kategorie" => htmlspecialchars($_POST["kategorieProduktu"]),
                     ":sport" => htmlspecialchars($_POST["sportProduktu"]),
                     ":znacka" => htmlspecialchars($_POST["znackaProduktu"]),
@@ -747,7 +748,7 @@ if(isset($_SESSION["user"])) {
                 $stmt->execute([
                     ":id" => $arr[0]["id"],
                     ":nazev" => htmlspecialchars($_POST["novyMaterial"]),
-                    ":procento" => htmlspecialchars($_POST["procentoNovehoMaterialu"])
+                    ":procento" => htmlspecialchars($_POST["procentoNovehoMaterialiu"])
                 ]);
 
                 header("Location: administrace.php?" . $_SERVER["QUERY_STRING"] );
@@ -757,12 +758,12 @@ if(isset($_SESSION["user"])) {
 
             if(isset($_POST["pridatBarvu"])) {
                 // ? dodelat to tak, ze do db varianty se da idproduktu,idbarvy,0
-                $stmt = $db->prepare("INSERT INTO varianty (id_produktu,id_barvy,id_velikosti) VALUES (:idProduktu,(SELECT id FROM barva WHERE nazev = :nazev LIMIT1),:idBarvy)");
+                $stmt = $db->prepare("INSERT INTO varianty (id_produktu,id_barvy,id_velikosti) VALUES (:idProduktu,(SELECT id FROM barva WHERE nazev = :nazev LIMIT 1),:idVelikosti)");
 
                 $stmt->execute([
                     ":idProduktu" => $arr[0]["id"],
                     ":nazev" => htmlspecialchars($_POST["novaBarva"]),
-                    ":idBarvy" => 0
+                    ":idVelikosti" => 0
                 ]);
                 
                 header("Location: administrace.php?" . $_SERVER["QUERY_STRING"] );
@@ -789,10 +790,12 @@ if(isset($_SESSION["user"])) {
         if(isset($_POST["pridatNovyProdukt"])) {
             $stmt = $db->prepare("INSERT INTO produkt (nazev,popis,cena,cena_ve_sleve,id_znacky,id_kategorie,id_sportu) VALUES (:nazev,:popis,:cena,:cenaVeSleve,(SELECT id FROM znacka WHERE nazev = :znacka LIMIT 1),(SELECT id FROM kategorie WHERE nazev = :kategorie LIMIT 1),(SELECT id FROM sport WHERE nazev = :sport LIMIT 1))");
 
+            $cenaVeSleve = htmlspecialchars($_POST["slevaNovehoProduktu"]) != '' ? htmlspecialchars($_POST["slevaNovehoProduktu"]) : null;
+
             $stmt->execute([":nazev" => htmlspecialchars($_POST["nazevNovehoProduktu"]),
                 ":popis" => htmlspecialchars($_POST["popisNovehoProduktu"]),
                 ":cena" => htmlspecialchars($_POST["cenaNovehoProduktu"]),
-                ":cenaVeSleve" => htmlspecialchars($_POST["slevaNovehoProduktu"]),
+                ":cenaVeSleve" => $cenaVeSleve,
                 ":znacka" => htmlspecialchars($_POST["znackaNovehoProduktu"]),
                 ":kategorie" => htmlspecialchars($_POST["kategorieNovehoProduktu"]),
                 ":sport" => htmlspecialchars($_POST["sportNovehoProduktu"])
@@ -800,13 +803,15 @@ if(isset($_SESSION["user"])) {
 
             $id = $db->lastInsertId();
 
-            for($i = 0;$i < count($_POST["material"]);$i++) {
-                $stmt = $db->prepare("INSERT INTO materialy_produktu (id_produktu,id_materialu,procento_materialu) VALUES (:id,(SELECT id FROM material WHERE nazev = :nazev LIMIT 1),:procento)");
-
-                $stmt->execute([":id" => $id,
-                    ":nazev" => $_POST["material"][$i],
-                    ":procento" => $_POST["procento"][$i],
-                ]);
+            if(isset($_POST["material"])) {
+                for($i = 0;$i < count($_POST["material"]);$i++) {
+                    $stmt = $db->prepare("INSERT INTO materialy_produktu (id_produktu,id_materialu,procento_materialu) VALUES (:id,(SELECT id FROM material WHERE nazev = :nazev LIMIT 1),:procento)");
+    
+                    $stmt->execute([":id" => $id,
+                        ":nazev" => $_POST["material"][$i],
+                        ":procento" => $_POST["procento"][$i],
+                    ]);
+                }
             }
 
             foreach($_POST["barva"] as $value) {
@@ -821,7 +826,7 @@ if(isset($_SESSION["user"])) {
 
                 $obrazky = $_FILES[$value . "Obrazky"];
 
-                foreach($obrazky as $key2 => $value2) {
+                foreach($obrazky["name"] as $key2 => $value2) {
                     $target_file = "obrazky/" . basename($obrazky["name"][$key2]);
                 
                     if(getimagesize($obrazky["tmp_name"][$key2])) {

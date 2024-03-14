@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+session_start();
+
 spl_autoload_register(fn(string $trida):int|bool  => require_once "$trida.class.php");
 
 use Databaze as Db;
+
 
 $html = file_get_contents("kod/html/registrace.html");
 
@@ -42,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ":id_role" => 3
                 ]);
         
-                $_SESSION["user"] = $_POST["prijmeni"];
+                $_SESSION["user"] = $db->lastInsertId();
 
                 header("Location: ucet.php");
             }

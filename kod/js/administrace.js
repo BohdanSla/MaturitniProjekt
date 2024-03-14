@@ -185,8 +185,7 @@ novyProduktBarvaButton.addEventListener("click",function() {
         obrazky.accept = "jpg,png,jpeg"
         obrazky.name = barva.value + "Obrazky[]"
 
-        let td3 = document.querySelector("td");
-        td3.innerHTML = ""
+        let td3 = document.createElement("td");
         td3.appendChild(obrazky)
         tr.appendChild(td3)
 
