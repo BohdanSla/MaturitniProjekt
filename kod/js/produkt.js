@@ -53,12 +53,21 @@ function otevriPostraniMenu() {
     }
 }
 
+
+
+
 let vsechnyObrazkyProduktu = document.querySelectorAll(".obrazky-produktu option")
 let hlavniObrazek = document.createElement("img")
 
-let src = Array.from(vsechnyObrazkyProduktu).filter(el => {
+
+
+src = Array.from(vsechnyObrazkyProduktu).filter(el => {
     return el.value.includes("main")
 },vsechnyObrazkyProduktu)
+
+if(src.length == 0) {
+    src = Array.from(vsechnyObrazkyProduktu)
+}
 
 hlavniObrazek.setAttribute("data-barva",src[0].getAttribute("data-barva"))
 hlavniObrazek.src = src[0].value;

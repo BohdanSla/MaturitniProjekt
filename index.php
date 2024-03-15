@@ -26,7 +26,14 @@ if(isset($_SESSION["user"])) {
 
 $db = new Db();
 $html = file_get_contents("kod/html/index.html");
-$stmt = $db->prepare("SELECT produkt.id,produkt.nazev, produkt.popis, COALESCE(produkt.cena_ve_sleve,produkt.cena) AS cena, FORMAT(AVG(recenze.pocet_hvezd),1) AS hodnoceni_produktu, obrazek.src FROM produkt JOIN obrazky_k_produktu ON produkt.id = obrazky_k_produktu.id_produktu JOIN obrazek ON obrazky_k_produktu.id_obrazku = obrazek.id JOIN recenze ON recenze.id_produktu = produkt.id WHERE obrazek.src LIKE '%main%' GROUP BY produkt.id ORDER BY hodnoceni_produktu DESC LIMIT 4;");
+$stmt = $db->prepare("SELECT produkt.id,produkt.nazev, produkt.popis, COALESCE(produkt.cena_ve_sleve,produkt.cena) AS cena, FORMAT(AVG(recenze.pocet_hvezd),1) AS hodnoceni_produktu, obrazek.src 
+FROM produkt 
+JOIN obrazky_k_produktu ON produkt.id = obrazky_k_produktu.id_produktu 
+JOIN obrazek ON obrazky_k_produktu.id_obrazku = obrazek.id 
+JOIN recenze ON recenze.id_produktu = produkt.id 
+GROUP BY produkt.id 
+ORDER BY hodnoceni_produktu 
+DESC LIMIT 4;");
 
 $stmt->execute();
 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -52,7 +59,7 @@ JOIN obrazky_k_produktu ON obrazky_k_produktu.id_obrazku = obrazek.id
 WHERE znacka.id = produkt.id_znacky 
 AND produkt.id = obrazky_k_produktu.id_produktu 
 AND produkt.cena_ve_sleve IS NOT NULL
-AND obrazek.src LIKE '%main%'
+GROUP BY produkt.id
 ORDER BY ABS(produkt.cena - produkt.cena_ve_sleve) DESC LIMIT 4");
 
 $stmt->execute();

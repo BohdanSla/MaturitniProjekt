@@ -35,9 +35,27 @@ if(isset($_SESSION["user"])) {
 
     
     
-    $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc FROM uzivatel WHERE id = :id;
-    SELECT produkt.nazev,produkt.id,obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN oblibene_produkty ON oblibene_produkty.id_produktu = produkt.id JOIN uzivatel ON uzivatel.id = oblibene_produkty.id_uzivatele WHERE obrazek.src LIKE "%main%" AND id_uzivatele = :id GROUP BY oblibene_produkty.id_produktu;
-    SELECT produkty_v_objednavce.id_objednavky, produkt.nazev,barva.nazev AS barva, velikost.nazev AS velikost, COALESCE(cena_ve_sleve,cena) AS cena, pocet AS mnozstvi, obrazek.src,objednavka.sleva FROM produkty_v_objednavce JOIN produkt ON produkt.id = produkty_v_objednavce.id_produktu JOIN barva ON barva.id = produkty_v_objednavce.id_barvy JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN objednavka ON objednavka.id = produkty_v_objednavce.id_objednavky WHERE id_objednavky IN (SELECT id FROM objednavka WHERE jeObjednana = 1 AND id_uzivatele = :id) AND obrazek.src LIKE "%main%" ORDER BY produkty_v_objednavce.id_objednavky;');
+    $stmt = $db->prepare('SELECT jmeno,prijmeni,email,telefonni_cislo,mesto,ulice,psc 
+    FROM uzivatel 
+    WHERE id = :id;
+    SELECT produkt.nazev,produkt.id,obrazek.src 
+    FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+    JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+    JOIN oblibene_produkty ON oblibene_produkty.id_produktu = produkt.id 
+    JOIN uzivatel ON uzivatel.id = oblibene_produkty.id_uzivatele 
+    WHERE id_uzivatele = :id 
+    GROUP BY oblibene_produkty.id_produktu;
+    SELECT produkty_v_objednavce.id_objednavky, produkt.nazev,barva.nazev AS barva, velikost.nazev AS velikost, COALESCE(cena_ve_sleve,cena) AS cena, pocet AS mnozstvi, obrazek.src,objednavka.sleva 
+    FROM produkty_v_objednavce 
+    JOIN produkt ON produkt.id = produkty_v_objednavce.id_produktu 
+    JOIN barva ON barva.id = produkty_v_objednavce.id_barvy 
+    JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti 
+    JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+    JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+    JOIN objednavka ON objednavka.id = produkty_v_objednavce.id_objednavky 
+    WHERE id_objednavky IN (SELECT id FROM objednavka WHERE jeObjednana = 1 AND id_uzivatele = :id) 
+    GROUP BY produkt.id 
+    ORDER BY produkty_v_objednavce.id_objednavky;');
 
     $stmt->execute([":id" => $_SESSION["user"]]);
 

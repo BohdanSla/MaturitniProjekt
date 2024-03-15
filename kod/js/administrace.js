@@ -81,144 +81,151 @@ let modalniOkno = document.querySelector(".modal > div")
 
 let novyProduktMaterialButton = document.querySelector("#pridatMaterial")
 
-novyProduktMaterialButton.addEventListener("click",function() {
-    let material = document.createElement("input")
-    material.setAttribute("list","materialy")
-    material.type = "text"
+if(novyProduktMaterialButton != null) {
 
-    let procento = document.createElement("input")
-    procento.type = "number"
-    procento.min = "1"
-    procento.max = "100"
-
-    let materialNazev = document.createElement("p")
-    materialNazev.textContent = "Materiál"
-
-    let procentoNazev = document.createElement("p")
-    procentoNazev.textContent = "procento materiálu"
-
-    let potvrdit = document.createElement("span")
-    potvrdit.textContent = "Potvrdit"
-    potvrdit.style.marginTop = "1rem"
-    potvrdit.addEventListener("click",function() {
-        let tr = document.createElement("tr")
-
-        let td1 = document.createElement("td")
-        material.readOnly = true
-        material.name = "material[]"
-        td1.appendChild(material)
-        tr.appendChild(td1)
-
-        let td2 = document.createElement("td")
-        procento.readOnly = true
-        procento.name = "procento[]"
-        td2.appendChild(procento)
-        tr.appendChild(td2)
-
-        let odstranitMaterialButton = document.createElement("input")
-        odstranitMaterialButton.type = "button"
-        odstranitMaterialButton.value = "odstranit materiál"
-        odstranitMaterialButton.addEventListener("click",function() {
-            odstranitMaterialButton.parentNode.parentNode.parentNode.removeChild(odstranitMaterialButton.parentNode.parentNode)
-        })
-
-        let td3 = document.createElement("td")
-        td3.appendChild(odstranitMaterialButton)
-        tr.appendChild(td3)
-
-        document.querySelector("table:nth-of-type(2) tbody").insertBefore(tr,document.querySelector("table:nth-of-type(2) tbody tr:last-of-type"))
-
-        zavriModalniOkno()
-    }) 
+    novyProduktMaterialButton.addEventListener("click",function() {
+        let material = document.createElement("input")
+        material.setAttribute("list","materialy")
+        material.type = "text"
     
-    modalniOkno.appendChild(materialNazev)
-    modalniOkno.appendChild(material)
-    modalniOkno.appendChild(procentoNazev)
-    modalniOkno.appendChild(procento)
-    modalniOkno.appendChild(potvrdit)
-    zobrazModalniOkno()
-})
+        let procento = document.createElement("input")
+        procento.type = "number"
+        procento.min = "1"
+        procento.max = "100"
+    
+        let materialNazev = document.createElement("p")
+        materialNazev.textContent = "Materiál"
+    
+        let procentoNazev = document.createElement("p")
+        procentoNazev.textContent = "procento materiálu"
+    
+        let potvrdit = document.createElement("span")
+        potvrdit.textContent = "Potvrdit"
+        potvrdit.style.marginTop = "1rem"
+        potvrdit.addEventListener("click",function() {
+            let tr = document.createElement("tr")
+    
+            let td1 = document.createElement("td")
+            material.readOnly = true
+            material.name = "material[]"
+            td1.appendChild(material)
+            tr.appendChild(td1)
+    
+            let td2 = document.createElement("td")
+            procento.readOnly = true
+            procento.name = "procento[]"
+            td2.appendChild(procento)
+            tr.appendChild(td2)
+    
+            let odstranitMaterialButton = document.createElement("input")
+            odstranitMaterialButton.type = "button"
+            odstranitMaterialButton.value = "odstranit materiál"
+            odstranitMaterialButton.addEventListener("click",function() {
+                odstranitMaterialButton.parentNode.parentNode.parentNode.removeChild(odstranitMaterialButton.parentNode.parentNode)
+            })
+    
+            let td3 = document.createElement("td")
+            td3.appendChild(odstranitMaterialButton)
+            tr.appendChild(td3)
+    
+            document.querySelector("table:nth-of-type(2) tbody").insertBefore(tr,document.querySelector("table:nth-of-type(2) tbody tr:last-of-type"))
+    
+            zavriModalniOkno()
+        }) 
+        
+        modalniOkno.appendChild(materialNazev)
+        modalniOkno.appendChild(material)
+        modalniOkno.appendChild(procentoNazev)
+        modalniOkno.appendChild(procento)
+        modalniOkno.appendChild(potvrdit)
+        zobrazModalniOkno()
+    })
+}
 
 
 
 
 let novyProduktBarvaButton = document.querySelector("#pridatBarvu")
 
-novyProduktBarvaButton.addEventListener("click",function() {
-    let barva = document.createElement("input")
-    barva.setAttribute("list","barvy")
-    barva.type = "text"
+if(novyProduktBarvaButton != null) {
 
-    let barvaNazev = document.createElement("p")
-    barvaNazev.textContent = "Barva"
-
-    let potvrdit = document.createElement("span")
-    potvrdit.textContent = "Potvrdit"
-    potvrdit.style.marginTop = "1rem"
-    potvrdit.addEventListener("click",function() {
-        let tr = document.createElement("tr")
-
-        let td1 = document.createElement("td")
-        barva.readOnly = true
-        barva.name = "barva[]"
-        td1.appendChild(barva)
-        tr.appendChild(td1)
-
-        let td2 = document.createElement("td")
-        
-        let odstranitBarvuButton = document.createElement("input")
-        odstranitBarvuButton.type = "button"
-        odstranitBarvuButton.value = "odstranit barvu"
-        odstranitBarvuButton.addEventListener("click",function() {
-            odstranitBarvuButton.parentNode.parentNode.parentNode.removeChild(odstranitBarvuButton.parentNode.parentNode)
-
-            document.querySelectorAll("." + barva.value).forEach((el) => {
-                el.parentNode.removeChild(el)
-            })
-        })
-        td2.appendChild(odstranitBarvuButton)
-        tr.appendChild(td2)
-
-        let obrazky = document.createElement("input")
-        obrazky.type = "file"
-        obrazky.multiple = true
-        obrazky.accept = "jpg,png,jpeg"
-        obrazky.name = barva.value + "Obrazky[]"
-
-        let td3 = document.createElement("td");
-        td3.appendChild(obrazky)
-        tr.appendChild(td3)
-
-        let trVelikosti = document.createElement("tr")
-        trVelikosti.classList = barva.value
-        let tdNovaVelikost = document.createElement("td")
-        tdNovaVelikost.colSpan = 3
-
-        let novaVelikostButton = document.createElement("input")
-        novaVelikostButton.type = "button"
-        novaVelikostButton.value = "Přidat velikost k barvě"
-
-        novaVelikostButton.addEventListener("click",() => {
-            zobrazVelikosti(barva.value)
-        })
-
-        tdNovaVelikost.appendChild(novaVelikostButton)
-        trVelikosti.appendChild(tdNovaVelikost)
-
-        
-        document.querySelector("table:nth-of-type(3) tbody").insertBefore(tr,document.querySelector("table:nth-of-type(3) tbody tr:last-of-type"))
-
-        tr.after(trVelikosti)
-
-        zavriModalniOkno()
-    }) 
+    novyProduktBarvaButton.addEventListener("click",function() {
+        let barva = document.createElement("input")
+        barva.setAttribute("list","barvy")
+        barva.type = "text"
     
-
-    modalniOkno.appendChild(barvaNazev)
-    modalniOkno.appendChild(barva)
-    modalniOkno.appendChild(potvrdit)
-    zobrazModalniOkno()
-})
+        let barvaNazev = document.createElement("p")
+        barvaNazev.textContent = "Barva"
+    
+        let potvrdit = document.createElement("span")
+        potvrdit.textContent = "Potvrdit"
+        potvrdit.style.marginTop = "1rem"
+        potvrdit.addEventListener("click",function() {
+            let tr = document.createElement("tr")
+    
+            let td1 = document.createElement("td")
+            barva.readOnly = true
+            barva.name = "barva[]"
+            td1.appendChild(barva)
+            tr.appendChild(td1)
+    
+            let td2 = document.createElement("td")
+            
+            let odstranitBarvuButton = document.createElement("input")
+            odstranitBarvuButton.type = "button"
+            odstranitBarvuButton.value = "odstranit barvu"
+            odstranitBarvuButton.addEventListener("click",function() {
+                odstranitBarvuButton.parentNode.parentNode.parentNode.removeChild(odstranitBarvuButton.parentNode.parentNode)
+    
+                document.querySelectorAll("." + barva.value).forEach((el) => {
+                    el.parentNode.removeChild(el)
+                })
+            })
+            td2.appendChild(odstranitBarvuButton)
+            tr.appendChild(td2)
+    
+            let obrazky = document.createElement("input")
+            obrazky.type = "file"
+            obrazky.multiple = true
+            obrazky.accept = "jpg,png,jpeg"
+            obrazky.name = barva.value + "Obrazky[]"
+    
+            let td3 = document.createElement("td");
+            td3.appendChild(obrazky)
+            tr.appendChild(td3)
+    
+            let trVelikosti = document.createElement("tr")
+            trVelikosti.classList = barva.value
+            trVelikosti.style.background = "#f0f0f0"
+            let tdNovaVelikost = document.createElement("td")
+            tdNovaVelikost.colSpan = 3
+    
+            let novaVelikostButton = document.createElement("input")
+            novaVelikostButton.type = "button"
+            novaVelikostButton.value = "Přidat velikost k barvě"
+    
+            novaVelikostButton.addEventListener("click",() => {
+                zobrazVelikosti(barva.value)
+            })
+    
+            tdNovaVelikost.appendChild(novaVelikostButton)
+            trVelikosti.appendChild(tdNovaVelikost)
+    
+            
+            document.querySelector("table:nth-of-type(3) tbody").insertBefore(tr,document.querySelector("table:nth-of-type(3) tbody tr:last-of-type"))
+    
+            tr.after(trVelikosti)
+    
+            zavriModalniOkno()
+        }) 
+        
+    
+        modalniOkno.appendChild(barvaNazev)
+        modalniOkno.appendChild(barva)
+        modalniOkno.appendChild(potvrdit)
+        zobrazModalniOkno()
+    })
+}
 
 function zobrazVelikosti(barva) {
     let velikostNazev = document.createElement("p")
@@ -232,6 +239,7 @@ function zobrazVelikosti(barva) {
     potvrdit.addEventListener("click",function(){
         let tr = document.createElement("tr")
         tr.classList = barva
+        tr.style.background = "#f0f0f0"
 
         let td1 = document.createElement("td")
         velikost.readOnly = true

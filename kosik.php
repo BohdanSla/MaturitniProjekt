@@ -58,7 +58,8 @@ if (isset($_SESSION["user"])) {
     JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti
     JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id
     JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku
-    WHERE id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id) AND obrazek.src LIKE "%main%"
+    WHERE id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id) 
+    GROUP BY produkt.id
     ORDER BY produkt.nazev;');
 
     $stmt->execute([":id" => $_SESSION["user"]]);
@@ -141,7 +142,12 @@ if (isset($_SESSION["user"])) {
         }
         $idPlaceholdery = rtrim($idPlaceholdery,",");
 
-        $stmt = $db->prepare("SELECT produkt.nazev,produkt.id, COALESCE(cena_ve_sleve,cena) AS cena, obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE '%main%' AND produkt.id IN ($idPlaceholdery) ORDER BY produkt.nazev;");
+        $stmt = $db->prepare("SELECT produkt.nazev,produkt.id, COALESCE(cena_ve_sleve,cena) AS cena, obrazek.src 
+        FROM produkt 
+        JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+        JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+        GROUP BY produkt.id
+        AND produkt.id IN ($idPlaceholdery) ORDER BY produkt.nazev;");
 
         $stmt->execute($id);
 

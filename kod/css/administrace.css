@@ -5,9 +5,6 @@ main > form {
     padding: 1rem;
     flex-direction: column;
 }
-td {
-    width: 100%;
-}
 main > section {
     padding: 1rem;
     display: flex;
@@ -47,6 +44,7 @@ body main > div ul li a {
 }
 main form table td {
     text-align: center;
+    padding: 0.5rem;
 }
 main form table td,main form table th,main form table {
     border: 1px solid black;
@@ -71,6 +69,12 @@ main form[method=get] {
 }
 main form[method=get] input[type="submit"] {
     margin:0;
+}
+main form[method=get] input[type=search] {
+    width: 15rem;
+    padding: 0.25rem;
+    border: 1px solid black;
+    outline: none;
 }
 td > input[type=submit] {
     width: 100%;
@@ -130,9 +134,15 @@ form > b {
 td >div {
     display: flex;
     align-items: center;
-    padding: 1rem;
-    justify-content: space-around;
+    justify-content: space-between
 }
 td >div img {
     width: 2rem;
+}
+textarea {
+    min-width: 30rem;
+    min-height: 10rem;
+}
+th {
+    padding: 0.2rem;
 }

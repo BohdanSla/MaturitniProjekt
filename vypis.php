@@ -80,9 +80,7 @@ JOIN sport ON sport.id = produkt.id_sportu
 JOIN varianty ON varianty.id_produktu = produkt.id
 JOIN velikost ON velikost.id = varianty.id_velikosti
 JOIN barva ON barva.id = varianty.id_barvy
-JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
-WHERE obrazek.src 
-LIKE "%main%"';
+JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku';
 
 $filtry = "";
 $nazvy = ["sport","znacka","velikost","barva","kategorie"];
@@ -111,23 +109,6 @@ if (isset($_GET["filtrovat"])) {
     }
     
     
-    // if(isset($_GET["kategorie"])) {
-        
-    //     $placeholdery = "";
-    //     foreach ($_GET["kategorie"] as $key2 => $value2) {
-    //         # code...
-    //         $placeholdery .= ":kategorie$key2,";
-    //         $parametry[":kategorie$key2"] = $value2;
-            
-    //         $html = str_replace('filtr="[@' . $value2 . ']"',"checked",$html);
-    //     }
-        
-    //     $placeholdery = rtrim($placeholdery,",");
-        
-    //     $filtry .= " AND kategorie_produktu.kategorie IN ($placeholdery)";
-
-    // }
-    
     foreach ($nazvy as $key => $value) {
         # code...
         if (isset($_GET[$value])) {
@@ -146,7 +127,7 @@ if (isset($_GET["filtrovat"])) {
             $filtry .= " AND $value.nazev IN ($placeholdery)";
         }
     }
-    $sql .= $filtry . " LIMIT 12 OFFSET :offset";
+    $sql .= $filtry . " GROUP BY produkt.id LIMIT 12 OFFSET :offset";
 
     $stmt = $db->prepare($sql);
 
@@ -166,7 +147,7 @@ if (isset($_GET["filtrovat"])) {
 } else if(isset($_GET["odeslat"])) {
     if(trim($_GET["hledat"]) != "") {
         $nazevHledanehoProduktu = " AND produkt.nazev LIKE :nazev";
-        $sql .=  $nazevHledanehoProduktu . " LIMIT 12 OFFSET :offset";
+        $sql .=  $nazevHledanehoProduktu . " GROUP BY produkt.id LIMIT 12 OFFSET :offset";
         $stmt = $db->prepare($sql);
         $parametry[":nazev"] = '%' . $_GET["hledat"] . '%';
 
@@ -175,13 +156,13 @@ if (isset($_GET["filtrovat"])) {
 
         $stmt->execute();
     } else if (trim($_GET["odeslat"]) == "") {
-        $sql .= " LIMIT 12 OFFSET :offset";
+        $sql .= " GROUP BY produkt.id LIMIT 12 OFFSET :offset";
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
     }
 } else {
-    $sql .= " LIMIT 12 OFFSET :offset";
+    $sql .= " GROUP BY produkt.id LIMIT 12 OFFSET :offset ";
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();

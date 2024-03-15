@@ -51,8 +51,18 @@ if(isset($_SESSION["user"])) {
     }
 
 
-    $stmt = $db->prepare("SELECT sleva FROM objednavka WHERE id_uzivatele = :id AND jeObjednana = 0;
-    SELECT produkt.nazev,COALESCE(produkt.cena_ve_sleve,produkt.cena) AS cena,obrazek.src,barva.nazev AS barva,velikost.nazev AS velikost,produkty_v_objednavce.pocet FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku JOIN produkty_v_objednavce ON produkty_v_objednavce.id_produktu = produkt.id JOIN barva ON barva.id = produkty_v_objednavce.id_barvy JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti WHERE obrazek.src LIKE '%main%' AND produkty_v_objednavce.id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id);
+    $stmt = $db->prepare("SELECT sleva 
+    FROM objednavka 
+    WHERE id_uzivatele = :id AND jeObjednana = 0;
+    SELECT produkt.nazev,COALESCE(produkt.cena_ve_sleve,produkt.cena) AS cena,obrazek.src,barva.nazev AS barva,velikost.nazev AS velikost,produkty_v_objednavce.pocet 
+    FROM produkt 
+    JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+    JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+    JOIN produkty_v_objednavce ON produkty_v_objednavce.id_produktu = produkt.id 
+    JOIN barva ON barva.id = produkty_v_objednavce.id_barvy 
+    JOIN velikost ON velikost.id = produkty_v_objednavce.id_velikosti 
+    WHERE produkty_v_objednavce.id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id)
+    GROUP BY produkt.id;
     SELECT jmeno, prijmeni, email, telefonni_cislo, psc, ulice, mesto FROM uzivatel WHERE id = :id");
 
     $stmt->execute([":id" => $_SESSION["user"]]);
@@ -203,7 +213,13 @@ if(isset($_SESSION["user"])) {
                 $idPlaceholdery = rtrim($idPlaceholdery,",");
 
                 
-                $stmt = $db->prepare("SELECT produkt.nazev,produkt.id, COALESCE(cena_ve_sleve,cena) AS cena, obrazek.src FROM produkt JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku WHERE obrazek.src LIKE '%main%' AND produkt.id IN ($idPlaceholdery) ORDER BY produkt.nazev;");
+                $stmt = $db->prepare("SELECT produkt.nazev,produkt.id, COALESCE(cena_ve_sleve,cena) AS cena, obrazek.src 
+                FROM produkt 
+                JOIN obrazky_k_produktu ON obrazky_k_produktu.id_produktu = produkt.id 
+                JOIN obrazek ON obrazek.id = obrazky_k_produktu.id_obrazku 
+                WHERE produkt.id IN ($idPlaceholdery)
+                GROUP BY produkt.id
+                ORDER BY produkt.nazev;");
                 
                 $stmt->execute($id);
                 

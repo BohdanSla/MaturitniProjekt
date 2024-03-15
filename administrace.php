@@ -48,7 +48,7 @@ if(isset($_SESSION["user"])) {
 
 
 
-        $stranky = ["novyProdukt" => file_get_contents("kod/html/novyProdukt.html"),"editaceProduktu" => file_get_contents("kod/html/editace.html"),"vlastnostiProduktu" =>file_get_contents("kod/html/vlastnosti.html"),"slevoveKody" =>file_get_contents("kod/html/kody.html"),"uzivatele" => file_get_contents("kod/html/uzivatele.html")];
+        $stranky = ["novyProdukt" => file_get_contents("kod/html/novyProdukt.html"),"editaceProduktu" => file_get_contents("kod/html/vyhledavani.html"),"vlastnostiProduktu" =>file_get_contents("kod/html/vlastnosti.html"),"slevoveKody" =>file_get_contents("kod/html/kody.html"),"uzivatele" => file_get_contents("kod/html/uzivatele.html")];
 
         if(isset($_GET["barva"])) {
             $html = str_replace("[@stranka]",file_get_contents("kod/html/barva.html"),$html);
@@ -113,30 +113,14 @@ if(isset($_SESSION["user"])) {
                 $obrazky .= '<tr><td><img src="obrazky/' . $value['src'].  '"></td><td><input type="submit" name="odstranitObrazek' . $key.'" value="odstranit obrázek"></td><tr>';
 
                 if(isset($_POST["odstranitObrazek" . $key])) {
-                    // $stmt = $db->prepare("SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :idProduktu AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1)");
-
-                    // $stmt->execute([":idProduktu" => $_GET["produkt"],
-                    //     ":barva" => $_GET["barva"]]
-                    // );
-                    // $idObrazku = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // $placeholdery = "";
-                    // $parametry = [
-                    //     ":obrazek" => $value["src"]
-                    // ];
-                    // foreach ($idObrazku as $key2 => $value2) {
-                    //     # code...
-                    //     $placeholdery .= ":obrazek$key2,";
-                    //     $parametry[":obrazek$key2"] = $value2["id_obrazku"];
-                        
-                    // }
-                    // $placeholdery = rtrim($placeholdery,",");
-
-                    //DELETE FROM obrazek WHERE id IN ($placeholdery)
 
                     $stmt = $db->prepare("DELETE FROM obrazky_k_produktu WHERE id_obrazku = (SELECT id FROM obrazek WHERE src = :obrazek LIMIT 1);");
 
                     $stmt->execute([":obrazek" => $value["src"]]);
+
+                    if(file_exists("obrazky/" . $value["src"])) {
+                        unlink("obrazky/" . $value["src"]);
+                    }
 
                     header("Location: " . $_SERVER["REQUEST_URI"]);
                 }
@@ -550,6 +534,8 @@ if(isset($_SESSION["user"])) {
         
         if(isset($_GET["produkt"])) {
 
+            $html = str_replace("[@vyhledanyProdukt]",file_get_contents("kod/html/editace.html"),$html);
+
             $html = str_replace("[@znacky]",$nazvyZnacek,$html);
             $html = str_replace("[@kategorie]",$nazvyKategorii,$html);
             $html = str_replace("[@sporty]",$nazvySportu,$html);
@@ -661,27 +647,28 @@ if(isset($_SESSION["user"])) {
                 $nazvyBarvy .= '<tr><td>' . $value["nazev"] . '</td><td><input type="submit" value="odstranit barvu" name="odstranitBarvuProduktu' . $key. '"></td><td><a href="administrace.php?'. $_SERVER["QUERY_STRING"].'&barva=' . $value["nazev"] .'">Zobrazit obrázky a velikosti</a></td></tr>';
 
                 if(isset($_POST["odstranitBarvuProduktu" . $key])) {
-                    $stmt = $db->prepare("SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev)");
+                    $stmt = $db->prepare("SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev);
+                    SELECT obrazek.src FROM obrazek WHERE id IN (SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev LIMIT 1));");
                     
                     $stmt->execute([":id" => $arr[0]["id"],
                         ":nazev" => $value["nazev"]
                     ]);
 
-                    $obrazky = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $obrazkyId = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $stmt->nextRowSet();
+                    $obrazkySrc = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     $placeholdery = "";
                     $parametry = [":id" => $arr[0]["id"],
                         ":nazev" => $value["nazev"]
                     ];
-                    foreach ($obrazky as $key2 => $value2) {
+                    foreach ($obrazkyId as $key2 => $value2) {
                         # code...
                         $placeholdery .= ":obrazekId$key2,";
                         $parametry[":obrazekId$key2"] = $value2["id_obrazku"];
                         
                     }
                     $placeholdery = rtrim($placeholdery,",");
-
-
 
                     $sql = "DELETE FROM varianty 
                     WHERE id_produktu = :id 
@@ -693,6 +680,12 @@ if(isset($_SESSION["user"])) {
 
                     $stmt = $db->prepare($sql);
                     $stmt->execute($parametry);
+                    
+                    foreach($obrazkySrc as $key => $value) {
+                        if(file_exists("obrazky/" . $value["src"])) {
+                            unlink("obrazky/" . $value["src"]);
+                        }
+                    }
 
                     header("Location: administrace.php?" . $_SERVER["QUERY_STRING"] );
                 }
@@ -773,6 +766,34 @@ if(isset($_SESSION["user"])) {
             // ! odstranění produktu
             
             if(isset($_POST["odstranitProdukt"])) {
+                $stmt = $db->prepare("SELECT obrazek.src FROM obrazek WHERE id IN (SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :idProduktu);");
+
+                $stmt->execute([":idProduktu" => $_GET["produkt"]]
+                );
+                $srcObrazku = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                $placeholdery = "";
+                $parametry = [];
+                foreach ($srcObrazku as $key2 => $value2) {
+                    # code...
+                    $placeholdery .= ":obrazek$key2,";
+                    $parametry[":obrazek$key2"] = $value2["src"];
+                    
+                }
+                $placeholdery = rtrim($placeholdery,",");
+
+                $sql = "DELETE FROM obrazek WHERE src IN ($placeholdery)";
+                $stmt = $db->prepare($sql);
+
+                $stmt->execute($parametry);
+
+                foreach($srcObrazku as $key => $value) {
+                    if(file_exists("obrazky/" . $value["src"])) {
+                        unlink("obrazky/" . $value["src"]);
+                    }
+                }
+
+
                 $stmt = $db->prepare("DELETE FROM produkt WHERE id = :id;
                 DELETE FROM varianty WHERE id_produktu = :id;
                 DELETE FROM obrazky_k_produktu WHERE id_produktu = :id;
@@ -780,12 +801,15 @@ if(isset($_SESSION["user"])) {
                 DELETE FROM recezne WHERE id_produktu = :id;
                 DELETE FROM oblibene_produkty WHERE id_produktu = :id;
                 DELETE FROM zakoupene_produkty WHERE id_produktu = :id;
-                DELETE FROM produkty_v_objednavce WHRE id_produktu = :id");
+                DELETE FROM produkty_v_objednavce WHERE id_produktu = :id");
                 $stmt->execute([":id" => $arr[0]["id"]]);
                 
-                header("Location: administrace.php?" . $_SERVER["QUERY_STRING"] );
+                header("Location: administrace.php?stranka=editaceProduktu" );
             }
+        } else {
+            $html = str_replace("[@vyhledanyProdukt]","",$html);
         }
+
 
         if(isset($_POST["pridatNovyProdukt"])) {
             $stmt = $db->prepare("INSERT INTO produkt (nazev,popis,cena,cena_ve_sleve,id_znacky,id_kategorie,id_sportu) VALUES (:nazev,:popis,:cena,:cenaVeSleve,(SELECT id FROM znacka WHERE nazev = :znacka LIMIT 1),(SELECT id FROM kategorie WHERE nazev = :kategorie LIMIT 1),(SELECT id FROM sport WHERE nazev = :sport LIMIT 1))");
