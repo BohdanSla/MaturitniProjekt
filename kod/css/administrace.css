@@ -1,3 +1,7 @@
+main {
+    min-height: 80vh;
+}
+
 main > form {
     display: flex;
     justify-content: center;

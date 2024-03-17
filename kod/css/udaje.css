@@ -10,6 +10,7 @@ main form {
     flex-direction: column;
     align-items: center;
     font-size: larger;
+    justify-content: center;
 }
 
 .udaj {

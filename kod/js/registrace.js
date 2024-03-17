@@ -57,10 +57,6 @@ let telefonniCislo = document.querySelector("input[type=\"tel\"]")
 let email = document.querySelector("input[type=\"email\"]")
 let pozadavkyHesla = document.querySelectorAll(".registrace li");
 
-let telefonniCisloRegex = /(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/
-let hesloRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d\s])[A-Za-z\d\W\S]{8,}$/
-let emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/ 
-
 let odeslat = document.querySelector(".registrace form input[name=odeslat]")
 
 hesla[0].addEventListener("input",function(){
@@ -112,8 +108,8 @@ function zkontrolujHesla() {
 odeslat.addEventListener("click",function(){
     let zprava = ""
     let validace = true
-    
-    inputy = document.querySelectorAll("main input:not(input[type=button])")
+    let inputy = document.querySelectorAll("main input:not(input[type=button])")
+
     for (const element of inputy) {
         if(element.value == "") {
             zprava += "máte nevyplněná pole"
@@ -121,6 +117,10 @@ odeslat.addEventListener("click",function(){
             break
         }
     }
+
+    let telefonniCisloRegex = /(^(\+[0-9]{1,4} )?([0-9]{3} ){2}[0-9]{3}$)|(^(\+[0-9]{1,4})?[0-9]{9}$)/
+    let hesloRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d\s])[A-Za-z\d\W\S]{8,}$/
+    let emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/ 
 
     if(validace) {
         if(!emailRegex.test(email.value)) {
