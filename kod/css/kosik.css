@@ -42,7 +42,10 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 22rem;
+    width: 24rem;
+}
+.kosik > div section > b {
+    text-align: center;
 }
 .kosik > div section p {
     margin: 0;
@@ -82,7 +85,7 @@ main .kosik a:last-of-type {
     text-decoration: 0;
 }
 main .kosik > form input {
-    background-color: #C70000;
+    background-color: red;
     color: white;
     padding: 0.5rem;
     outline: none;
@@ -90,7 +93,7 @@ main .kosik > form input {
     border-radius: 0.15rem;
 }
 main .kosik > form input:first-child {
-    background-color: #393939;
+    background-color: #C70000;
 }
 main .kosik > form input:hover {
     cursor: pointer;
@@ -127,7 +130,6 @@ main .kosik > form input:hover {
     main .kosik > form input {
         font-size: x-small;
     }
-<<<<<<< HEAD
     .kosik > div section > *:last-child {
         margin-left: 1rem;
     }
@@ -156,11 +158,4 @@ main .kosik > form input:hover {
     main .kosik > form input:last-of-type {
         margin-top: 5vw;
     }
-=======
-    .kosik > div section {
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-        width: 100%;
-    }
->>>>>>> c362742d79b04e40cc0dc2db4246d04b638a8620
 }

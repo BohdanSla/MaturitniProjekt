@@ -14,7 +14,6 @@ if (window.innerWidth > 650) {
 window.addEventListener("resize",zmenPolohuPostrannihoMenu)
 
 function zmenPolohuPostrannihoMenu() {
-    console.log(this.innerWidth);
     if (this.innerWidth > 650) {
         if (tmavaPlocha.style.visibility == "visible") {
             postranniMenu.style.left = "0";

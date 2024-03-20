@@ -74,7 +74,7 @@ if (isset($_SESSION["user"])) {
             # code...
             $src = "obrazky/" . $value["src"];
     
-            $produkty .= '<div><section><img src="' . $src . '"><h2>' . $value["nazev"] .'</h2></section><section><div><p>Barva: ' . $value["barva"] . '</p><p>Velikost: ' . $value["velikost"] .'</p></div><b>' . $value["cena"] . ' Kč</b><form method="post">množství:<input type="number" form="pokracovat" name="mnozstvi' . $key .'" id="mnozstvi" min="1" max="5" value="' . $value["mnozstvi"] . '"><button name="odstranit' . $key .'" type="submit"><img src="obrazky/krizek_ikona.svg"></button></form></section></div>';
+            $produkty .= '<div><section><img src="' . $src . '"><h2>' . $value["nazev"] .'</h2></section><section><div><p>Barva: ' . $value["barva"] . '</p><p>Velikost: ' . $value["velikost"] .'</p></div><b>cena za 1 ks: <br>' . $value["cena"] . ' Kč</b><form method="post">množství:<input type="number" form="pokracovat" name="mnozstvi' . $key .'" id="mnozstvi" min="1" max="5" value="' . $value["mnozstvi"] . '"><button name="odstranit' . $key .'" type="submit"><img src="obrazky/krizek_ikona.svg"></button></form></section></div>';
 
             if(isset($_POST["odstranit" . $key])) {
                 $stmt = $db->prepare("DELETE FROM produkty_v_objednavce WHERE id_objednavky = (SELECT id FROM objednavka WHERE jeObjednana = 0 AND id_uzivatele = :id LIMIT 1) AND id_produktu = (SELECT id FROM produkt WHERE nazev = :nazev LIMIT 1) AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
@@ -162,7 +162,7 @@ if (isset($_SESSION["user"])) {
 
                         $src = "obrazky/" . $value["src"];
 
-                        $produkty .= '<div><section><img src="' . $src . '"><h2>' . $value["nazev"] .'</h2></section><section><div><p>Barva: ' . $informace[1] . '</p><p>Velikost: ' . $informace[2] .'</p></div><b>' . $value["cena"] . ' Kč</b><form method="post">množství:<input type="number" form="pokracovat" name="mnozstvi' . $key .$key2 .'" id="mnozstvi" min="1" max="5" value="' . $informace[3] . '"><button name="odstranit' . $key . $key2 .'" type="submit"><img src="obrazky/krizek_ikona.svg"></button></form></section></div>';
+                        $produkty .= '<div><section><img src="' . $src . '"><h2>' . $value["nazev"] .'</h2></section><section><div><p>Barva: ' . $informace[1] . '</p><p>Velikost: ' . $informace[2] .'</p></div><b>cena za 1 ks: <br>' . $value["cena"] . ' Kč</b><form method="post">množství:<input type="number" form="pokracovat" name="mnozstvi' . $key .$key2 .'" id="mnozstvi" min="1" max="5" value="' . $informace[3] . '"><button name="odstranit' . $key . $key2 .'" type="submit"><img src="obrazky/krizek_ikona.svg"></button></form></section></div>';
                         
                         if(isset($_POST["odstranit" . $key . $key2])) {
 

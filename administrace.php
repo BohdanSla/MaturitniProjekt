@@ -17,12 +17,12 @@ $inactivity_time = 15 * 60;
 
 
 
-$stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
-$stmt->execute([":id" => $_SESSION["user"]]);
-
-$arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if(isset($_SESSION["user"])) {
+    $stmt = $db->prepare("SELECT id_role FROM uzivatel WHERE id = :id");
+    $stmt->execute([":id" => $_SESSION["user"]]);
+    
+    $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if($arr[0]["id_role"] == 1) {
 
@@ -875,9 +875,9 @@ if(isset($_SESSION["user"])) {
         
         echo $html;
     } else {
-        header("Location: index.php");
+        http_response_code(404);
     }
 } else {
-    header("Location: index.php");
+    http_response_code(404);
 }
 

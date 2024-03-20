@@ -56,27 +56,25 @@ function otevriPostraniMenu() {
 
 let menu = document.querySelectorAll("main ul li")
 let main = document.querySelectorAll("main > div > *")
-console.log(main);
 for (let index = 0; index < 3; index++) {
     menu[index].addEventListener("click", function() {
         
         menu[index].style.outline = "1px solid #969696"
         main[index].style.display = "flex";
 
-        //dojmenovat
-        let n = Array.from(main).filter(element => {
+        let nevybranyObsah = Array.from(main).filter(element => {
             return element !== main[index]
         })
 
-        n.forEach(element => {
+        nevybranyObsah.forEach(element => {
             element.style.display = "none"
         })
         
-        let nevybrany = Array.from(menu).filter(element => {
+        let nevybranyMenu = Array.from(menu).filter(element => {
             return element !== menu[index]
         })
 
-        nevybrany.forEach(element => {
+        nevybranyMenu.forEach(element => {
             element.style.outline = "none"
         })
         
