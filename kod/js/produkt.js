@@ -147,6 +147,8 @@ function vypisObrazky() {
         if (document.querySelector(".hlavni-obrazek img:nth-child(2)").getAttribute("src") == el.value) {
             img.style.border = "1px solid #111111BB"
             indexHlavnihoObrazku = index
+        } else {
+            img.style.border = "1px solid #dcdcdc5d"
         }
         
         obrazky.appendChild(img);
@@ -208,7 +210,7 @@ vypisObrazky()
 
 sipky[0].addEventListener("click",function() {
     
-    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid white"
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid #dcdcdc5d"
     if (indexHlavnihoObrazku > 0) {
         indexHlavnihoObrazku--;
     } else {
@@ -220,7 +222,7 @@ sipky[0].addEventListener("click",function() {
 })
 
 sipky[1].addEventListener("click",function(){
-    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid white"
+    ostatniObrazky[indexHlavnihoObrazku].style.border = "1px solid #dcdcdc5d"
     if (indexHlavnihoObrazku + 1 < ostatniObrazky.length) {
         indexHlavnihoObrazku++;
     } else {

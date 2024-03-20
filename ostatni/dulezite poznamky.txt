@@ -9,7 +9,7 @@ heslo pro administratora: AdmnstrtrProSprotvce23$
 
 
 CO CHYBY
- opravit administraci - editace,vytváření nového produktu, kategorie, uživatele, slevové kódy
+ opravit administraci - editace,vytváření nového produktu, kategorie, uživatele, slevové kódy HOTOVO
  dodělat hlášky když je nějaká chyba (zatim jenom kdyz se prida produkt,nevim zda tu je neco jieneho jeste lol) HOTOVO
  Změnit u objednavek slevu misto kodu (protoze slevovy kod muze byt smazan) HOTOVO
  Opravit cenu u shrnuti u stejnych produktu jinaci barvy (je to dojebany) HOTOVO
@@ -26,6 +26,10 @@ CO CHYBY
  zkontrolovat prihlaseni (na porpve se to nevydari) a niv se nevypise ASI HOTOVO------------
  doopravit slevove kody tak, aby se nemohla dat sleva 100kč na 50 kč produkt. HOTOVO
  dodelat stranku kosiku HOTOVO
+
+ !!!BONUS!!!
+ zobrazeni obrazku podle barvy
+ hlasky kdyz se neco stane
 
 private String $dbDsn = "mysql:host=db.mp.spse-net.cz;dbname=slawisbo20_1;charset=utf8";
 private String $dbName = "slawisbo20";

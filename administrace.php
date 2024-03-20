@@ -87,7 +87,7 @@ if(isset($_SESSION["user"])) {
 
             $velikosti = '';
             foreach($arr as $key => $value) {
-                $velikosti .= '<tr><td>' . $value['nazev'].  '</td><td><input type="submit" name="odstranitVelikost' . $key.'" value="odstranit velikost"></td><tr>';
+                $velikosti .= '<tr><td>' . $value['nazev'].  '</td><td><input type="submit" name="odstranitVelikost' . $key.'" value="odstranit velikost" class="odstranit"></td><tr>';
 
                 if(isset($_POST["odstranitVelikost" . $key])) {
                     $stmt = $db->prepare("DELETE FROM varianty WHERE id_produktu = :idProduktu AND id_barvy = (SELECT id FROM barva WHERE nazev = :barva LIMIT 1) AND id_velikosti = (SELECT id FROM velikost WHERE nazev = :velikost LIMIT 1)");
@@ -110,7 +110,7 @@ if(isset($_SESSION["user"])) {
 
             $obrazky = '';
             foreach($arr as $key => $value) {
-                $obrazky .= '<tr><td><img src="obrazky/' . $value['src'].  '"></td><td><input type="submit" name="odstranitObrazek' . $key.'" value="odstranit obrázek"></td><tr>';
+                $obrazky .= '<tr><td><img src="obrazky/' . $value['src'].  '"></td><td><input type="submit" name="odstranitObrazek' . $key.'" value="odstranit obrázek" class="odstranit"></td><tr>';
 
                 if(isset($_POST["odstranitObrazek" . $key])) {
 
@@ -417,7 +417,7 @@ if(isset($_SESSION["user"])) {
             $bylPouzit = $value["bylPouzit"] == 1 ? "Ano" : "Ne";
 
             $datum = new DateTime($value["expirace"]);
-            $kody .= '<tr><td>' . $value["id"] .'</td><td>' . $value["kod"] .'</td><td>' . $value["sleva"] . ' Kč</td><td>' . $datum->format("j. n. Y") . '</td><td>' . $value["znacka/sport"] .'</td><td>' . $bylPouzit .'</td><td><input type="submit" name="slevovyKod' . $key.'" value="Odebrat kód"></td></tr>';
+            $kody .= '<tr><td>' . $value["id"] .'</td><td>' . $value["kod"] .'</td><td>' . $value["sleva"] . ' Kč</td><td>' . $datum->format("j. n. Y") . '</td><td>' . $value["znacka/sport"] .'</td><td>' . $bylPouzit .'</td><td><input type="submit" name="slevovyKod' . $key.'" value="Odebrat kód" class="odstranit"></td></tr>';
             
             if(isset($_POST["slevovyKod" . $key])) {
                 $stmt = $db->prepare("DELETE FROM slevovy_kod WHERE id = :id;
@@ -473,7 +473,7 @@ if(isset($_SESSION["user"])) {
             });
             
             # code...
-            $uzivatele .= '<tr><td>' . $value["id"]. '</td><td>' . $value["jmeno"]. '</td><td>' . $value["prijmeni"]. '</td><td>' . $value["email"]. '</td><td>' . $value["telefonni_cislo"]. '</td><td>' . $value["mesto"]. '</td><td>' . $value["ulice"]. '</td><td>' . $value["psc"]. '</td><td>' . $value["role"]. '</td><td><input type="submit" value="smazat účet" name="smazatUcet' . $key .'"></td></tr>';
+            $uzivatele .= '<tr><td>' . $value["id"]. '</td><td>' . $value["jmeno"]. '</td><td>' . $value["prijmeni"]. '</td><td>' . $value["email"]. '</td><td>' . $value["telefonni_cislo"]. '</td><td>' . $value["mesto"]. '</td><td>' . $value["ulice"]. '</td><td>' . $value["psc"]. '</td><td>' . $value["role"]. '</td><td><input type="submit" value="smazat účet" name="smazatUcet' . $key .'" class="odstranit"></td></tr>';
             
             if(count($recenzeUzivatele) != 0) {
 
@@ -481,7 +481,7 @@ if(isset($_SESSION["user"])) {
                 
                 foreach ($recenzeUzivatele as $key2 => $value2) {
                     # code...
-                    $uzivatele .= "<tr><td></td><td>" . $value2["nazev"]. "</td><td><div><img src='obrazky/hvezda_ikona.svg'>" . $value2["pocet_hvezd"] . "</div</td><td colspan='6'>" . $value2["recenze"] . "</td><td><input type='submit' name='odstranitRecenzi" . $key2 . "' value='Odstranit recezni'></td></tr>";
+                    $uzivatele .= "<tr><td></td><td>" . $value2["nazev"]. "</td><td><div><img src='obrazky/hvezda_ikona.svg'>" . $value2["pocet_hvezd"] . "</div</td><td colspan='6'>" . $value2["recenze"] . "</td><td><input type='submit' name='odstranitRecenzi" . $key2 . "' value='Odstranit recezni' class='odstranit'></td></tr>";
                     
                     if(isset($_POST["odstranitRecenzi" . $key2])) {
                         $stmt = $db->prepare("DELETE FROM recenze WHERE id = :id");
@@ -591,7 +591,7 @@ if(isset($_SESSION["user"])) {
             $vsechnyMaterialy = '';
             foreach ($materialyProduktu as $key => $value) {
                 # code...
-                $vsechnyMaterialy .= "<tr><td>".$value["nazev"]."</td><td><input type='number' name='procento". $key."' value='" . $value["procento_materialu"] ."' min='1' max='100'></td><td><input type='submit' name='odstranitMaterial" . $key. "' value='Odstranit materiál'></td><td><input type='submit' name='aktualizovatProcento" . $key ."' value='Aktualizovat procento materiálu'></td></tr>";
+                $vsechnyMaterialy .= "<tr><td>".$value["nazev"]."</td><td><input type='number' name='procento". $key."' value='" . $value["procento_materialu"] ."' min='1' max='100'></td><td><input type='submit' name='odstranitMaterial" . $key. "' value='Odstranit materiál' class='odstranit'></td><td><input type='submit' name='aktualizovatProcento" . $key ."' value='Aktualizovat procento materiálu'></td></tr>";
 
                 // ! odstraneni materialu produktu
 
@@ -644,7 +644,7 @@ if(isset($_SESSION["user"])) {
             
             $nazvyBarvy = '';
             foreach($barvyProduktu as $key => $value) {
-                $nazvyBarvy .= '<tr><td>' . $value["nazev"] . '</td><td><input type="submit" value="odstranit barvu" name="odstranitBarvuProduktu' . $key. '"></td><td><a href="administrace.php?'. $_SERVER["QUERY_STRING"].'&barva=' . $value["nazev"] .'">Zobrazit obrázky a velikosti</a></td></tr>';
+                $nazvyBarvy .= '<tr><td>' . $value["nazev"] . '</td><td><input type="submit" value="odstranit barvu" name="odstranitBarvuProduktu' . $key. '" class="odstranit"></td><td><a href="administrace.php?'. $_SERVER["QUERY_STRING"].'&barva=' . $value["nazev"] .'">Zobrazit obrázky a velikosti</a></td></tr>';
 
                 if(isset($_POST["odstranitBarvuProduktu" . $key])) {
                     $stmt = $db->prepare("SELECT id_obrazku FROM obrazky_k_produktu WHERE id_produktu = :id AND id_barvy = (SELECT id FROM barva WHERE nazev = :nazev);

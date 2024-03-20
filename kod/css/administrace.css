@@ -55,7 +55,6 @@ main form table td,main form table th,main form table {
     border-collapse: collapse;
 }
 main form input[type=submit],main > a {
-    background-color: red;
     color: white;
     padding: 0.3rem;
     border: none;
@@ -82,6 +81,25 @@ main form[method=get] input[type=search] {
 }
 td > input[type=submit] {
     width: 100%;
+}
+.odstranit {
+    background-color: #C70000;
+    color: white;
+    padding: 0.3rem;
+    border: none;
+    border-radius: 0.1rem;
+}
+.odstranit:hover {
+    cursor: pointer;
+}
+input[name=odstranitProdukt]:not(input[type=submit]) {
+    margin-top: 1rem;
+}
+input[name=odstranitProdukt]:not(input[type=submit]):hover {
+    cursor: pointer;
+}
+main form input[type=submit]:not(.odstranit) {
+    background-color: red;
 }
 td img {
     width: 5rem;

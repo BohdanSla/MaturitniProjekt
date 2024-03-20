@@ -274,7 +274,25 @@ function zobrazVelikosti(barva) {
     zobrazModalniOkno()
 }
 
+let odstranitProdukt = document.querySelector("input[name=odstranitProdukt]");
 
+odstranitProdukt.addEventListener("click",function() {
+    let zprava = document.createElement("p");
+    zprava.innerHTML = "Opravdu chcete produkt smazat? <br> Smazání produktu nejde zvrátit."
+    let potvrdit = document.createElement("input")
+    potvrdit.type = "submit"
+    potvrdit.name = "odstranitProdukt"
+    potvrdit.value = "Ano"
+    potvrdit.classList = "odstranit"
+    potvrdit.setAttribute("form","editace")
+    potvrdit.addEventListener("click",function() {
+        document.querySelector("form[method=post]").submit()
+    })
+
+    modalniOkno.appendChild(zprava)
+    modalniOkno.appendChild(potvrdit)
+    zobrazModalniOkno()
+})
 
 
 

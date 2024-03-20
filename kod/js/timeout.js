@@ -2,42 +2,22 @@ let logout = setTimeout(function() {
     window.location.href = "timeout.php";
 },15 * 60000);
 
+document.addEventListener("click",resetTimer)
+document.addEventListener("contextmenu",resetTimer)
+document.addEventListener("keypress",resetTimer)
+document.addEventListener("mousemove",resetTimer)
 
-document.addEventListener("keypress",function() {
-    clearTimeout(logout);
-    logout = setTimeout(function() {
-        window.location.href = "timeout.php";
-    },15 * 60000);
-    i = 0;
-    
-});
+document.addEventListener("click", reset);
+document.addEventListener("keypress", reset);
+document.addEventListener("contextmenu", reset);
+document.addEventListener("mousemove", reset);
 
-document.addEventListener("click",function() {
+function resetTimer() {
     clearTimeout(logout);  
     logout = setTimeout(function() {
         window.location.href = "timeout.php";
     },15 * 60000);
-    i = 0;
-    
-});
-
-document.addEventListener("contextmenu",function() {
-    clearTimeout(logout); 
-    logout = setTimeout(function() {
-        window.location.href = "timeout.php";
-    },15 * 60000);
-    i = 0;
-    
-});
-
-document.addEventListener("mousemove",function() {
-    clearTimeout(logout);
-    logout = setTimeout(function() {
-        window.location.href = "timeout.php";
-    },15 * 60000);
-    i = 0;
-    
-});
+}
 
 
 function reset() {
@@ -45,8 +25,3 @@ function reset() {
     xhr.open("GET", "resetTimer.php", true);
     xhr.send();
 }
-
-document.addEventListener("click", reset);
-document.addEventListener("keypress", reset);
-document.addEventListener("contextmenu", reset);
-document.addEventListener("mousemove", reset);

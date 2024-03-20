@@ -63,7 +63,6 @@ for (let index = 0; index < 3; index++) {
         menu[index].style.outline = "1px solid #969696"
         main[index].style.display = "flex";
 
-        //dojmenovat
         let n = Array.from(main).filter(element => {
             return element !== main[index]
         })
